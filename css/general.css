@@ -1,0 +1,229 @@
+/* CSS for Mail Checker Plus for Google Mail™ */
+body
+{
+   font-family: arial, sans-serif;
+   font-size: 80%;
+   background: #3d3d3d url("img/options_title.png") repeat-x;
+   color: #fff;
+}
+
+body a, body a:visited
+{
+   color: #fff;
+   text-decoration: none;
+   border-bottom: 1px dotted #fff;
+}
+
+body a:hover
+{
+   border-bottom: 1px solid #dc8300;
+}
+
+h1
+{
+   margin-top: 0;
+}
+
+h1.title
+{
+   font-size: 200%;
+}
+
+legend
+{
+   font-size: 110%;
+   font-weight: bold;
+}
+
+#main
+{
+   margin: 0 auto;
+   margin-top: 30px;
+   text-align: center;
+   width: 550px;
+}
+
+#main img
+{
+   vertical-align: text-bottom;
+}
+
+#main input
+{
+   margin-top: 5px;
+}
+
+#save
+{
+   clear: both;
+   float: right;
+   margin: 0;
+   padding: 0;
+   text-align: right;
+   font-size: 70%;
+   font-weight: bold;
+}
+
+span.field
+{
+   padding-top: 8px;
+   clear: both;
+   float: left;
+   text-align: right;
+   width: 80px;
+}
+
+table
+{
+   border-width: 5px;
+   border-style: outset;
+   border-color: #cd851b;
+   border-collapse: separate;
+   background-color: #fff;
+   color: #000;
+   font-size: 90%;
+   margin: 0 auto;
+   width: 100%;
+   position: relative;
+   text-align: left;
+}
+
+table a, table a:visited
+{
+   color: #000;
+   text-decoration: none;
+   border-bottom: 1px dotted #000;
+}
+
+table a:hover
+{
+   border-bottom: 1px solid #000;
+}
+
+td
+{
+   border-width: 1px;
+   padding: 10px;
+   border-style: solid;
+   border-color: #dc8300;
+   background-color: #e0c295;
+}
+
+td.left_column
+{
+   text-align: right;
+   width: 100px;
+}
+
+form
+{
+   margin: 0 auto;
+   padding: 0;
+}
+
+#languages
+{
+   font-size: 80%;
+   height: 20px;
+}
+
+.left
+{
+   float: left;
+   margin-top: 5px;
+   margin-left: 5px;
+   font-weight: bold;
+}
+
+.top_right
+{
+   right: 15px;
+   top: 5px;
+   position: absolute;
+}
+
+.invisible
+{
+   display: none;
+}
+
+.content
+{
+   float: left;
+   padding: 10px;
+   padding-left: 20px;
+   border-left: 1px dashed #dc8300;
+}
+
+ul.menu
+{
+   padding: 0;
+   margin: 0;
+   list-style-type: none;
+   float: left;
+   width: 25%;
+}
+
+ul.menu li
+{
+   padding: 0;
+   list-style: none;
+   display: block;
+   clear: both;
+   width: 100%;
+   border-bottom: 1px dashed #dc8300;
+}
+
+ul.menu li a
+{
+   display: block;
+   clear: both;
+   padding: 10px;
+   border: 0;
+   background: white url("img/options_bg.png") repeat-x top left;
+   color: #000;
+   font-size: 150%;
+   font-weight: bold;
+   background-color: #ffeed4;
+}
+
+ul.menu li a:hover, ul.menu li a.active
+{
+   background-color: #ffbd5d;
+   color: #975a00;
+}
+/*Button style*/
+.button {
+  background: #ffbc5e;
+  background-image: -webkit-linear-gradient(top, #ffbc5e, #ff9500);
+  background-image: -moz-linear-gradient(top, #ffbc5e, #ff9500);
+  background-image: -ms-linear-gradient(top, #ffbc5e, #ff9500);
+  background-image: -o-linear-gradient(top, #ffbc5e, #ff9500);
+  background-image: linear-gradient(to bottom, #ffbc5e, #ff9500);
+  -webkit-border-radius: 7;
+  -moz-border-radius: 7;
+  border-radius: 7px;
+  -webkit-box-shadow: 0px 1px 5px #666666;
+  -moz-box-shadow: 0px 1px 5px #666666;
+  box-shadow: 0px 1px 5px #666666;
+  font-family: Arial;
+  color: #ffffff;
+  font-size: 20px;
+  padding: 3px 20px 3px 20px;
+  text-decoration: none;
+}
+
+.button:hover {
+  background: #ff9500;
+  background-image: -webkit-linear-gradient(top, #ff9500, #ffbc5e);
+  background-image: -moz-linear-gradient(top, #ff9500, #ffbc5e);
+  background-image: -ms-linear-gradient(top, #ff9500, #ffbc5e);
+  background-image: -o-linear-gradient(top, #ff9500, #ffbc5e);
+  background-image: linear-gradient(to bottom, #ff9500, #ffbc5e);
+  text-decoration: none;
+}
+
+.button:active {
+  background: #ff9500;
+  text-decoration: none;
+}

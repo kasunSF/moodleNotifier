@@ -1,0 +1,113 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<title>Moodle Notifier Options</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+		<link rel="stylesheet" type="text/css" media="screen" href="css/general.css" />
+
+		<script type="text/javascript" src="js/options.js"></script>
+		<script type="text/javascript" src="js/options2.js"></script>
+	</head>
+	<body>
+
+		<div id="main">
+			<h1 class="title"><font color="#fea727">Moodle Notifier 1.0</font></h1>
+			<form>
+				<table>
+					<tr>
+						<td style="background-color: #d6ae74">                
+						<span class="top_right"><img src="img/logo.png" alt="Icon" /></span>
+						<h1>Options</h1>
+						<p>Thank you for installing Moodle Notifier. Please configure the extension to fit your requirements.</p>
+						</td>
+					</tr>
+					<tr>
+						<td  style="padding: 0">
+								<ul class="menu">
+									<li><a href="javascript:showContent(0)" title="View general settings">General</a></li>
+									<li><a href="javascript:showContent(1)" title="View notification settings">Notifications</a></li>
+									<li><a href="javascript:showContent(2)" title="View account settings">Accounts</a></li>
+									<li><a href="javascript:showContent(3)" title="View account settings">About</a></li>
+								</ul>
+
+							<div id="content_0" class="content invisible">
+								<h2>General settings</h2>
+								URL for moodle<br><input type="text" id="url" /> <label for="url"></label><br><br>
+								Polling interval:  
+								<select id="poll">
+									<option id="poll_15000" value="15000">15 seconds</option>
+									<option id="poll_30000" value="30000">30 seconds</option>
+									<option id="poll_60000" value="60000">1 minute</option>
+									<option id="poll_300000" value="300000">5 minutes</option>
+									<option id="poll_900000" value="900000">15 minutes</option>
+									<option id="poll_1800000" value="1800000">30 minutes</option>
+									<option id="poll_3600000" value="3600000">1 hour</option>
+									<option id="poll_18000000" value="18000000">5 hours</option>
+								</select>
+							</div>
+
+							<div id="content_1" class="content invisible">
+							<h2>Notification settings</h2>
+							<fieldset>
+								<legend>Sound notifications</legend>
+								<input type="checkbox" id="mute" /> <label for="mute">Mute</label>
+								<br />
+								<br />
+								Notification sound:
+								<select id="alert">
+									<option id="alert1" value="alert1.ogg">alert1</option>
+									<option id="alert2" value="alert2.ogg">alert2</option>
+									<option id="alert3" value="alert3.ogg">alert3</option>
+									<option id="alert4" value="alert4.ogg">alert4</option>
+									<option id="alert5" value="alert5.ogg">alert5</option>
+									<option id="alert6" value="alert6.ogg">alert6</option>
+									<option id="alert7" value="alert7.ogg">alert7</option>
+									<option id="alert8" value="alert8.ogg">alert8</option>								</select>
+								<a href="javascript:void(0);" onclick="playNotificationSound()" title="Play notification sound" style="border: 0"><img src="img/play.png" /></a>
+								<br>
+								<input type="hidden" id="sn_audio_enc" />
+							</fieldset>
+							<br />				   
+							<fieldset>
+								<legend>Desktop popup</legend>                  
+								<input type="checkbox" id="show_notification" onchange="requestUserPermission()" />
+								<label for="show_notification">Show desktop popup</label> 
+								<br />
+								<br />
+								Timeout:  
+								<select id="dn_timeout">
+									<option id="dn_timeout_5000" value="5000">5 seconds</option>
+									<option id="dn_timeout_15000" value="15000">15 seconds</option>
+									<option id="dn_timeout_60000" value="60000">1 minute</option>
+									<option id="dn_timeout_3600000" value="3600000">1 hour</option>
+									<option id="dn_timeout_0" value="0">Indefinitely</option>
+								</select>
+							</fieldset>
+							</div>
+							<div id="content_2" class="content invisible">
+								<h2>Account settings</h2>
+								<fieldset>
+									<legend>Account details</legend>
+									Username<br><input type="text" id="username" /> <label for="username"></label><br>
+									Password<br><input type="password" id="password" /> <label for="password"></label><br>
+								</fieldset>
+							</div>
+							<div id="content_3" class="content invisible">
+								<h2>About Moodle Notifier</h2>
+								<p>Moodle Notifier is an extension for Google Chrome web browser <br>
+								to get desktop notifications of upcoming events that are posted<br>
+								on Moodle.</p>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<button class="button" id="submit" onclick="save_options()" style="float: right;">Save</button>
+						</td>
+					</tr>
+				</table>
+			</form>
+		</div>
+	</body>
+</html>
