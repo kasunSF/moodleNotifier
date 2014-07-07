@@ -166,20 +166,13 @@ ul.menu
 
 ul.menu li
 {
-   padding: 0;
-   list-style: none;
    display: block;
    clear: both;
-   width: 100%;
-   border-bottom: 1px dashed #dc8300;
-}
-
-ul.menu li a
-{
-   display: block;
-   clear: both;
+   cursor: pointer;
    padding: 10px;
-   border: 0;
+   border-left: 1px dashed #dc8300;
+   border-right: 1px dashed #dc8300;
+   border-top: 1px dashed #dc8300;
    background: white url("img/options_bg.png") repeat-x top left;
    color: #000;
    font-size: 150%;
@@ -187,7 +180,7 @@ ul.menu li a
    background-color: #ffeed4;
 }
 
-ul.menu li a:hover, ul.menu li a.active
+ul.menu li:hover, ul.menu li.active
 {
    background-color: #ffbd5d;
    color: #975a00;

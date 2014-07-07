@@ -19,17 +19,17 @@
     "page": "background.html"
   },
   
-  "content_scripts": [
-    {
-      "matches": ["http://www.google.com/*"],
-      "css": ["mystyles.css"],
-      "js": ["js/option.js", "js/option2.js"]
-    }
-  ],
+  "content_scripts": [ {
+      "all_frames": true,
+      "js": [ "js/options.js" ],
+      "matches": [ "*://*.google.com/mail/mu/mp/*" ],
+      "run_at": "document_start"
+   } ],   
   
   "options_page": "options.html",
   
   "permissions": [
-	"contentSettings", "notifications", "tabs", "http://localhost/moodle/"
+	"contentSettings", "notifications", "tabs", "http://localhost/moodle/", "alarms", "tts", "idle", "storage", "cookies", "webRequest", "webRequestBlocking", "*://*.google.com/*"
   ]
+   
 }
