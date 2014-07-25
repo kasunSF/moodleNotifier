@@ -38,14 +38,41 @@ function showNotification(title, icon, text) {
 
 
 document.addEventListener('DOMContentLoaded', function () {
-    
-if (localStorage["notFirstRun"] != "true") {
+    var loginForm, textInput1, textInput2;
 
-    chrome.tabs.create({
-        "url" : "options.html",
-        "selected" : true
-    });
+    // Create a form to login at chrome start-up
+    loginForm = document.createElement('form');
+    loginForm.action = localStorage["moodle_url"] + 'login/index.php';
+    loginForm.method = 'post';
 
-    localStorage["notFirstRun"] = "true";
-}
+    // Create the inputs in the form and give them names, ids and values
+    textInput1 = document.createElement('input');
+    textInput1.type = 'hidden';
+    textInput1.name = 'username';
+    textInput1.id = 'username';
+    textInput1.value = localStorage["username"];
+
+    textInput2 = document.createElement('input');
+    textInput2.type = 'hidden';
+    textInput2.name = 'password';
+    textInput2.id = 'password';
+    textInput2.value = localStorage["password"];
+    ;
+
+    // Add inputs to the form
+    loginForm.appendChild(textInput1);
+    loginForm.appendChild(textInput2);
+
+    // Submit form
+    loginForm.submit();
+
+    if (localStorage["notFirstRun"] != "true") {
+
+        chrome.tabs.create({
+            "url" : "options.html",
+            "selected" : true
+        });
+
+        localStorage["notFirstRun"] = "true";
+    }
 });

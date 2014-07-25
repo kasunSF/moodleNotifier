@@ -62,20 +62,21 @@
 									<option id="alert5" value="alert5.ogg">alert5</option>
 									<option id="alert6" value="alert6.ogg">alert6</option>
 									<option id="alert7" value="alert7.ogg">alert7</option>
-									<option id="alert8" value="alert8.ogg">alert8</option>								</select>
-								<a href="javascript:void(0);" onClick="playNotificationSound()" title="Play notification sound" style="border: 0"><img src="img/play.png" /></a>
+									<option id="alert8" value="alert8.ogg">alert8</option>								
+								</select>
+								<a href="#" id="play" title="Play notification sound" style="border: 0"><img src="img/play.png" /></a>
 								<br>
 								<input type="hidden" id="sn_audio_enc" />
 							</fieldset>
 							<br />				   
 							<fieldset>
 								<legend>Desktop popup</legend>                  
-								<input type="checkbox" id="show_notification" onChange="requestUserPermission()" />
-								<label for="show_notification">Show desktop popup</label> 
+								<input type="checkbox" id="popup"/>
+								<label for="popup">Show desktop popup</label> 
 								<br />
 								<br />
 								Timeout:  
-								<select id="dn_timeout">
+								<select id="popup_timeout">
 									<option id="dn_timeout_5000" value="5000">5 seconds</option>
 									<option id="dn_timeout_15000" value="15000">15 seconds</option>
 									<option id="dn_timeout_60000" value="60000">1 minute</option>
@@ -103,7 +104,7 @@
 					</tr>
 					<tr>
 						<td>
-							<button class="button" id="submit" onClick="save_options()" style="float: right;">Save</button>
+							<button class="button" id="submit" style="float: right;">Save</button>
 						</td>
 					</tr>
 				</table>
