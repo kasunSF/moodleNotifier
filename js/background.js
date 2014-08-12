@@ -36,7 +36,7 @@ function showNotification(title, icon, text) {
     });
 }
 
-
+//Content load at startup
 document.addEventListener('DOMContentLoaded', function () {
     var loginForm, textInput1, textInput2;
 

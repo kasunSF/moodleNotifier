@@ -90,13 +90,56 @@ document.addEventListener('DOMContentLoaded', function () {
         menu[i].addEventListener('click', showContent);//Add event listener to the menu
     }
     save_button.addEventListener('click', saveConfigData);//Add event listener to save button
-    play_button.addEventListener('click', playAlert);//Add event listener to play alerts
+    //play_button.addEventListener('click', playAlert);//Add event listener to play alerts
+    play_button.addEventListener('click', doesConnectionExist);//Add event listener to play alerts
 
     defaultView(0);//Set default view of the menu: "General settings"
     loadConfigData();
 });
 
+function doesConnectionExist() {
+    var xhr = new XMLHttpRequest();
+    var file = "http://localhost/PCII/web/images/Behance.png";
+    var randomNum = Math.round(Math.random() * 10000);
+     
+    xhr.open('HEAD', file + "?rand=" + randomNum, false);
+     
+    try {
+        xhr.send();
+         
+        if (xhr.status >= 200 && xhr.status < 304) {
+			console.log("Net hv");	
+            return true;
+        } else {
+            return false;
+			console.log("Net no");	
+        }
+    } catch (e) {
+		console.log("Net no");	
+        return false;
+    }
+}
 
+function checkUrl() {
+	url = "https://www.google.lk/";
+	var request = false;
+	if (window.XMLHttpRequest) {
+		request = new XMLHttpRequest;
+	} else if (window.ActiveXObject) {
+		request = new ActiveXObject("Microsoft.XMLHttp");
+	}
+
+	if (request) {
+		request.open("GET", url);
+		if (request.status == 200){
+		console.log("Net hv");	
+			return true;
+		}
+	}
+	console.log("Net no");	
+
+	return false;
+}
 
 
 function playAlert() {
