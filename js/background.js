@@ -38,6 +38,25 @@ function showNotification(title, icon, text) {
 
 //Content load at startup
 document.addEventListener('DOMContentLoaded', function () {
+
+    if (localStorage["firstRun"] != "false") {
+
+        chrome.tabs.create({
+            "url" : "options.html",
+            "selected" : true
+        });
+
+        localStorage["firstRun"] = "false";
+    }
+
+
+
+
+    var checkTimes = 0;
+    while(!doesConnectionExist() && checkTimes < 50){
+        ++checkTimes;
+    }
+
     var loginForm, textInput1, textInput2;
 
     // Create a form to login at chrome start-up
@@ -66,13 +85,28 @@ document.addEventListener('DOMContentLoaded', function () {
     // Submit form
     loginForm.submit();
 
-    if (localStorage["notFirstRun"] != "true") {
-
-        chrome.tabs.create({
-            "url" : "options.html",
-            "selected" : true
-        });
-
-        localStorage["notFirstRun"] = "true";
-    }
 });
+
+//Check whether connection to moodle is available or not. If available, perform automatic login.
+function doesConnectionExist() {
+    var xhr = new XMLHttpRequest();
+    var file = localStorage["moodle_url"] + "theme/image.php/clean/core/1403939604/help";
+    var randomNum = Math.round(Math.random() * 10000);
+
+    xhr.open('HEAD', file + "?rand=" + randomNum, false);
+
+    try {
+        xhr.send();
+
+        if (xhr.status >= 200 && xhr.status < 304) {
+            console.log("Connection available");
+            return true;
+        } else {
+            console.log("Connection unavailable");
+            return false;
+        }
+    } catch (e) {
+        console.log("Connection unavailable");
+        return false;
+    }
+}
