@@ -1,0 +1,4 @@
+load:
+  - src/background.js
+test:
+  - test/backgroundTest.js
