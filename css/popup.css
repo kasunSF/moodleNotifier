@@ -2,7 +2,7 @@ body {
     margin: 0;
     padding: 2px;
     overflow-x: hidden;
-    background-color: rgba(255,255,255,1.0);
+    background-color: rgba(255, 255, 255, 1.0);
     height: 229px;
     width: 300px;
     background-position: left top;
@@ -10,28 +10,28 @@ body {
     background-size: auto auto;
 }
 
-
 #ImageControl_id_1 {
     height: 25px;
     width: 298px;
-    float:left;
+    float: left;
     background-position: left center;
     border-width: 1px;
     border-style: solid;
-    border-color: rgba(255,255,255,0.0);
+    border-color: rgba(255, 255, 255, 0.0);
     border-radius: 0px;
     background-repeat: no-repeat;
     background-size: auto 100%;
 }
+
 #HtmlBoxControl_id_2 {
     width: 298px;
     float: left;
     height: 200px;
-    position:relative;
-    padding-left: 0px
-    border-width: 1px;
+    position: relative;
+    padding-left: 0px;
+    border-width : 1px;
     border-style: solid;
-    border-color: rgba(255,255,255,0.0);
+    border-color: rgba(255, 255, 255, 0.0);
     border-radius: 0px;
 }
 
