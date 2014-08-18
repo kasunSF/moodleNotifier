@@ -12,13 +12,15 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     save_button.addEventListener('click', saveConfigData);//Add event listener to save button
     play_button.addEventListener('click', playAlert);//Add event listener to play alerts
+    //play_button.addEventListener('click', notify);//Add event listener to play alerts
 
     defaultView(0);//Set default view of the menu: "General settings"
-    loadConfigData();
+    loadConfigData();//Load saved preferences
 });
 
 /*
  JavaScript for navigate menu in options page.
+ This controls the visibility of menus in options page.
  */
 function showContent(event) {
     $('.content').each(function (index) {
@@ -38,7 +40,7 @@ function showContent(event) {
 }
 
 /*
- JavaScript for set default menu in options page
+ Set default menu view in options page
  */
 function defaultView(contentId) {
     $('.content').each(function (index) {
@@ -65,7 +67,7 @@ function saveConfigData() {
     var remember = document.getElementById('remember').checked;
 
     /*
-     Save user preferences to local storage.
+     JavaScript function to save user preferences to local storage.
      */
     try {
         localStorage["moodle_url"] = moodle_url;
@@ -79,6 +81,7 @@ function saveConfigData() {
 
         /*
          If the user need to save login data, encrypt the password and save in local storage.
+         Otherwise clear previously saved password if available
          */
         if (remember)
             localStorage["password"] = CryptoJS.RC4Drop.encrypt(password, "Vw7F3ZcPqJwLqerFoF3sNDAmIDsB", { drop: 3072 / 4 });
@@ -88,7 +91,7 @@ function saveConfigData() {
         console.log("Preferences are saved!");//Print log on browser console
         automaticLogin();
     } catch (e) {
-        console.log("Save Error!");//Print log on browser console
+        console.log("Save Error!");//Print error log on browser console
     }
     /*
      console.log("url: " + localStorage["moodle_url"]);
@@ -141,7 +144,7 @@ function automaticLogin() {
 }
 
 /*
- JavaScript to load configuration data to options page
+ JavaScript function to load configuration data to options page
  */
 function loadConfigData() {
     //Do not load config data during the first run of the extension.
@@ -149,6 +152,10 @@ function loadConfigData() {
         localStorage["notFirstRun"] = "true";
         console.log("First run");
     }
+    /*
+     Retrive user preferences from local storage.
+     All the preferences except password are previewed in options page
+     */
     else {
         try {
             document.getElementById('url').value = localStorage["moodle_url"];
@@ -156,7 +163,6 @@ function loadConfigData() {
             document.getElementById('popup_timeout').value = localStorage["popup_time"];
             document.getElementById('alert').value = localStorage["alert_sound"];
             document.getElementById('username').value = localStorage["username"];
-            //document.getElementById('password').value = localStorage["password"];
 
             if (localStorage["mute"] == "false")
                 document.getElementById('mute').checked = false;
@@ -176,9 +182,20 @@ function loadConfigData() {
                 document.getElementById('remember').checked = true;
 
             console.log("Preferences are loaded!");//Print log on console
+
+
+            console.log("url: " + localStorage["moodle_url"]);
+            console.log("intrvl: " + localStorage["poll_interval"]);
+            console.log("mute: " + localStorage["mute"]);
+            console.log("alert: " + localStorage["alert_sound"]);
+            console.log("popup: " + localStorage["popup"]);
+            console.log("time: " + localStorage["popup_time"]);
+            console.log("un: " + localStorage["username"]);
+            console.log("pw: " + CryptoJS.RC4Drop.decrypt(localStorage["password"], "Vw7F3ZcPqJwLqerFoF3sNDAmIDsB", { drop: 3072 / 4 }).toString(CryptoJS.enc.Utf8));
+            console.log("remember: " + localStorage["remember"]);
         }
         catch (e) {
-            console.log("Preferences loading error!");//Print log on console
+            console.log("Preferences loading error!");//Print error log on console
         }
     }
 }

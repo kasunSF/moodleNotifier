@@ -1,35 +1,37 @@
 {
-  "manifest_version": 2,
-  "name": "Moodle Notifier",
-  "version": "1.0",
-  "description": "Chrome extension for fetching notifications from moodle",
-  "icons": {
-    "48": "img/icon48.png",
-    "128": "img/icon128.png",
-    "16": "img/icon16.png"
-  },
-  
-  "browser_action": {
-    "default_icon": "img/icon128.png",
-    "default_title": "Moodle Notifier",
-    "default_popup": "popup.html"
-  },
-  
-  "background": {
-    "page": "background.html"
-  },
-  
-  "content_scripts": [ {
-      "all_frames": true,
-      "js": [ "js/options.js" ],
-      "matches": [ "*://*.google.com/mail/mu/mp/*" ],
-      "run_at": "document_start"
-   } ],   
-  
-  "options_page": "options.html",
-  
-  "permissions": [
-	"contentSettings", "notifications", "tabs", "http://localhost/moodle/", "alarms", "tts", "idle", "storage", "cookies", "webRequest", "webRequestBlocking", "*://*.google.com/*"
-  ]
-   
+    "manifest_version": 2,
+    "name": "Moodle Notifier",
+    "version": "1.0",
+    "description": "Chrome extension for fetching notifications from moodle",
+    "icons": {
+        "48": "img/icon48.png",
+        "128": "img/icon128.png",
+        "16": "img/icon16.png"
+    },
+
+    "browser_action": {
+        "default_icon": "img/icon128.png",
+        "default_title": "Moodle Notifier",
+        "default_popup": "popup.html"
+    },
+
+    "background": {
+        "page": "background.html"
+    },
+
+    "content_scripts": [
+        {
+            "all_frames": true,
+            "js": [ "js/options.js" ],
+            "matches": [ "*://*.google.com/mail/mu/mp/*" ],
+            "run_at": "document_start"
+        }
+    ],
+
+    "options_page": "options.html",
+
+    "permissions": [
+        "contentSettings", "notifications", "tabs", "http://localhost/moodle/", "alarms", "tts", "idle", "storage", "cookies", "webRequest", "webRequestBlocking", "*://*.google.com/*","http://*/*"
+    ]
+
 }

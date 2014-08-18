@@ -1,17 +1,10 @@
-GreeterTest = TestCase("GreeterTest");
-
-GreeterTest.prototype.testGreet = function () {
-    var greeter = new myapp.Greeter();
-    assertEquals("Hello World!", greeter.greet("World"));
-};
-
 backgroundTest = TestCase("backgroundTest");
 
-backgroundTest.prototype.testHello = function () {
-    var result = sample.hello("Kasun");
-    assertEquals(result, "Hello Kasun");
+backgroundTest.prototype.checkConn = function () {
+    var result = checkConn.doesConnectionExist();
+    assertEquals(result, true);
 };
-backgroundTest.prototype.testBye = function () {
-    var result = sample.goodBye("Kasun");
-    assertEquals(result, "Good bye Kasuan");
+backgroundTest.prototype.checkConn = function () {
+    var result = checkConn.doesConnectionExist();
+    assertEquals(result, false);
 };

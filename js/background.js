@@ -7,83 +7,87 @@ document.addEventListener('DOMContentLoaded', function () {
      If first run, open th options page to set user preferences.
      */
     if (localStorage["firstRun"] != "false") {
-
-        chrome.tabs.create({
-            "url": "options.html",
-            "selected": true
-        });
-
+        createTab("options.html");
         localStorage["firstRun"] = "false";
     }
 
     /*
-     Check availability of Moodle for 20 seconds.
-     If Moodle is available, login to the moodle automatically
+     If automatic login is enabled, check availability of Moodle for each 10 seconds.
+     If Moodle is available, login to the moodle automatically.
      */
-    var checkTimes = 0;
-    while (!doesConnectionExist() && checkTimes < 50) {
-        ++checkTimes;
+    var hasConnection = false;
+    var loggedIn = false;
+
+    if (localStorage["remember"] == "true") {//If automatic login enabled
+
+        var connectionChecker = setInterval(function () {
+            console.log("Checking connection...");
+            hasConnection = doesConnectionExist();//Check for connection to Moodle
+            console.log("Connection is available.");
+
+            if (hasConnection && !loggedIn) {//If connection is avaiable
+                automaticLogin();//Login automatically
+                loggedIn = isLoggedIn();
+                console.log("Logged in");
+            }
+            else if (!hasConnection){//If connection is not available, set as not logged in.
+                loggedIn = false;
+                console.log("Not logged in");
+            }
+        }, 10000);
     }
+    /*
+    If automatic login is disabled, check whether user is logged in to the moodle for every 10 seconds.
+    This uses browser cookies.
 
-    automaticLogin();
+    else{
 
+    }*/
 });
 
 /*
- This function create an html form.
+ This function creates an html form.
  Then fill it with login detils that are provided by the user and login to Moodle automatically.
  */
 function automaticLogin() {
-    var loginForm, textInput1, textInput2;
+    var password = CryptoJS.RC4Drop.decrypt(localStorage["password"], "Vw7F3ZcPqJwLqerFoF3sNDAmIDsB", { drop: 3072 / 4 }).toString(CryptoJS.enc.Utf8);
 
-    // Create a form to login at chrome start-up
-    loginForm = document.createElement('form');
-    loginForm.action = localStorage["moodle_url"] + 'login/index.php';
-    loginForm.method = 'post';
+    var xmlhttp;
+    if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp = new XMLHttpRequest();
+    }
+    else {// code for IE6, IE5
+        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+    }
 
-    // Create the inputs in the form and give them names, ids and values
-    textInput1 = document.createElement('input');
-    textInput1.type = 'hidden';
-    textInput1.name = 'username';
-    textInput1.id = 'username';
-    textInput1.value = localStorage["username"];
+    xmlhttp.open("POST", localStorage["moodle_url"] + 'login/index.php', true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xmlhttp.send("username= " + localStorage["username"] + "& password=" + password);
 
-    textInput2 = document.createElement('input');
-    textInput2.type = 'hidden';
-    textInput2.name = 'password';
-    textInput2.id = 'password';
-    textInput2.value = CryptoJS.RC4Drop.decrypt(localStorage["password"], "Vw7F3ZcPqJwLqerFoF3sNDAmIDsB", { drop: 3072 / 4 }).toString(CryptoJS.enc.Utf8);
-    ;
-
-    // Add inputs to the form
-    loginForm.appendChild(textInput1);
-    loginForm.appendChild(textInput2);
-
-    // Submit form
-    loginForm.submit();
+    console.log("Submitted!");
 }
 
 /*
  Check whether connection to moodle is available or not.
  Return true if connection is available.
+ Otherwise returns false.
 
- Note: This function checks the availability of an image in Moodle using http header.
- Availability of the image is recognized as connection availability.
+ Note: This function checks the availability of a page of Moodle using http header.
+ Availability of the web pageis recognized as connection availability.
  */
 function doesConnectionExist() {
-    var xhr = new XMLHttpRequest();
-    var file = localStorage["moodle_url"] + "theme/image.php/clean/core/1403939604/help";//Check for image
+    var xmlhttp = new XMLHttpRequest();
+    var file = localStorage["moodle_url"] + "login/index.php";//Checks for login/index.php page
     var randomNum = Math.round(Math.random() * 10000);//Random number prevents loading cached data
-
-    xhr.open('HEAD', file + "?rand=" + randomNum, false);
+    xmlhttp.open('HEAD', file + "?rand=" + randomNum, false);//Fetch header information of the request
 
     try {
-        xhr.send();
+        xmlhttp.send();//Send http request
 
         /*
          200 and 304 are http response codes. Any number above 304 is detected as connection unavaiability or error.
          */
-        if (xhr.status >= 200 && xhr.status < 304) {
+        if (xmlhttp.status >= 200 && xmlhttp.status < 304) {
             console.log("Connection available");
             return true;
         } else {
@@ -91,9 +95,44 @@ function doesConnectionExist() {
             return false;
         }
     } catch (e) {
-        console.log("Connection unavailable");
+        console.log("Connection unavailable");//Log error
         return false;
     }
+}
+
+/*
+ This function checks whether user is logged in or not.
+ It is identified by scratching the response of login/index.php page.
+
+ Returns true if logged in. Otherwise returns false.
+ */
+function isLoggedIn() {
+    var xmlhttp = new XMLHttpRequest();
+    var file = localStorage["moodle_url"] + "login/index.php";
+    var randomNum = Math.round(Math.random() * 10000);//Random number prevents loading cached data.
+    xmlhttp.open('GET', file + "?rand=" + randomNum, false);//Fetch the response as an html string.
+
+    try {
+        xmlhttp.send();//Send http request
+        var responseText = xmlhttp.responseText;
+        if (responseText.search("Cookies must be enabled in your browser") > -1)//Scratch the html string.
+            return false;
+        else
+            return true;
+    } catch (e) {
+        return false;
+    }
+}
+
+/*
+ Function to create tab with given url in Chrome browser.
+ url: Desired url
+ */
+function createTab(url) {
+    chrome.tabs.create({
+        "url": url,
+        "selected": true
+    });
 }
 
 /*
