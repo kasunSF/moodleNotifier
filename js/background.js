@@ -6,43 +6,52 @@ document.addEventListener('DOMContentLoaded', function () {
      //Check for the first run of the extension.
      If first run, open th options page to set user preferences.
      */
-    if (localStorage["firstRun"] != "false") {
+    if (localStorage["notFirstRun"] != "true") {
         createTab("options.html");
-        localStorage["firstRun"] = "false";
     }
 
-    /*
-     If automatic login is enabled, check availability of Moodle for each 10 seconds.
-     If Moodle is available, login to the moodle automatically.
-     */
+    chrome.browserAction.setBadgeText({text: "5"});
     var hasConnection = false;
     var loggedIn = false;
 
-    if (localStorage["remember"] == "true") {//If automatic login enabled
-
-        var connectionChecker = setInterval(function () {
+    var connectionChecker = setInterval(function () {
+        /*
+         If automatic login is enabled, check availability of Moodle for each 10 seconds.
+         */
+        if (localStorage["remember"] == "true") {//If automatic login enabled
             console.log("Checking connection...");
             hasConnection = doesConnectionExist();//Check for connection to Moodle
-            console.log("Connection is available.");
-
+            /*
+             If Moodle is available and not logged in, login to the moodle automatically.
+             */
             if (hasConnection && !loggedIn) {//If connection is avaiable
                 automaticLogin();//Login automatically
+                console.log("Logging in");
                 loggedIn = isLoggedIn();
-                console.log("Logged in");
             }
-            else if (!hasConnection){//If connection is not available, set as not logged in.
+            /*
+             If Moodle is available and logged in, fetch upcoming events.
+             */
+            else if (hasConnection && loggedIn) {//If connection is avaiable
+                //fetchEvents();//Show dektop and audible notifications
+
+            }
+            /*
+             If Moodle is not available, set as not logged in.
+             Then whenever the connection become available, this cause re-login.
+             */
+            else if (!hasConnection) {//If connection is not available, set as not logged in.
                 loggedIn = false;
-                console.log("Not logged in");
             }
-        }, 10000);
-    }
-    /*
-    If automatic login is disabled, check whether user is logged in to the moodle for every 10 seconds.
-    This uses browser cookies.
-
-    else{
-
-    }*/
+        }
+        /*
+         If automatic login is disabled, check whether user is logged in to the moodle for every 10 seconds.
+         This uses browser cookies.
+         */
+        else {
+            console.log("Automatic login disabled");
+        }
+    }, 10000);
 });
 
 /*
@@ -73,7 +82,7 @@ function automaticLogin() {
  Otherwise returns false.
 
  Note: This function checks the availability of a page of Moodle using http header.
- Availability of the web pageis recognized as connection availability.
+ Availability of the web page is recognized as connection availability.
  */
 function doesConnectionExist() {
     var xmlhttp = new XMLHttpRequest();
@@ -95,7 +104,7 @@ function doesConnectionExist() {
             return false;
         }
     } catch (e) {
-        console.log("Connection unavailable");//Log error
+        console.log("Connection error!");//Log error
         return false;
     }
 }
@@ -117,8 +126,10 @@ function isLoggedIn() {
         var responseText = xmlhttp.responseText;
         if (responseText.search("Cookies must be enabled in your browser") > -1)//Scratch the html string.
             return false;
-        else
+        else {
+            console.log("Logged in")
             return true;
+        }
     } catch (e) {
         return false;
     }

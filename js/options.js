@@ -12,7 +12,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     save_button.addEventListener('click', saveConfigData);//Add event listener to save button
     play_button.addEventListener('click', playAlert);//Add event listener to play alerts
-    //play_button.addEventListener('click', notify);//Add event listener to play alerts
 
     defaultView(0);//Set default view of the menu: "General settings"
     loadConfigData();//Load saved preferences
@@ -89,7 +88,6 @@ function saveConfigData() {
             localStorage["password"] = "";
 
         console.log("Preferences are saved!");//Print log on browser console
-        automaticLogin();
     } catch (e) {
         console.log("Save Error!");//Print error log on browser console
     }
@@ -103,44 +101,7 @@ function saveConfigData() {
      console.log("un: " + localStorage["username"]);
      console.log("remember: " + localStorage["remember"]);
      */
-
-}
-
-/*
- This function create an html form.
- Then fill it with login detils that are provided by the user and login to Moodle automatically.
- */
-function automaticLogin() {
-    console.log("Awaaaaaa");
-    var loginForm, textInput1, textInput2;
-
-    // Create a form to login
-    loginForm = document.createElement('form');
-    loginForm.action = localStorage["moodle_url"] + 'login/index.php';
-    loginForm.method = 'post';
-
-    // Create the inputs in the form and give them names, ids and values
-    textInput1 = document.createElement('input');
-    textInput1.type = 'hidden';
-    textInput1.name = 'username';
-    textInput1.id = 'usernam';
-    textInput1.value = localStorage["username"];
-
-    textInput2 = document.createElement('input');
-    textInput2.type = 'hidden';
-    textInput2.name = 'password';
-    textInput2.id = 'password';
-    textInput2.value = CryptoJS.RC4Drop.decrypt(localStorage["password"], "Vw7F3ZcPqJwLqerFoF3sNDAmIDsB", { drop: 3072 / 4 }).toString(CryptoJS.enc.Utf8);
-    ;
-
-    // Add inputs to the form
-    loginForm.appendChild(textInput1);
-    loginForm.appendChild(textInput2);
-
-    // Submit form
-    loginForm.submit();
-
-    console.log("Giya");
+    localStorage["configured"] = "true";
 }
 
 /*
