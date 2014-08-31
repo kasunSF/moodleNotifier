@@ -57,3 +57,19 @@ function notifyEver(title, body, url) {
         this.close();
     }
 }
+
+/*
+ Function to play notification sounds that are available in the extension as preview.
+ */
+function playAlert(alertID) {
+    var source;
+    source = "sounds/" + alertID;//Direct to the location of sound file
+
+    try {
+        var audioElement = new Audio();
+        audioElement.src = source;
+        audioElement.play();
+    } catch (e) {
+        console.error(e);
+    }
+}
