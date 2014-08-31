@@ -3,9 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="2ced237e-81b9-4021-8c26-37429c9a0e89" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/background.js" afterPath="$PROJECT_DIR$/js/background.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/notification.js" afterPath="$PROJECT_DIR$/js/notification.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/options.js" afterPath="$PROJECT_DIR$/js/options.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="moodleNotifier.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -49,7 +46,7 @@
       <file leaf-file-name="background.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/js/background.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="145" column="23" selection-start="5229" selection-end="5229" vertical-scroll-proportion="4.3939395" vertical-offset="0" max-vertical-offset="5304">
+            <state line="297" column="17" selection-start="12055" selection-end="12055" vertical-scroll-proportion="0.24242425" vertical-offset="4913" max-vertical-offset="5474">
               <folding />
             </state>
           </provider>
@@ -599,7 +596,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/js/background.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="145" column="23" selection-start="5229" selection-end="5229" vertical-scroll-proportion="4.3939395" vertical-offset="0" max-vertical-offset="5304">
+        <state line="297" column="17" selection-start="12055" selection-end="12055" vertical-scroll-proportion="0.24242425" vertical-offset="4913" max-vertical-offset="5474">
           <folding />
         </state>
       </provider>

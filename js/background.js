@@ -12,16 +12,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
     /*
      //Check for the first run of the extension.
-     If first run, open th options page to set user preferences.
+     If first run, open the options page to set user preferences.
      */
     if (localStorage["notFirstRun"] != "true") {
         createTab("options.html");
     }
 
     connectionChecker = setInterval(function () {
-        if(localStorage["configured"] == "true"){
-            console.log("Preferences are changed!");
+        if (localStorage["configured"] == "true") {
             location.reload(true);
+            console.log("Preferences are changed!");
             localStorage["configured"] = "false";
         }
         /*
@@ -38,20 +38,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.log("Logging in");
                 loggedIn = isLoggedIn();
             }
-            /*
-             If Moodle is available and logged in, fetch upcoming events.
-             */
-            if (hasConnection && loggedIn) {//If connection is avaiable
-                fetchEvents();//Show dektop and audible notifications
-
-            }
-            /*
-             If Moodle is not available, set as not logged in.
-             Then whenever the connection become available, this cause re-login.
-             */
-            else if (!hasConnection) {//If connection is not available, set as not logged in.
-                loggedIn = false;
-            }
         }
         /*
          If automatic login is disabled, check whether user is logged in to the moodle for every 10 seconds.
@@ -59,6 +45,23 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         else {
             console.log("Automatic login disabled");
+            console.log("Checking connection...");
+            hasConnection = doesConnectionExist();//Check for connection to Moodle
+            loggedIn = isLoggedIn();
+        }
+
+        /*
+         If Moodle is available and logged in, fetch upcoming events.
+         */
+        if (hasConnection && loggedIn) {//If connection is avaiable
+            fetchEvents();//Show dektop and audible notifications
+        }
+        /*
+         If Moodle is not available, set as not logged in.
+         Then whenever the connection become available, this cause re-check for logged in.
+         */
+        else if (!hasConnection) {//If connection is not available, set as not logged in.
+            loggedIn = false;
         }
     }, localStorage["poll_interval"]);
 });
@@ -71,14 +74,11 @@ function automaticLogin() {
     var password;
     var xmlhttp;
 
-    password = CryptoJS.RC4Drop.decrypt(localStorage["password"], "Vw7F3ZcPqJwLqerFoF3sNDAmIDsB", { drop: 3072 / 4 }).toString(CryptoJS.enc.Utf8);
-    if (window.XMLHttpRequest) {
-        xmlhttp = new XMLHttpRequest();
-    }
-    else {// code for IE6, IE5
-        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-    }
-
+    password = CryptoJS.RC4Drop.decrypt(localStorage["password"], "Vw7F3ZcPqJwLqerFoF3sNDAmIDsB", { drop: 3072 / 4 }).toString(CryptoJS.enc.Utf8);//Decrypt password
+    xmlhttp = new XMLHttpRequest();
+    /*
+     Create XML http request to send login information to the Moodle.
+     */
     xmlhttp.open("POST", localStorage["moodle_url"] + 'login/index.php', true);
     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xmlhttp.send("username= " + localStorage["username"] + "& password=" + password);
@@ -282,13 +282,23 @@ function fetchEvents() {
                 }
             }
 
+            /*
+            Snow desktop notifications and play audible notifications according to user preferences.
+            Notifications are called only if the event page has been changed.
+             */
             if (hasChanged) {
+                /*
+                Show desktop notification if enabled.
+                 */
                 if (localStorage["popup"] == "true") {
                     if (localStorage["popup_time"] == "Indefinitely")
                         notifyEver(name, date + "\n" + status + "\n", url);
                     else
                         notify(name, date + "\n" + status + "\n", url, localStorage["popup_time"]);
                 }
+                /*
+                Play audible notifications if enabled.
+                 */
                 if (localStorage["mute"] == "false") {
                     playAlert(localStorage["alert_sound"]);
                 }
