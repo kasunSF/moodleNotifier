@@ -2,10 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2ced237e-81b9-4021-8c26-37429c9a0e89" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/test.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/background.js" afterPath="$PROJECT_DIR$/js/background.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/notification.js" afterPath="$PROJECT_DIR$/js/notification.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/post.html" afterPath="$PROJECT_DIR$/post.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/options.js" afterPath="$PROJECT_DIR$/js/options.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="moodleNotifier.iws" />
@@ -32,7 +31,7 @@
       <file leaf-file-name="options.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/options.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="72" column="37" selection-start="2491" selection-end="2520" vertical-scroll-proportion="0.0" vertical-offset="969" max-vertical-offset="3621">
+            <state line="107" column="39" selection-start="3878" selection-end="3913" vertical-scroll-proportion="0.0" vertical-offset="1615" max-vertical-offset="3723">
               <folding />
             </state>
           </provider>
@@ -41,7 +40,7 @@
       <file leaf-file-name="options.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/options.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="87" column="80" selection-start="4638" selection-end="4650" vertical-scroll-proportion="-15.692307" vertical-offset="1071" max-vertical-offset="2108">
+            <state line="87" column="68" selection-start="4638" selection-end="4638" vertical-scroll-proportion="-7.6923075" vertical-offset="1279" max-vertical-offset="2108">
               <folding />
             </state>
           </provider>
@@ -50,7 +49,7 @@
       <file leaf-file-name="background.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/js/background.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="5" column="5" selection-start="154" selection-end="154" vertical-scroll-proportion="-1.3636364" vertical-offset="850" max-vertical-offset="5168">
+            <state line="145" column="23" selection-start="5229" selection-end="5229" vertical-scroll-proportion="4.3939395" vertical-offset="0" max-vertical-offset="5304">
               <folding />
             </state>
           </provider>
@@ -59,7 +58,7 @@
       <file leaf-file-name="notification.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/notification.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="27" column="28" selection-start="772" selection-end="772" vertical-scroll-proportion="0.0" vertical-offset="153" max-vertical-offset="1360">
+            <state line="76" column="1" selection-start="2026" selection-end="2026" vertical-scroll-proportion="0.0" vertical-offset="820" max-vertical-offset="1394">
               <folding />
             </state>
           </provider>
@@ -68,7 +67,7 @@
       <file leaf-file-name="popup.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/popup.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="66" column="10" selection-start="2031" selection-end="2031" vertical-scroll-proportion="0.0" vertical-offset="1122" max-vertical-offset="1360">
+            <state line="66" column="10" selection-start="2031" selection-end="2031" vertical-scroll-proportion="-11.923077" vertical-offset="812" max-vertical-offset="1360">
               <folding />
             </state>
           </provider>
@@ -77,7 +76,7 @@
       <file leaf-file-name="popup.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/popup.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="12" column="20" selection-start="344" selection-end="344" vertical-scroll-proportion="0.0" vertical-offset="204" max-vertical-offset="340">
+            <state line="12" column="20" selection-start="344" selection-end="344" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="340">
               <folding />
             </state>
           </provider>
@@ -108,9 +107,9 @@
         <option value="$PROJECT_DIR$/css/style.css" />
         <option value="$PROJECT_DIR$/js/popup.js" />
         <option value="$PROJECT_DIR$/popup.html" />
-        <option value="$PROJECT_DIR$/js/options.js" />
         <option value="$PROJECT_DIR$/test.html" />
         <option value="$PROJECT_DIR$/post.html" />
+        <option value="$PROJECT_DIR$/js/options.js" />
         <option value="$PROJECT_DIR$/js/notification.js" />
         <option value="$PROJECT_DIR$/js/background.js" />
       </list>
@@ -542,20 +541,6 @@
         <state line="6" column="3" selection-start="153" selection-end="153" vertical-scroll-proportion="-10.969697" vertical-offset="6256" max-vertical-offset="6817" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/popup.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="66" column="10" selection-start="2031" selection-end="2031" vertical-scroll-proportion="0.0" vertical-offset="1122" max-vertical-offset="1360">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/popup.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="20" selection-start="344" selection-end="344" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="340">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/background.html">
       <provider selected="true" editor-type-id="text-editor">
         <state line="3" column="50" selection-start="65" selection-end="65" vertical-scroll-proportion="0.093065694" vertical-offset="0" max-vertical-offset="548">
@@ -577,30 +562,44 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/options.html">
+    <entry file="file://$PROJECT_DIR$/popup.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="87" column="80" selection-start="4638" selection-end="4650" vertical-scroll-proportion="-15.692307" vertical-offset="1071" max-vertical-offset="2108">
+        <state line="66" column="10" selection-start="2031" selection-end="2031" vertical-scroll-proportion="-11.923077" vertical-offset="812" max-vertical-offset="1360">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/options.js">
+    <entry file="file://$PROJECT_DIR$/js/popup.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="72" column="37" selection-start="2491" selection-end="2520" vertical-scroll-proportion="0.0" vertical-offset="867" max-vertical-offset="3621">
+        <state line="12" column="20" selection-start="344" selection-end="344" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="340">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/js/notification.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="27" column="28" selection-start="772" selection-end="772" vertical-scroll-proportion="0.0" vertical-offset="153" max-vertical-offset="1360">
+        <state line="76" column="1" selection-start="2026" selection-end="2026" vertical-scroll-proportion="0.0" vertical-offset="820" max-vertical-offset="1394">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/options.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="87" column="68" selection-start="4638" selection-end="4638" vertical-scroll-proportion="-7.6923075" vertical-offset="1279" max-vertical-offset="2108">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/options.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="107" column="39" selection-start="3878" selection-end="3913" vertical-scroll-proportion="0.0" vertical-offset="1615" max-vertical-offset="3723">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/js/background.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="5" selection-start="154" selection-end="154" vertical-scroll-proportion="-1.3636364" vertical-offset="850" max-vertical-offset="5168">
+        <state line="145" column="23" selection-start="5229" selection-end="5229" vertical-scroll-proportion="4.3939395" vertical-offset="0" max-vertical-offset="5304">
           <folding />
         </state>
       </provider>

@@ -3,9 +3,13 @@
  Purpose: Add event listnets to navigate through menus, load, save and preview user preferences.
  */
 document.addEventListener('DOMContentLoaded', function () {
-    var menu = document.querySelectorAll('li');//Get menu list
-    var save_button = document.getElementById('submit');//Save button
-    var play_button = document.getElementById('play');//Alert previewe button
+    var menu
+    var save_button;
+    var play_button;
+
+    menu = document.querySelectorAll('li');//Get menu list
+    save_button = document.getElementById('submit');//Save button
+    play_button = document.getElementById('play');//Alert previewe button
 
     for (var i = 0; i < menu.length; ++i) {
         menu[i].addEventListener('click', showContent);//Add event listener to the menu
@@ -196,10 +200,12 @@ function doesConnectionExist() {
  */
 function playAlert() {
     var source;
+    var audioElement;
+
     source = "sounds/" + document.getElementById("alert").value;//Direct to the location of sound file
 
     try {
-        var audioElement = new Audio();
+        audioElement = new Audio();
         audioElement.src = source;
         audioElement.play();
     } catch (e) {

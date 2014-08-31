@@ -63,10 +63,12 @@ function notifyEver(title, body, url) {
  */
 function playAlert(alertID) {
     var source;
+    var audioElement;
+
     source = "sounds/" + alertID;//Direct to the location of sound file
 
     try {
-        var audioElement = new Audio();
+        audioElement = new Audio();
         audioElement.src = source;
         audioElement.play();
     } catch (e) {

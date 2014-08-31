@@ -7,8 +7,8 @@ document.addEventListener('DOMContentLoaded', function () {
     var loggedIn;
 
     hasConnectionhasConnection = false;
-    //loggedIn = false;
-    loggedIn = true;
+    loggedIn = false;
+    //loggedIn = true;
 
     /*
      //Check for the first run of the extension.
@@ -19,6 +19,11 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     connectionChecker = setInterval(function () {
+        if(localStorage["configured"] == "true"){
+            console.log("Preferences are changed!");
+            location.reload(true);
+            localStorage["configured"] = "false";
+        }
         /*
          If automatic login is enabled, check availability of Moodle for each 10 seconds.
          */
@@ -36,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function () {
             /*
              If Moodle is available and logged in, fetch upcoming events.
              */
-            else if (hasConnection && loggedIn) {//If connection is avaiable
+            if (hasConnection && loggedIn) {//If connection is avaiable
                 fetchEvents();//Show dektop and audible notifications
 
             }
@@ -63,9 +68,10 @@ document.addEventListener('DOMContentLoaded', function () {
  Then fill it with login detils that are provided by the user and login to Moodle automatically.
  */
 function automaticLogin() {
-    var password = CryptoJS.RC4Drop.decrypt(localStorage["password"], "Vw7F3ZcPqJwLqerFoF3sNDAmIDsB", { drop: 3072 / 4 }).toString(CryptoJS.enc.Utf8);
+    var password;
     var xmlhttp;
 
+    password = CryptoJS.RC4Drop.decrypt(localStorage["password"], "Vw7F3ZcPqJwLqerFoF3sNDAmIDsB", { drop: 3072 / 4 }).toString(CryptoJS.enc.Utf8);
     if (window.XMLHttpRequest) {
         xmlhttp = new XMLHttpRequest();
     }
@@ -137,7 +143,7 @@ function isLoggedIn() {
 
     try {
         xmlhttp.send();//Send http request
-        responseText = xmlhttp.responseText;
+        responseText = xmlhttp.responseText;//Get response html page as a string
         if (responseText.search("Cookies must be enabled in your browser") > -1)//Scratch the html string.
             return false;
         else {
@@ -181,17 +187,19 @@ function fetchEvents() {
 
     try {
         xmlhttp.send();//Send http request
-        responseText = xmlhttp.responseText;
+        responseText = xmlhttp.responseText;//Get response html page as a string
         hasChanged = false;
 
         num_of_events = responseText.match(/collapsibleregioninner/g).length;//Get number of available events
+        localStorage["num_of_events"] = num_of_events;
+
         if (num_of_events > 0)
             chrome.browserAction.setBadgeText({text: "" + num_of_events});
         /*
          If there is at least one event, get title, name, url, due date and status of the event.
          This is done by processing the http response string.
          title, name, url, due date and status of the event is stored in local storage.
-         Once they are stored,
+         Desktop notifications are shown only when there's a change in the event.
          */
         while (num_of_events > 0) {
             /*
@@ -208,8 +216,8 @@ function fetchEvents() {
             position = responseText.indexOf(":");
             title = responseText.slice(0, position);
             if (localStorage["eventTitle" + num_of_events] != title) {
-                localStorage["eventTitle" + num_of_events] = title;
-                hasChanged = true;
+                localStorage["eventTitle" + num_of_events] = title;//Save in local storage if there's any change
+                hasChanged = true;//Set as changed
             }
 
             /*
@@ -220,8 +228,8 @@ function fetchEvents() {
             position = responseText.indexOf("\">");
             url = responseText.slice(0, position);
             if (localStorage["eventUrl" + num_of_events] != url) {
-                localStorage["eventUrl" + num_of_events] = url;
-                hasChanged = true;
+                localStorage["eventUrl" + num_of_events] = url;//Save in local storage if there's any change
+                hasChanged = true;//Set as changed
             }
 
             /*
@@ -231,8 +239,8 @@ function fetchEvents() {
             position = responseText.indexOf("<");
             name = responseText.slice(0, position);
             if (localStorage["eventName" + num_of_events] != name) {
-                localStorage["eventName" + num_of_events] = name;
-                hasChanged = true;
+                localStorage["eventName" + num_of_events] = name;//Save in local storage if there's any change
+                hasChanged = true;//Set as changed
             }
 
             /*
@@ -243,8 +251,8 @@ function fetchEvents() {
             position = responseText.indexOf("</div>");
             date = responseText.slice(0, position);
             if (localStorage["eventDate" + num_of_events] != date) {
-                localStorage["eventDate" + num_of_events] = date;
-                hasChanged = true;
+                localStorage["eventDate" + num_of_events] = date;//Save in local storage if there's any change
+                hasChanged = true;//Set as changed
             }
 
             if (title == "Assignment") {
@@ -255,9 +263,9 @@ function fetchEvents() {
                 responseText = responseText.slice(position + 9);//position+9 = Status about the assignment in the string
                 position = responseText.indexOf("</div>");
                 status = responseText.slice(0, position);
-                if (localStorage["eeventStatus" + num_of_events] != status) {
-                    localStorage["eventStatus" + num_of_events] = status;
-                    hasChanged = true;
+                if (localStorage["eventStatus" + num_of_events] != status) {
+                    localStorage["eventStatus" + num_of_events] = status;//Save in local storage if there's any change
+                    hasChanged = true;//Set as changed
                 }
             }
             else if (title == "Quiz") {
@@ -269,16 +277,11 @@ function fetchEvents() {
                 position = responseText.indexOf("</div>");
                 status = responseText.slice(0, position);
                 if (localStorage["eventStatus" + num_of_events] != status) {
-                    localStorage["eventStatus" + num_of_events] = status;
-                    hasChanged = true;
+                    localStorage["eventStatus" + num_of_events] = status;//Save in local storage if there's any change
+                    hasChanged = true;//Set as changed
                 }
             }
 
-            console.log(name);
-            console.log(url);
-            console.log(date);
-            console.log(status + "\n");
-            --num_of_events;
             if (hasChanged) {
                 if (localStorage["popup"] == "true") {
                     if (localStorage["popup_time"] == "Indefinitely")
@@ -290,10 +293,15 @@ function fetchEvents() {
                     playAlert(localStorage["alert_sound"]);
                 }
             }
+
+            console.log(name);
+            console.log(url);
+            console.log(date);
+            console.log(status + "\n");
+            --num_of_events;
         }
 
     } catch (e) {
-        console.log(e);
+        console.log(e);//Log error
     }
-
 }
