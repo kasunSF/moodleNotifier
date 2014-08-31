@@ -12,7 +12,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     chrome.browserAction.setBadgeText({text: "5"});
     var hasConnection = false;
-    var loggedIn = false;
+    //var loggedIn = false;
+    var loggedIn = true;
 
     var connectionChecker = setInterval(function () {
         /*
@@ -33,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function () {
              If Moodle is available and logged in, fetch upcoming events.
              */
             else if (hasConnection && loggedIn) {//If connection is avaiable
-                //fetchEvents();//Show dektop and audible notifications
+                fetchEvents();//Show dektop and audible notifications
 
             }
             /*
@@ -62,7 +63,7 @@ function automaticLogin() {
     var password = CryptoJS.RC4Drop.decrypt(localStorage["password"], "Vw7F3ZcPqJwLqerFoF3sNDAmIDsB", { drop: 3072 / 4 }).toString(CryptoJS.enc.Utf8);
 
     var xmlhttp;
-    if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+    if (window.XMLHttpRequest) {
         xmlhttp = new XMLHttpRequest();
     }
     else {// code for IE6, IE5
@@ -146,43 +147,102 @@ function createTab(url) {
     });
 }
 
-/*
- const NOTIFICATIONS_INTERVAL = 5000;
+function fetchEvents() {
+    var xmlhttp = new XMLHttpRequest();
+    var file = localStorage["moodle_url"] + "my";
+    var randomNum = Math.round(Math.random() * 10000);//Random number prevents loading cached data.
+    xmlhttp.open('GET', file + "?rand=" + randomNum, false);//Fetch the response as an html string.
+    var copyOfResponseText;
+    var hasChanged;
+    try {
+        xmlhttp.send();//Send http request
+        var responseText = xmlhttp.responseText;
+        if (responseText != copyOfResponseText) {
+            hasChanged = true;
+            copyOfResponseText = responseText;
+            console.log("Copied");
+        }
+        if (hasChanged) {
+            var p = responseText.match(/collapsibleregioninner/g).length;//Get number of available events
 
- var feedUrl2contentLength = {};
+            /*
+             If there is at least one event, get title, name, url, due date and status of the event.
+             This is done by processing the http response string.
+             */
+            while (p > 0 && hasChanged) {
+                var position;//Index of the occurance
+                var url;//URL to the event
+                var title;//Title of the event
+                var name;//Name of the event
+                var date;//Due date of the event
+                var status;//Status of the event
 
- function runNotificationsTimer(url, title, icon, text) {
- setInterval(function () {
- var xhr = new XMLHttpRequest();
- xhr.open("GET", url, true);
- xhr.onload = function (e) {
+                /*
+                 Remove unwanted string above the events
+                 */
+                position = responseText.indexOf("collapsibleregioninner");
+                responseText = responseText.slice(position);
 
- var oldContentLength = feedUrl2contentLength[url];
+                /*
+                 Get the title
+                 */
+                position = responseText.indexOf("name");
+                responseText = responseText.slice(position + 6);//position+6 = Starting index of the title of event in the string
+                position = responseText.indexOf(":");
+                title = responseText.slice(0, position);
 
- if (!oldContentLength || oldContentLength != e.target.responseText.length) {
- showNotification(title, icon, text);
+                /*
+                 Get the url
+                 */
+                position = responseText.indexOf("http");
+                responseText = responseText.slice(position);//position = Starting index of the url to the event in the string
+                position = responseText.indexOf("\">");
+                url = responseText.slice(0, position);
 
- feedUrl2contentLength[url] = e.target.responseText.length;
- }
+                /*
+                 Get the name
+                 */
+                responseText = responseText.slice(position + 2);//position+2 = Starting index of the name of event in the string
+                position = responseText.indexOf("<");
+                name = responseText.slice(0, position);
 
- };
- xhr.send(null);
- }, 20000);
- }
+                /*
+                 Get the due date
+                 */
+                position = responseText.indexOf("info");
+                responseText = responseText.slice(position + 6);//position+6 = Due date of the event in the string
+                position = responseText.indexOf("</div>");
+                date = responseText.slice(0, position);
 
- function showNotification(title, icon, text) {
- var opt = {
- type: "basic",
- title: title,
- message: text,
- iconUrl: icon
- };
+                if (title == "Assignment") {
+                    /*
+                     Get the status of assignment
+                     */
+                    position = responseText.indexOf("details");
+                    responseText = responseText.slice(position + 9);//position+9 = Status about the assignment in the string
+                    position = responseText.indexOf("</div>");
+                    status = responseText.slice(0, position);
+                }
+                else if (title == "Quiz") {
+                    /*
+                     Get the status of the quiz
+                     */
+                    position = responseText.indexOf("info");
+                    responseText = responseText.slice(position + 6);//position+2 = Status about the quiz in the string
+                    position = responseText.indexOf("</div>");
+                    status = responseText.slice(0, position);
+                }
 
- chrome.notifications.create("alert-notification", opt, function (notificationId) {
- setTimeout(function () {
- chrome.notifications.clear(notificationId, function () {
- });
- }, 5000);
- });
- }
- */
+                console.log(name);
+                console.log(url);
+                console.log(date);
+                console.log(status + "\n");
+                --p;
+                notifyEver(name, date + "\n" + status + "\n", url);
+            }
+        }
+    } catch (e) {
+        console.log(e);
+    }
+
+}
