@@ -9,9 +9,9 @@ var notification;
  */
 function notify(title, body, url, timeout) {
     if (window.webkitNotifications) {
-        notification = webkitNotifications.createNotification(title, body, "/img/icon128.png");
+        notification = webkitNotifications.createNotification(title, body, "/img/icon_active.png");
     } else {
-        notification = new Notification(title, {body: body, icon: "/img/icon128.png"});
+        notification = new Notification(title, {body: body, icon: "/img/icon_active.png"});
     }
 
     /*
@@ -44,9 +44,9 @@ function notify(title, body, url, timeout) {
  */
 function notifyEver(title, body, url) {
     if (window.webkitNotifications) {
-        notification = webkitNotifications.createNotification(title, body, "/img/icon128.png");
+        notification = webkitNotifications.createNotification(title, body, "/img/icon_active.png");
     } else {
-        notification = new Notification(title, {body: body, icon: "/img/icon128.png"});
+        notification = new Notification(title, {body: body, icon: "/img/icon_active.png"});
     }
 
     /*

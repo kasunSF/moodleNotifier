@@ -1,4 +1,4 @@
-var num_of_events;//Number of available events
+var num_of_events;//This variable tracks the number of available events. This is used to show available events in extension button and prevent duplicated notifications.
 
 /*
  This function called during start up of the extension
@@ -8,6 +8,8 @@ document.addEventListener('DOMContentLoaded', function () {
     var hasConnection;
     var loggedIn;
 
+    chrome.browserAction.setIcon({path: "img/icon_inactive.png"});
+    chrome.browserAction.setBadgeText({text: ""});
     hasConnectionhasConnection = false;
     loggedIn = false;
     //loggedIn = true;
@@ -196,8 +198,6 @@ function fetchEvents() {
          Find the number of courses that have events
          */
         num_of_courses_with_event = (responseText.match(/box flush/g).length) / 2;//Get number of courses with events
-        //localStorage["num_of_events"] = num_of_events;
-        //console.log(num_of_courses_with_event);
 
         /*
          Separate the courses that have events and process the response string to get events.
@@ -263,12 +263,12 @@ function processAssignments(textString) {
     var events;
     var url;//URL to the assignment
     var name;//Name of the assignment
-    var date;//Due date of the assignment
+    var due;//Due date of the assignment
     var status;//Status of the assignment
     var hasChanged;//Boolean variable for determining changes of the assignment events
 
+    hasChanged = false;
     events = textString.match(/assign overview/g).length;//Get number of available assignments
-    num_of_events += events;
 
     while (events-- > 0) {
 
@@ -285,6 +285,10 @@ function processAssignments(textString) {
         textString = textString.slice(position);//position = Starting index of the url to the assignment in the string
         position = textString.indexOf("\">");
         url = textString.slice(0, position);
+        if (localStorage["assignmentUrl" + num_of_events] != url) {
+            localStorage["assignmentUrl" + num_of_events] = url;//Save in local storage if there's any change
+            hasChanged = true;//Set as changed
+        }
 
         /*
          Get the name of assignment
@@ -292,6 +296,10 @@ function processAssignments(textString) {
         textString = textString.slice(position + 2);//position+2 = Starting index of the name of assignment in the string
         position = textString.indexOf("<");
         name = textString.slice(0, position);
+        if (localStorage["assignmentName" + num_of_events] != name) {
+            localStorage["assignmentName" + num_of_events] = name;//Save in local storage if there's any change
+            hasChanged = true;//Set as changed
+        }
 
         /*
          Get the due date of assignment
@@ -299,7 +307,11 @@ function processAssignments(textString) {
         position = textString.indexOf("info");
         textString = textString.slice(position + 6);//position+6 = Due date of the assignment in the string
         position = textString.indexOf("</div>");
-        date = textString.slice(0, position);
+        due = textString.slice(0, position);
+        if (localStorage["assignmentDue" + num_of_events] != due) {
+            localStorage["assignmentDue" + num_of_events] = due;//Save in local storage if there's any change
+            hasChanged = true;//Set as changed
+        }
 
         /*
          Get the status of assignment
@@ -308,11 +320,25 @@ function processAssignments(textString) {
         textString = textString.slice(position + 9);//position+9 = Status about the assignment in the string
         position = textString.indexOf("</div>");
         status = textString.slice(0, position);
+        if (localStorage["assignmentStatus" + num_of_events] != status) {
+            localStorage["assignmentStatus" + num_of_events] = status;//Save in local storage if there's any change
+            hasChanged = true;//Set as changed
+        }
 
-        console.log(name);
-        console.log(url);
-        console.log(date);
-        console.log(status + "\n");
+        /*
+         If any change of the event is detected, notify to the user.
+         Notifications are called only if the event page has been changed.
+         */
+        if (hasChanged) {
+            showNotification(name, due, status, url);
+        }
+        ++num_of_events;
+        /*
+         console.log(name);
+         console.log(url);
+         console.log(due);
+         console.log(status + "\n");
+         */
     }
 }
 
@@ -322,12 +348,12 @@ function processAssignments(textString) {
 function processQuizzes(textString) {
     var url;//URL to the quiz
     var name;//Name of the quiz
-    var date;//Due date of the quiz
+    var due;//Due date of the quiz
     var status;//Status of the quiz
     var hasChanged;//Boolean variable for determining changes of the quiz events
 
+    hasChanged = false;
     events = textString.match(/quiz overview/g).length;//Get number of available quiz event.
-    num_of_events += events;
 
     while (events-- > 0) {
 
@@ -344,6 +370,10 @@ function processQuizzes(textString) {
         textString = textString.slice(position);//position = Starting index of the url to the quiz in the string
         position = textString.indexOf("\">");
         url = textString.slice(0, position);
+        if (localStorage["quizUrl" + num_of_events] != url) {
+            localStorage["quizUrl" + num_of_events] = url;//Save in local storage if there's any change
+            hasChanged = true;//Set as changed
+        }
 
         /*
          Get the name of quiz
@@ -351,6 +381,10 @@ function processQuizzes(textString) {
         textString = textString.slice(position + 2);//position+2 = Starting index of the name of quiz in the string
         position = textString.indexOf("<");
         name = textString.slice(0, position);
+        if (localStorage["quizName" + num_of_events] != name) {
+            localStorage["quizName" + num_of_events] = name;//Save in local storage if there's any change
+            hasChanged = true;//Set as changed
+        }
 
         /*
          Get the due date of quiz
@@ -358,7 +392,11 @@ function processQuizzes(textString) {
         position = textString.indexOf("info");
         textString = textString.slice(position + 6);//position+6 = Due date of the quiz in the string
         position = textString.indexOf("</div>");
-        date = textString.slice(0, position);
+        due = textString.slice(0, position);
+        if (localStorage["quizDue" + num_of_events] != due) {
+            localStorage["quizDue" + num_of_events] = due;//Save in local storage if there's any change
+            hasChanged = true;//Set as changed
+        }
 
         /*
          Get the status of quiz
@@ -367,11 +405,25 @@ function processQuizzes(textString) {
         textString = textString.slice(position + 6);//position+2 = Status about the quiz in the string
         position = textString.indexOf("</div>");
         status = textString.slice(0, position);
+        if (localStorage["quizStatus" + num_of_events] != status) {
+            localStorage["quizStatus" + num_of_events] = status;//Save in local storage if there's any change
+            hasChanged = true;//Set as changed
+        }
 
-        console.log(name);
-        console.log(url);
-        console.log(date);
-        console.log(status + "\n");
+        /*
+         If any change of the event is detected, notify to the user.
+         Notifications are called only if the event page has been changed.
+         */
+        if (hasChanged) {
+            showNotification(name, due, status, url);
+        }
+        ++num_of_events;
+        /*
+         console.log(name);
+         console.log(url);
+         console.log(due);
+         console.log(status + "\n");
+         */
     }
 
 }
@@ -385,8 +437,8 @@ function processForumPosts(textString) {
     var status;//Status of the forum
     var hasChanged;//Boolean variable for determining changes of the forum events
 
+    hasChanged = false;
     events = textString.match(/overview forum/g).length;//Get number of available forum events
-    num_of_events += events;
 
     while (events-- > 0) {
 
@@ -403,6 +455,10 @@ function processForumPosts(textString) {
         textString = textString.slice(position);//position = Starting index of the url to the forum in the string
         position = textString.indexOf("\">");
         url = textString.slice(0, position);
+        if (localStorage["forumUrl" + num_of_events] != url) {
+            localStorage["forumUrl" + num_of_events] = url;//Save in local storage if there's any change
+            hasChanged = true;//Set as changed
+        }
 
         /*
          Get the name of forum
@@ -410,6 +466,10 @@ function processForumPosts(textString) {
         textString = textString.slice(position + 2);//position+2 = Starting index of the name of forum in the string
         position = textString.indexOf("<");
         name = textString.slice(0, position);
+        if (localStorage["forumName" + num_of_events] != name) {
+            localStorage["forumName" + num_of_events] = name;//Save in local storage if there's any change
+            hasChanged = true;//Set as changed
+        }
 
         /*
          Get the status of forum
@@ -418,9 +478,70 @@ function processForumPosts(textString) {
         textString = textString.slice(position + 16);//position+16 = Starting index of the status of forum in the string
         position = textString.indexOf("<");
         status = textString.slice(0, position);
+        if (localStorage["forumStatus" + num_of_events] != status) {
+            localStorage["forumStatus" + num_of_events] = status;//Save in local storage if there's any change
+            hasChanged = true;//Set as changed
+        }
 
-        console.log(name);
-        console.log(url);
-        console.log(status + "\n");
+        /*
+         If any change of the event is detected, notify to the user.
+         Notifications are called only if the event page has been changed.
+         */
+        if (hasChanged) {
+            showForumNotification(name, status, url);
+        }
+        ++num_of_events;
+        /*
+         console.log(url);
+         console.log(status + "\n");
+         */
+    }
+}
+
+/*
+ Snow desktop notifications and play audible notifications according to user preferences.
+ This function is used for events that have a deadline such as assignmnets and quizzes.
+ */
+function showNotification(name, due, status, url) {
+    /*
+     Show desktop notification if enabled.
+     */
+    if (localStorage["popup"] == "true") {
+        if (localStorage["popup_time"] == "Indefinitely") {
+            notifyEver(name, due + "\n" + status + "\n", url);
+        }
+        else {
+            notify(name, due + "\n" + status + "\n", url, localStorage["popup_time"]);
+        }
+    }
+    /*
+     Play audible notifications if enabled.
+     */
+    if (localStorage["mute"] == "false") {
+        playAlert(localStorage["alert_sound"]);
+    }
+}
+
+/*
+ Snow desktop notifications and play audible notifications according to user preferences.
+ This function is used for events that do not have a deadline such as forum posts.
+ */
+function showForumNotification(name, status, url) {
+    /*
+     Show desktop notification if enabled.
+     */
+    if (localStorage["popup"] == "true") {
+        if (localStorage["popup_time"] == "Indefinitely") {
+            notifyEver(name, status + "\n", url);
+        }
+        else {
+            notify(name, status + "\n", url, localStorage["popup_time"]);
+        }
+    }
+    /*
+     Play audible notifications if enabled.
+     */
+    if (localStorage["mute"] == "false") {
+        playAlert(localStorage["alert_sound"]);
     }
 }

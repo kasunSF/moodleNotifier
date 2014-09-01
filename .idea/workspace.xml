@@ -2,12 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2ced237e-81b9-4021-8c26-37429c9a0e89" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/test2.html" />
-      <change type="DELETED" beforePath="C:\xampp\htdocs\moodleNotifier\img\icon128.png" afterPath="" />
+      <change type="DELETED" beforePath="C:\xampp\htdocs\moodleNotifier\img\Capture.PNG" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/background.js" afterPath="$PROJECT_DIR$/js/background.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/manifest.json" afterPath="$PROJECT_DIR$/manifest.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/post.html" afterPath="$PROJECT_DIR$/post.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test.html" afterPath="$PROJECT_DIR$/test.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/notification.js" afterPath="$PROJECT_DIR$/js/notification.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="moodleNotifier.iws" />
@@ -31,47 +28,13 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="background.js" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="background.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/js/background.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="183" column="71" selection-start="6514" selection-end="6514" vertical-scroll-proportion="0.0" vertical-offset="4233" max-vertical-offset="7327">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="test2.html" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/test2.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="15" column="84" selection-start="823" selection-end="824" vertical-scroll-proportion="-4.9038463" vertical-offset="0" max-vertical-offset="1734">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="post.html" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/post.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="40" column="51" selection-start="2762" selection-end="2771" vertical-scroll-proportion="-8.25" vertical-offset="251" max-vertical-offset="2261">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="test.html" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/test.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="242" column="20" selection-start="24529" selection-end="24529" vertical-scroll-proportion="-68.30769" vertical-offset="562" max-vertical-offset="12121">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="background - Copy.js" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/js/background - Copy.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="196" column="0" selection-start="7162" selection-end="7268" vertical-scroll-proportion="-0.81569344" vertical-offset="3745" max-vertical-offset="5457">
-              <folding />
+            <state line="407" column="29" selection-start="15698" selection-end="15698" vertical-scroll-proportion="0.74041814" vertical-offset="6494" max-vertical-offset="9384">
+              <folding>
+                <marker date="1409589482161" expanded="true" signature="19664:19717" placeholder="{...}" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -101,11 +64,11 @@
         <option value="$PROJECT_DIR$/js/popup.js" />
         <option value="$PROJECT_DIR$/popup.html" />
         <option value="$PROJECT_DIR$/js/options.js" />
-        <option value="$PROJECT_DIR$/js/notification.js" />
         <option value="$PROJECT_DIR$/test.html" />
         <option value="$PROJECT_DIR$/post.html" />
         <option value="$PROJECT_DIR$/manifest.json" />
         <option value="$PROJECT_DIR$/test2.html" />
+        <option value="$PROJECT_DIR$/js/notification.js" />
         <option value="$PROJECT_DIR$/js/background.js" />
       </list>
     </option>
@@ -285,7 +248,12 @@
     <option name="LAST_COMMIT_MESSAGE" value="Prototype popup" />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager />
+    <breakpoint-manager>
+      <breakpoints-dialog>
+        <breakpoints-dialog />
+      </breakpoints-dialog>
+      <option name="time" value="1" />
+    </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/background.html">
@@ -296,13 +264,17 @@
     <entry file="file://$PROJECT_DIR$/js/background.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="108" column="0" selection-start="3768" selection-end="4416" vertical-scroll-proportion="0.0" vertical-offset="1836" max-vertical-offset="3060">
-          <folding />
+          <folding>
+            <marker date="1409589482161" expanded="true" signature="19664:19717" placeholder="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/js/notification.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="52" column="5" selection-start="1442" selection-end="1442" vertical-scroll-proportion="0.0" vertical-offset="514" max-vertical-offset="1088" />
+        <state line="52" column="5" selection-start="1442" selection-end="1442" vertical-scroll-proportion="0.0" vertical-offset="514" max-vertical-offset="1088">
+          <folding />
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/popup.html">
@@ -323,13 +295,17 @@
     <entry file="file://$PROJECT_DIR$/js/background.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="64" column="62" selection-start="2323" selection-end="2323" vertical-scroll-proportion="0.0" vertical-offset="1088" max-vertical-offset="3060">
-          <folding />
+          <folding>
+            <marker date="1409589482161" expanded="true" signature="19664:19717" placeholder="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/js/notification.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="52" column="5" selection-start="1442" selection-end="1442" vertical-scroll-proportion="0.0" vertical-offset="514" max-vertical-offset="1088" />
+        <state line="52" column="5" selection-start="1442" selection-end="1442" vertical-scroll-proportion="0.0" vertical-offset="514" max-vertical-offset="1088">
+          <folding />
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/popup.html">
@@ -350,7 +326,9 @@
     <entry file="file://$PROJECT_DIR$/js/background.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="8" column="28" selection-start="279" selection-end="279" vertical-scroll-proportion="0.0" vertical-offset="1020" max-vertical-offset="2788">
-          <folding />
+          <folding>
+            <marker date="1409589482161" expanded="true" signature="19664:19717" placeholder="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -372,7 +350,9 @@
     <entry file="file://$PROJECT_DIR$/js/background.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="10" column="43" selection-start="376" selection-end="376" vertical-scroll-proportion="0.0" vertical-offset="170" max-vertical-offset="2737">
-          <folding />
+          <folding>
+            <marker date="1409589482161" expanded="true" signature="19664:19717" placeholder="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -404,7 +384,9 @@
     <entry file="file://$PROJECT_DIR$/js/background.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="116" column="0" selection-start="3386" selection-end="3386" vertical-scroll-proportion="0.0" vertical-offset="34" max-vertical-offset="2516">
-          <folding />
+          <folding>
+            <marker date="1409589482161" expanded="true" signature="19664:19717" placeholder="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -426,7 +408,9 @@
     <entry file="file://$PROJECT_DIR$/js/background.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="10" column="28" selection-start="327" selection-end="327" vertical-scroll-proportion="0.0" vertical-offset="170" max-vertical-offset="2431">
-          <folding />
+          <folding>
+            <marker date="1409589482161" expanded="true" signature="19664:19717" placeholder="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -510,11 +494,6 @@
         <state line="107" column="39" selection-start="3878" selection-end="3913" vertical-scroll-proportion="0.0" vertical-offset="1615" max-vertical-offset="3723" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/notification.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="76" column="1" selection-start="2026" selection-end="2026" vertical-scroll-proportion="0.82229966" vertical-offset="820" max-vertical-offset="1394" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/popup.html">
       <provider selected="true" editor-type-id="text-editor">
         <state line="66" column="10" selection-start="2031" selection-end="2031" vertical-scroll-proportion="0.56569344" vertical-offset="812" max-vertical-offset="1360" />
@@ -523,20 +502,6 @@
     <entry file="file://$PROJECT_DIR$/js/popup.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="12" column="20" selection-start="344" selection-end="344" vertical-scroll-proportion="0.3554007" vertical-offset="0" max-vertical-offset="574" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="242" column="20" selection-start="24529" selection-end="24529" vertical-scroll-proportion="-68.30769" vertical-offset="562" max-vertical-offset="12121">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/post.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="40" column="51" selection-start="2762" selection-end="2771" vertical-scroll-proportion="-8.25" vertical-offset="251" max-vertical-offset="2261">
-          <folding />
-        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/manifest.json">
@@ -548,22 +513,47 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/test2.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="15" column="84" selection-start="823" selection-end="824" vertical-scroll-proportion="-4.9038463" vertical-offset="0" max-vertical-offset="1734">
+        <state line="15" column="84" selection-start="823" selection-end="824" vertical-scroll-proportion="0.48850575" vertical-offset="0" max-vertical-offset="1734">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/background.js">
+    <entry file="file://$PROJECT_DIR$/test.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="183" column="71" selection-start="6514" selection-end="6514" vertical-scroll-proportion="0.0" vertical-offset="4233" max-vertical-offset="7327">
+        <state line="242" column="20" selection-start="24529" selection-end="24529" vertical-scroll-proportion="6.978389" vertical-offset="562" max-vertical-offset="12121">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/post.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="40" column="51" selection-start="2762" selection-end="2771" vertical-scroll-proportion="0.8218391" vertical-offset="251" max-vertical-offset="2261">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/js/background - Copy.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="196" column="0" selection-start="7162" selection-end="7268" vertical-scroll-proportion="-0.81569344" vertical-offset="3745" max-vertical-offset="5457">
+        <state line="8" column="39" selection-start="230" selection-end="230" vertical-scroll-proportion="0.24817519" vertical-offset="0" max-vertical-offset="5491">
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/notification.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="21" column="21" selection-start="686" selection-end="686" vertical-scroll-proportion="0.08885018" vertical-offset="306" max-vertical-offset="1394">
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/background.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="407" column="29" selection-start="15698" selection-end="15698" vertical-scroll-proportion="0.74041814" vertical-offset="6494" max-vertical-offset="9384">
+          <folding>
+            <marker date="1409589482161" expanded="true" signature="19664:19717" placeholder="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
