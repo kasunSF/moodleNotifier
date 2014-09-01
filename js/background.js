@@ -175,6 +175,12 @@ function createTab(url) {
     });
 }
 
+/*
+ This function is called periodically in user preferred time intervals.
+ This sends an XML http request to the "my home" page of the moodle page and get te response as a string.
+ The response string is scratched to find available events.
+ If events are available, rresponse string is sent to processing.
+ */
 function fetchEvents() {
     var xmlhttp;//XML http request
     var sitePage;//URL of the home page of the user
@@ -202,7 +208,7 @@ function fetchEvents() {
         /*
          Separate the courses that have events and process the response string to get events.
          "box flush" separates the courses that have events.
-         Events of a course is processes at a time.
+         Events of a course is processed at a time.
          */
         while (num_of_courses_with_event-- > 0) {
             position = responseText.indexOf("box flush");
@@ -211,14 +217,16 @@ function fetchEvents() {
             responseText = responseText.slice(position);
             position = responseText.indexOf("box flush");
 
-            processEventTypes(responseText.slice(0, position));//
-            //console.log(responseText.slice(0, position)+"\n\n");
+            processEventTypes(responseText.slice(0, position));//Send dtring to process
 
             responseText = responseText.slice(position);
             position = responseText.indexOf("<div");
             responseText = responseText.slice(position);
             position = responseText.indexOf("box flush");
         }
+        /*
+         If there's at least one event, show number of available events at extension button.
+         */
         if (num_of_events > 0)
             chrome.browserAction.setBadgeText({text: "" + num_of_events});
     } catch (e) {
@@ -235,8 +243,16 @@ function processEventTypes(textString) {
     var num_of_event_types;//number of available event types
     var eventString;//Substring of the events
 
+    /*
+     Find the number of event types that available in the course
+     */
     num_of_event_types = textString.match(/activity_overview/g).length;//Get number of available event types
 
+    /*
+     Separate the event types that available in the course.
+     "activity_overview" separates the event types.
+     Then each event is sent for processing to get details of the event.
+     */
     while (num_of_event_types-- > 0) {
         position = textString.indexOf("activity_overview");
         textString = textString.slice(position);
@@ -244,12 +260,21 @@ function processEventTypes(textString) {
         textString = textString.slice(position);
         position = textString.indexOf("activity_overview");
         eventString = textString.slice(0, position);
+        /*
+        If event is an assignment, send the string to process as an assignment.
+         */
         if (eventString.search("Assignment: <a") != -1) {
             processAssignments(eventString);
         }
+        /*
+         If event is a quiz, send the string to process as a quiz.
+         */
         else if (eventString.search("Quiz: <a") != -1) {
             processQuizzes(eventString);
         }
+        /*
+         If event is a forum post, send the string to process as a forum post.
+         */
         else if (eventString.search("Forum: <a") != -1) {
             processForumPosts(eventString);
         }
@@ -330,7 +355,7 @@ function processAssignments(textString) {
          Notifications are called only if the event page has been changed.
          */
         if (hasChanged) {
-            showNotification(name, due, status, url);
+            showNotifications(name, due, status, url);
         }
         ++num_of_events;
         /*
@@ -415,7 +440,7 @@ function processQuizzes(textString) {
          Notifications are called only if the event page has been changed.
          */
         if (hasChanged) {
-            showNotification(name, due, status, url);
+            showNotifications(name, due, status, url);
         }
         ++num_of_events;
         /*
@@ -488,7 +513,7 @@ function processForumPosts(textString) {
          Notifications are called only if the event page has been changed.
          */
         if (hasChanged) {
-            showForumNotification(name, status, url);
+            showForumNotifications(name, status, url);
         }
         ++num_of_events;
         /*
@@ -502,7 +527,7 @@ function processForumPosts(textString) {
  Snow desktop notifications and play audible notifications according to user preferences.
  This function is used for events that have a deadline such as assignmnets and quizzes.
  */
-function showNotification(name, due, status, url) {
+function showNotifications(name, due, status, url) {
     /*
      Show desktop notification if enabled.
      */
@@ -526,7 +551,7 @@ function showNotification(name, due, status, url) {
  Snow desktop notifications and play audible notifications according to user preferences.
  This function is used for events that do not have a deadline such as forum posts.
  */
-function showForumNotification(name, status, url) {
+function showForumNotifications(name, status, url) {
     /*
      Show desktop notification if enabled.
      */
