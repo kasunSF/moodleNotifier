@@ -1,3 +1,5 @@
+var num_of_events;//Number of available events
+
 /*
  This function called during start up of the extension
  */
@@ -54,6 +56,7 @@ document.addEventListener('DOMContentLoaded', function () {
          If Moodle is available and logged in, fetch upcoming events.
          */
         if (hasConnection && loggedIn) {//If connection is avaiable
+            chrome.browserAction.setIcon({path: "img/icon_active.png"});
             fetchEvents();//Show dektop and audible notifications
         }
         /*
@@ -61,7 +64,11 @@ document.addEventListener('DOMContentLoaded', function () {
          Then whenever the connection become available, this cause re-check for logged in.
          */
         else if (!hasConnection) {//If connection is not available, set as not logged in.
+            chrome.browserAction.setIcon({path: "img/icon_inactive.png"});
             loggedIn = false;
+        }
+        else {
+            chrome.browserAction.setIcon({path: "img/icon_inactive.png"});
         }
     }, localStorage["poll_interval"]);
 });
@@ -171,15 +178,10 @@ function fetchEvents() {
     var sitePage;//URL of the home page of the user
     var randomNum;
     var responseText;//Response text of XML http request
-    var hasChanged;//Boolean variable for determining changes of the web page
-    var num_of_events;//Number of available events
+    var num_of_courses_with_event;//Number of courses that has events
     var position;//Index of the occurance
-    var url;//URL to the event
-    var title;//Title of the event
-    var name;//Name of the event
-    var date;//Due date of the event
-    var status;//Status of the event
 
+    num_of_events = 0;//Clear number of events to prevent over counting
     xmlhttp = new XMLHttpRequest();
     sitePage = localStorage["moodle_url"] + "my";
     randomNum = Math.round(Math.random() * 10000);//Random number prevents loading cached data.
@@ -190,128 +192,235 @@ function fetchEvents() {
         responseText = xmlhttp.responseText;//Get response html page as a string
         hasChanged = false;
 
-        num_of_events = responseText.match(/collapsibleregioninner/g).length;//Get number of available events
-        localStorage["num_of_events"] = num_of_events;
+        /*
+         Find the number of courses that have events
+         */
+        num_of_courses_with_event = (responseText.match(/box flush/g).length) / 2;//Get number of courses with events
+        //localStorage["num_of_events"] = num_of_events;
+        //console.log(num_of_courses_with_event);
 
+        /*
+         Separate the courses that have events and process the response string to get events.
+         "box flush" separates the courses that have events.
+         Events of a course is processes at a time.
+         */
+        while (num_of_courses_with_event-- > 0) {
+            position = responseText.indexOf("box flush");
+            responseText = responseText.slice(position);
+            position = responseText.indexOf("<div");
+            responseText = responseText.slice(position);
+            position = responseText.indexOf("box flush");
+
+            processEventTypes(responseText.slice(0, position));//
+            //console.log(responseText.slice(0, position)+"\n\n");
+
+            responseText = responseText.slice(position);
+            position = responseText.indexOf("<div");
+            responseText = responseText.slice(position);
+            position = responseText.indexOf("box flush");
+        }
         if (num_of_events > 0)
             chrome.browserAction.setBadgeText({text: "" + num_of_events});
-        /*
-         If there is at least one event, get title, name, url, due date and status of the event.
-         This is done by processing the http response string.
-         title, name, url, due date and status of the event is stored in local storage.
-         Desktop notifications are shown only when there's a change in the event.
-         */
-        while (num_of_events > 0) {
-            /*
-             Remove unwanted string above the events
-             */
-            position = responseText.indexOf("collapsibleregioninner");
-            responseText = responseText.slice(position);
-
-            /*
-             Get the title
-             */
-            position = responseText.indexOf("name");
-            responseText = responseText.slice(position + 6);//position+6 = Starting index of the title of event in the string
-            position = responseText.indexOf(":");
-            title = responseText.slice(0, position);
-            if (localStorage["eventTitle" + num_of_events] != title) {
-                localStorage["eventTitle" + num_of_events] = title;//Save in local storage if there's any change
-                hasChanged = true;//Set as changed
-            }
-
-            /*
-             Get the url
-             */
-            position = responseText.indexOf("http");
-            responseText = responseText.slice(position);//position = Starting index of the url to the event in the string
-            position = responseText.indexOf("\">");
-            url = responseText.slice(0, position);
-            if (localStorage["eventUrl" + num_of_events] != url) {
-                localStorage["eventUrl" + num_of_events] = url;//Save in local storage if there's any change
-                hasChanged = true;//Set as changed
-            }
-
-            /*
-             Get the name
-             */
-            responseText = responseText.slice(position + 2);//position+2 = Starting index of the name of event in the string
-            position = responseText.indexOf("<");
-            name = responseText.slice(0, position);
-            if (localStorage["eventName" + num_of_events] != name) {
-                localStorage["eventName" + num_of_events] = name;//Save in local storage if there's any change
-                hasChanged = true;//Set as changed
-            }
-
-            /*
-             Get the due date
-             */
-            position = responseText.indexOf("info");
-            responseText = responseText.slice(position + 6);//position+6 = Due date of the event in the string
-            position = responseText.indexOf("</div>");
-            date = responseText.slice(0, position);
-            if (localStorage["eventDate" + num_of_events] != date) {
-                localStorage["eventDate" + num_of_events] = date;//Save in local storage if there's any change
-                hasChanged = true;//Set as changed
-            }
-
-            if (title == "Assignment") {
-                /*
-                 Get the status of assignment
-                 */
-                position = responseText.indexOf("details");
-                responseText = responseText.slice(position + 9);//position+9 = Status about the assignment in the string
-                position = responseText.indexOf("</div>");
-                status = responseText.slice(0, position);
-                if (localStorage["eventStatus" + num_of_events] != status) {
-                    localStorage["eventStatus" + num_of_events] = status;//Save in local storage if there's any change
-                    hasChanged = true;//Set as changed
-                }
-            }
-            else if (title == "Quiz") {
-                /*
-                 Get the status of the quiz
-                 */
-                position = responseText.indexOf("info");
-                responseText = responseText.slice(position + 6);//position+2 = Status about the quiz in the string
-                position = responseText.indexOf("</div>");
-                status = responseText.slice(0, position);
-                if (localStorage["eventStatus" + num_of_events] != status) {
-                    localStorage["eventStatus" + num_of_events] = status;//Save in local storage if there's any change
-                    hasChanged = true;//Set as changed
-                }
-            }
-
-            /*
-            Snow desktop notifications and play audible notifications according to user preferences.
-            Notifications are called only if the event page has been changed.
-             */
-            if (hasChanged) {
-                /*
-                Show desktop notification if enabled.
-                 */
-                if (localStorage["popup"] == "true") {
-                    if (localStorage["popup_time"] == "Indefinitely")
-                        notifyEver(name, date + "\n" + status + "\n", url);
-                    else
-                        notify(name, date + "\n" + status + "\n", url, localStorage["popup_time"]);
-                }
-                /*
-                Play audible notifications if enabled.
-                 */
-                if (localStorage["mute"] == "false") {
-                    playAlert(localStorage["alert_sound"]);
-                }
-            }
-
-            console.log(name);
-            console.log(url);
-            console.log(date);
-            console.log(status + "\n");
-            --num_of_events;
-        }
-
     } catch (e) {
         console.log(e);//Log error
+    }
+}
+
+/*
+ This function separates the events according to the category.
+ "activity_overview" separates the event types.
+ After separation, this send text strings for processing to obtain name, url, due date and status of the event and store them in local storage.
+ */
+function processEventTypes(textString) {
+    var num_of_event_types;//number of available event types
+    var eventString;//Substring of the events
+
+    num_of_event_types = textString.match(/activity_overview/g).length;//Get number of available event types
+
+    while (num_of_event_types-- > 0) {
+        position = textString.indexOf("activity_overview");
+        textString = textString.slice(position);
+        position = textString.indexOf("<div");
+        textString = textString.slice(position);
+        position = textString.indexOf("activity_overview");
+        eventString = textString.slice(0, position);
+        if (eventString.search("Assignment: <a") != -1) {
+            processAssignments(eventString);
+        }
+        else if (eventString.search("Quiz: <a") != -1) {
+            processQuizzes(eventString);
+        }
+        else if (eventString.search("Forum: <a") != -1) {
+            processForumPosts(eventString);
+        }
+    }
+}
+
+/*
+ This function scratch the given string and separate the name, url, due date and status of the assignments and store them in local storage.
+ */
+function processAssignments(textString) {
+    var events;
+    var url;//URL to the assignment
+    var name;//Name of the assignment
+    var date;//Due date of the assignment
+    var status;//Status of the assignment
+    var hasChanged;//Boolean variable for determining changes of the assignment events
+
+    events = textString.match(/assign overview/g).length;//Get number of available assignments
+    num_of_events += events;
+
+    while (events-- > 0) {
+
+        /*
+         Remove unwanted string above the assignment
+         */
+        position = textString.indexOf("assign overview");
+        textString = textString.slice(position);
+
+        /*
+         Get the url of assignment
+         */
+        position = textString.indexOf("http");
+        textString = textString.slice(position);//position = Starting index of the url to the assignment in the string
+        position = textString.indexOf("\">");
+        url = textString.slice(0, position);
+
+        /*
+         Get the name of assignment
+         */
+        textString = textString.slice(position + 2);//position+2 = Starting index of the name of assignment in the string
+        position = textString.indexOf("<");
+        name = textString.slice(0, position);
+
+        /*
+         Get the due date of assignment
+         */
+        position = textString.indexOf("info");
+        textString = textString.slice(position + 6);//position+6 = Due date of the assignment in the string
+        position = textString.indexOf("</div>");
+        date = textString.slice(0, position);
+
+        /*
+         Get the status of assignment
+         */
+        position = textString.indexOf("details");
+        textString = textString.slice(position + 9);//position+9 = Status about the assignment in the string
+        position = textString.indexOf("</div>");
+        status = textString.slice(0, position);
+
+        console.log(name);
+        console.log(url);
+        console.log(date);
+        console.log(status + "\n");
+    }
+}
+
+/*
+ This function scratch the given string and separate the name, url, due date and status of the Quizzes and store them in local storage.
+ */
+function processQuizzes(textString) {
+    var url;//URL to the quiz
+    var name;//Name of the quiz
+    var date;//Due date of the quiz
+    var status;//Status of the quiz
+    var hasChanged;//Boolean variable for determining changes of the quiz events
+
+    events = textString.match(/quiz overview/g).length;//Get number of available quiz event.
+    num_of_events += events;
+
+    while (events-- > 0) {
+
+        /*
+         Remove unwanted string above the quiz
+         */
+        position = textString.indexOf("quiz overview");
+        textString = textString.slice(position);
+
+        /*
+         Get the url of quiz
+         */
+        position = textString.indexOf("http");
+        textString = textString.slice(position);//position = Starting index of the url to the quiz in the string
+        position = textString.indexOf("\">");
+        url = textString.slice(0, position);
+
+        /*
+         Get the name of quiz
+         */
+        textString = textString.slice(position + 2);//position+2 = Starting index of the name of quiz in the string
+        position = textString.indexOf("<");
+        name = textString.slice(0, position);
+
+        /*
+         Get the due date of quiz
+         */
+        position = textString.indexOf("info");
+        textString = textString.slice(position + 6);//position+6 = Due date of the quiz in the string
+        position = textString.indexOf("</div>");
+        date = textString.slice(0, position);
+
+        /*
+         Get the status of quiz
+         */
+        position = textString.indexOf("info");
+        textString = textString.slice(position + 6);//position+2 = Status about the quiz in the string
+        position = textString.indexOf("</div>");
+        status = textString.slice(0, position);
+
+        console.log(name);
+        console.log(url);
+        console.log(date);
+        console.log(status + "\n");
+    }
+
+}
+
+/*
+ This function scratch the given string and separate the url of the forum posts and store them in local storage.
+ */
+function processForumPosts(textString) {
+    var url;//URL to the forum
+    var name;//Name of the forum
+    var status;//Status of the forum
+    var hasChanged;//Boolean variable for determining changes of the forum events
+
+    events = textString.match(/overview forum/g).length;//Get number of available forum events
+    num_of_events += events;
+
+    while (events-- > 0) {
+
+        /*
+         Remove unwanted string above the forum
+         */
+        position = textString.indexOf("overview forum");
+        textString = textString.slice(position);
+
+        /*
+         Get the url of forum
+         */
+        position = textString.indexOf("http");
+        textString = textString.slice(position);//position = Starting index of the url to the forum in the string
+        position = textString.indexOf("\">");
+        url = textString.slice(0, position);
+
+        /*
+         Get the name of forum
+         */
+        textString = textString.slice(position + 2);//position+2 = Starting index of the name of forum in the string
+        position = textString.indexOf("<");
+        name = textString.slice(0, position);
+
+        /*
+         Get the status of forum
+         */
+        position = textString.indexOf("postsincelogin");
+        textString = textString.slice(position + 16);//position+16 = Starting index of the status of forum in the string
+        position = textString.indexOf("<");
+        status = textString.slice(0, position);
+
+        console.log(name);
+        console.log(url);
+        console.log(status + "\n");
     }
 }

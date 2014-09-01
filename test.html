@@ -1,490 +1,707 @@
-<div id="page" class="container-fluid">
+<!DOCTYPE html>
+<html dir="ltr" lang="en" xml:lang="en">
+<head>
+    <title>: My home</title>
+    <link rel="shortcut icon" href="http://localhost/moodle/theme/image.php/clean/theme/1403939604/favicon"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="keywords" content="moodle, : My home"/>
+    <script type="text/javascript">
+        //<![CDATA[
+        var M = {};
+        M.yui = {};
+        M.pageloadstarttime = new Date();
+        M.cfg = {"wwwroot": "http:\/\/localhost\/moodle", "sesskey": "EdRY6NaB7g", "loadingicon": "http:\/\/localhost\/moodle\/theme\/image.php\/clean\/core\/1403939604\/i\/loading_small", "themerev": "1403939604", "slasharguments": 1, "theme": "clean", "jsrev": "1403939604", "svgicons": true};
+        var yui1ConfigFn = function (me) {
+            if (/-skin|reset|fonts|grids|base/.test(me.name)) {
+                me.type = 'css';
+                me.path = me.path.replace(/\.js/, '.css');
+                me.path = me.path.replace(/\/yui2-skin/, '/assets/skins/sam/yui2-skin')
+            }
+        };
+        var yui2ConfigFn = function (me) {
+            var parts = me.name.replace(/^moodle-/, '').split('-'), component = parts.shift(), module = parts[0], min = '-min';
+            if (/-(skin|core)$/.test(me.name)) {
+                parts.pop();
+                me.type = 'css';
+                min = ''
+            }
+            ;
+            if (module) {
+                var filename = parts.join('-');
+                me.path = component + '/' + module + '/' + filename + min + '.' + me.type
+            } else me.path = component + '/' + component + '.' + me.type
+        };
+        YUI_config = {"debug": false, "base": "http:\/\/localhost\/moodle\/lib\/yuilib\/3.15.0\/", "comboBase": "http:\/\/localhost\/moodle\/theme\/yui_combo.php?", "combine": true, "filter": null, "insertBefore": "firstthemesheet", "groups": {"yui-patched": {"combine": true, "root": "3.15.0_1\/", "patterns": {"dd-drag": {"group": "yui-patched"}, "dd-gestures": {"group": "yui-patched"}}, "modules": {"dd-drag": [], "dd-gestures": []}}, "yui2": {"base": "http:\/\/localhost\/moodle\/lib\/yuilib\/2in3\/2.9.0\/build\/", "comboBase": "http:\/\/localhost\/moodle\/theme\/yui_combo.php?", "combine": true, "ext": false, "root": "2in3\/2.9.0\/build\/", "patterns": {"yui2-": {"group": "yui2", "configFn": yui1ConfigFn}}}, "moodle": {"name": "moodle", "base": "http:\/\/localhost\/moodle\/theme\/yui_combo.php?m\/1403939604\/", "combine": true, "comboBase": "http:\/\/localhost\/moodle\/theme\/yui_combo.php?", "ext": false, "root": "m\/1403939604\/", "patterns": {"moodle-": {"group": "moodle", "configFn": yui2ConfigFn}}, "filter": null, "modules": {"moodle-core-actionmenu": {"requires": ["base", "event", "node-event-simulate"]}, "moodle-core-blocks": {"requires": ["base", "node", "io", "dom", "dd", "dd-scroll", "moodle-core-dragdrop", "moodle-core-notification"]}, "moodle-core-checknet": {"requires": ["base-base", "moodle-core-notification-alert", "io-base"]}, "moodle-core-chooserdialogue": {"requires": ["base", "panel", "moodle-core-notification"]}, "moodle-core-dock": {"requires": ["base", "node", "event-custom", "event-mouseenter", "event-resize", "escape", "moodle-core-dock-loader"]}, "moodle-core-dock-loader": {"requires": ["escape"]}, "moodle-core-dragdrop": {"requires": ["base", "node", "io", "dom", "dd", "event-key", "event-focus", "moodle-core-notification"]}, "moodle-core-event": {"requires": ["event-custom"]}, "moodle-core-formautosubmit": {"requires": ["base", "event-key"]}, "moodle-core-formchangechecker": {"requires": ["base", "event-focus"]}, "moodle-core-handlebars": {"condition": {"trigger": "handlebars", "when": "after"}}, "moodle-core-lockscroll": {"requires": ["plugin", "base-build"]}, "moodle-core-maintenancemodetimer": {"requires": ["base", "node"]}, "moodle-core-notification": {"requires": ["moodle-core-notification-dialogue", "moodle-core-notification-alert", "moodle-core-notification-confirm", "moodle-core-notification-exception", "moodle-core-notification-ajaxexception"]}, "moodle-core-notification-dialogue": {"requires": ["base", "node", "panel", "event-key", "dd-plugin", "moodle-core-widget-focusafterclose", "moodle-core-lockscroll"]}, "moodle-core-notification-alert": {"requires": ["moodle-core-notification-dialogue"]}, "moodle-core-notification-confirm": {"requires": ["moodle-core-notification-dialogue"]}, "moodle-core-notification-exception": {"requires": ["moodle-core-notification-dialogue"]}, "moodle-core-notification-ajaxexception": {"requires": ["moodle-core-notification-dialogue"]}, "moodle-core-popuphelp": {"requires": ["moodle-core-tooltip"]}, "moodle-core-tooltip": {"requires": ["base", "node", "io-base", "moodle-core-notification-dialogue", "json-parse", "widget-position", "widget-position-align", "event-outside", "cache-base"]}, "moodle-core_availability-form": {"requires": ["base", "node", "event", "panel", "moodle-core-notification-dialogue", "json"]}, "moodle-backup-backupselectall": {"requires": ["node", "event", "node-event-simulate", "anim"]}, "moodle-backup-confirmcancel": {"requires": ["node", "node-event-simulate", "moodle-core-notification-confirm"]}, "moodle-calendar-eventmanager": {"requires": ["base", "node", "event-mouseenter", "overlay", "moodle-calendar-eventmanager-skin"]}, "moodle-course-categoryexpander": {"requires": ["node", "event-key"]}, "moodle-course-dragdrop": {"requires": ["base", "node", "io", "dom", "dd", "dd-scroll", "moodle-core-dragdrop", "moodle-core-notification", "moodle-course-coursebase", "moodle-course-util"]}, "moodle-course-formatchooser": {"requires": ["base", "node", "node-event-simulate"]}, "moodle-course-management": {"requires": ["base", "node", "io-base", "moodle-core-notification-exception", "json-parse", "dd-constrain", "dd-proxy", "dd-drop", "dd-delegate", "node-event-delegate"]}, "moodle-course-modchooser": {"requires": ["moodle-core-chooserdialogue", "moodle-course-coursebase"]}, "moodle-course-toolboxes": {"requires": ["node", "base", "event-key", "node", "io", "moodle-course-coursebase", "moodle-course-util"]}, "moodle-course-util": {"requires": ["node"], "use": ["moodle-course-util-base"], "submodules": {"moodle-course-util-base": {}, "moodle-course-util-section": {"requires": ["node", "moodle-course-util-base"]}, "moodle-course-util-cm": {"requires": ["node", "moodle-course-util-base"]}}}, "moodle-form-passwordunmask": {"requires": ["node", "base"]}, "moodle-form-shortforms": {"requires": ["node", "base", "selector-css3"]}, "moodle-form-showadvanced": {"requires": ["node", "base", "selector-css3"]}, "moodle-question-chooser": {"requires": ["moodle-core-chooserdialogue"]}, "moodle-question-preview": {"requires": ["base", "dom", "event-delegate", "event-key", "core_question_engine"]}, "moodle-question-qbankmanager": {"requires": ["node", "selector-css3"]}, "moodle-question-searchform": {"requires": ["base", "node"]}, "moodle-availability_completion-form": {"requires": ["base", "node", "event", "moodle-core_availability-form"]}, "moodle-availability_date-form": {"requires": ["base", "node", "event", "io", "moodle-core_availability-form"]}, "moodle-availability_grade-form": {"requires": ["base", "node", "event", "moodle-core_availability-form"]}, "moodle-availability_group-form": {"requires": ["base", "node", "event", "moodle-core_availability-form"]}, "moodle-availability_grouping-form": {"requires": ["base", "node", "event", "moodle-core_availability-form"]}, "moodle-availability_profile-form": {"requires": ["base", "node", "event", "moodle-core_availability-form"]}, "moodle-mod_assign-history": {"requires": ["node", "transition"]}, "moodle-mod_quiz-autosave": {"requires": ["base", "node", "event", "event-valuechange", "node-event-delegate", "io-form"]}, "moodle-message_airnotifier-toolboxes": {"requires": ["base", "node", "io"]}, "moodle-block_navigation-navigation": {"requires": ["base", "io-base", "node", "event-synthetic", "event-delegate", "json-parse"]}, "moodle-filter_glossary-autolinker": {"requires": ["base", "node", "io-base", "json-parse", "event-delegate", "overlay", "moodle-core-event", "moodle-core-notification-alert"]}, "moodle-filter_mathjaxloader-loader": {"requires": ["moodle-core-event"]}, "moodle-editor_atto-editor": {"requires": ["node", "io", "overlay", "escape", "event", "event-simulate", "event-custom", "yui-throttle", "moodle-core-notification-dialogue", "moodle-editor_atto-rangy", "handlebars", "timers"]}, "moodle-editor_atto-plugin": {"requires": ["node", "base", "escape", "event", "event-outside", "handlebars", "event-custom", "timers"]}, "moodle-editor_atto-menu": {"requires": ["moodle-core-notification-dialogue", "node", "event", "event-custom"]}, "moodle-editor_atto-rangy": {"requires": []}, "moodle-report_eventlist-eventfilter": {"requires": ["base", "event", "node", "node-event-delegate", "datatable", "autocomplete", "autocomplete-filters"]}, "moodle-report_loglive-fetchlogs": {"requires": ["base", "event", "node", "io", "node-event-delegate"]}, "moodle-gradereport_grader-scrollview": {"requires": ["base", "node"]}, "moodle-tool_capability-search": {"requires": ["base", "node"]}, "moodle-theme_bootstrapbase-bootstrap": {"requires": ["node", "selector-css3"]}, "moodle-assignfeedback_editpdf-editor": {"requires": ["base", "event", "node", "io", "graphics", "json", "event-move", "querystring-stringify-simple", "moodle-core-notification-dialog", "moodle-core-notification-exception", "moodle-core-notification-ajaxexception"]}, "moodle-atto_accessibilitychecker-button": {"requires": ["color-base", "moodle-editor_atto-plugin"]}, "moodle-atto_accessibilityhelper-button": {"requires": ["moodle-editor_atto-plugin"]}, "moodle-atto_align-button": {"requires": ["moodle-editor_atto-plugin"]}, "moodle-atto_bold-button": {"requires": ["moodle-editor_atto-plugin"]}, "moodle-atto_charmap-button": {"requires": ["moodle-editor_atto-plugin"]}, "moodle-atto_clear-button": {"requires": ["moodle-editor_atto-plugin"]}, "moodle-atto_collapse-button": {"requires": ["moodle-editor_atto-plugin"]}, "moodle-atto_emoticon-button": {"requires": ["moodle-editor_atto-plugin"]}, "moodle-atto_equation-button": {"requires": ["moodle-editor_atto-plugin", "moodle-core-event", "io", "event-valuechange", "tabview", "array-extras"]}, "moodle-atto_html-button": {"requires": ["moodle-editor_atto-plugin", "event-valuechange"]}, "moodle-atto_image-button": {"requires": ["moodle-editor_atto-plugin"]}, "moodle-atto_indent-button": {"requires": ["moodle-editor_atto-plugin"]}, "moodle-atto_italic-button": {"requires": ["moodle-editor_atto-plugin"]}, "moodle-atto_link-button": {"requires": ["moodle-editor_atto-plugin"]}, "moodle-atto_managefiles-button": {"requires": ["moodle-editor_atto-plugin"]}, "moodle-atto_managefiles-usedfiles": {"requires": ["node", "escape"]}, "moodle-atto_media-button": {"requires": ["moodle-editor_atto-plugin"]}, "moodle-atto_noautolink-button": {"requires": ["moodle-editor_atto-plugin"]}, "moodle-atto_orderedlist-button": {"requires": ["moodle-editor_atto-plugin"]}, "moodle-atto_rtl-button": {"requires": ["moodle-editor_atto-plugin"]}, "moodle-atto_strike-button": {"requires": ["moodle-editor_atto-plugin"]}, "moodle-atto_subscript-button": {"requires": ["moodle-editor_atto-plugin"]}, "moodle-atto_superscript-button": {"requires": ["moodle-editor_atto-plugin"]}, "moodle-atto_table-button": {"requires": ["moodle-editor_atto-plugin", "moodle-editor_atto-menu", "event", "event-valuechange"]}, "moodle-atto_title-button": {"requires": ["moodle-editor_atto-plugin"]}, "moodle-atto_underline-button": {"requires": ["moodle-editor_atto-plugin"]}, "moodle-atto_undo-button": {"requires": ["moodle-editor_atto-plugin"]}, "moodle-atto_unorderedlist-button": {"requires": ["moodle-editor_atto-plugin"]}}}, "gallery": {"name": "gallery", "base": "http:\/\/localhost\/moodle\/lib\/yuilib\/gallery\/", "combine": true, "comboBase": "http:\/\/localhost\/moodle\/theme\/yui_combo.php?", "ext": false, "root": "gallery\/1403939604\/", "patterns": {"gallery-": {"group": "gallery"}}}}, "modules": {"core_filepicker": {"name": "core_filepicker", "fullpath": "http:\/\/localhost\/moodle\/lib\/javascript.php\/1403939604\/repository\/filepicker.js", "requires": ["base", "node", "node-event-simulate", "json", "async-queue", "io-base", "io-upload-iframe", "io-form", "yui2-treeview", "panel", "cookie", "datatable", "datatable-sort", "resize-plugin", "dd-plugin", "escape", "moodle-core_filepicker"]}, "block_course_overview": {"name": "block_course_overview", "fullpath": "http:\/\/localhost\/moodle\/lib\/javascript.php\/1403939604\/blocks\/course_overview\/module.js", "requires": []}}};
+        M.yui.loader = {modules: {}};
 
-    <header id="page-header" class="clearfix">
-        <h1>: My home</h1>
+        //]]>
+    </script>
+    <link rel="stylesheet" type="text/css"
+          href="http://localhost/moodle/theme/yui_combo.php?rollup/3.15.0/yui-moodlesimple-min.css"/>
+    <script type="text/javascript"
+            src="http://localhost/moodle/theme/yui_combo.php?rollup/3.15.0_1/yui-moodlesimple-min.js&amp;rollup/1403939604/mcore-min.js"></script>
+    <script id="firstthemesheet"
+            type="text/css">/** Required in order to fix style inclusion problems in IE with YUI **/</script>
+    <link rel="stylesheet" type="text/css" href="http://localhost/moodle/theme/styles.php/clean/1403939604/all"/>
+    <script type="text/javascript"
+            src="http://localhost/moodle/lib/javascript.php/1403939604/lib/javascript-static.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
 
-        <div id="page-navbar" class="clearfix">
-            <nav class="breadcrumb-nav"><span class="accesshide">Page path</span>
-                <ul class="breadcrumb">
-                    <li><a href="http://localhost/moodle/">Home</a> <span class="divider"> <span
-                            class="accesshide "><span class="arrow_text">/</span>&nbsp;</span><span class="arrow sep">&#x25BA;</span> </span>
-                    </li>
-                    <li><a href="http://localhost/moodle/my/">My home</a></li>
-                </ul>
-            </nav>
-            <div class="breadcrumb-button">
-                <div class="singlebutton">
-                    <form method="post" action="http://localhost/moodle/my/index.php">
-                        <div><input type="submit" value="Customise this page"/><input type="hidden" name="edit"
-                                                                                      value="1"/><input type="hidden"
-                                                                                                        name="sesskey"
-                                                                                                        value="r4eY4IzuuA"/>
+<body id="page-my-index"
+      class="format-site  path-my safari dir-ltr lang-en yui-skin-sam yui3-skin-sam localhost--moodle pagelayout-mydashboard course-1 context-21 has-region-content used-region-content has-region-side-pre used-region-side-pre has-region-side-post used-region-side-post layout-option-langmenu">
+
+<div class="skiplinks"><a class="skip" href="#maincontent">Skip to main content</a></div>
+<script type="text/javascript">
+    //<![CDATA[
+    document.body.className += ' jsenabled';
+    //]]>
+</script>
+
+
+<header role="banner" class="navbar navbar-fixed-top moodle-has-zindex">
+    <nav role="navigation" class="navbar-inner">
+        <div class="container-fluid">
+            <a class="brand" href="http://localhost/moodle"></a>
+            <a class="btn btn-navbar" data-toggle="workaround-collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+
+            <div class="nav-collapse collapse">
+                <ul class="nav pull-right">
+                    <li></li>
+                    <li class="navbar-text">
+                        <div class="logininfo">You are logged in as <a
+                                href="http://localhost/moodle/user/profile.php?id=3" title="View profile">Sameera
+                            Fernando</a> (<a href="http://localhost/moodle/login/logout.php?sesskey=EdRY6NaB7g">Log
+                            out</a>)
                         </div>
-                    </form>
-                </div>
+                    </li>
+                </ul>
             </div>
         </div>
-        <div id="course-header">
+    </nav>
+</header>
+
+<div id="page" class="container-fluid">
+
+<header id="page-header" class="clearfix">
+    <h1>: My home</h1>
+
+    <div id="page-navbar" class="clearfix">
+        <nav class="breadcrumb-nav"><span class="accesshide">Page path</span>
+            <ul class="breadcrumb">
+                <li><a href="http://localhost/moodle/">Home</a> <span class="divider"> <span
+                        class="accesshide "><span class="arrow_text">/</span>&nbsp;</span><span class="arrow sep">&#x25BA;</span> </span>
+                </li>
+                <li><a href="http://localhost/moodle/my/">My home</a></li>
+            </ul>
+        </nav>
+        <div class="breadcrumb-button">
+            <div class="singlebutton">
+                <form method="post" action="http://localhost/moodle/my/index.php">
+                    <div><input type="submit" value="Customise this page"/><input type="hidden" name="edit"
+                                                                                  value="1"/><input type="hidden"
+                                                                                                    name="sesskey"
+                                                                                                    value="EdRY6NaB7g"/>
+                    </div>
+                </form>
+            </div>
         </div>
-    </header>
+    </div>
+    <div id="course-header">
+    </div>
+</header>
 
-    <div id="page-content" class="row-fluid">
-        <div id="region-bs-main-and-pre" class="span9">
-            <div class="row-fluid">
-                <section id="region-main" class="span8 pull-right">
-                    <div role="main"><span id="maincontent"></span>
-                        <aside id="block-region-content" class="block-region" data-blockregion="content"
-                               data-droptarget="1"><a href="#sb-1" class="skip-block">Skip Course overview</a>
+<div id="page-content" class="row-fluid">
+<div id="region-bs-main-and-pre" class="span9">
+<div class="row-fluid">
+<section id="region-main" class="span8 pull-right">
+<div role="main"><span id="maincontent"></span>
+<aside id="block-region-content" class="block-region" data-blockregion="content"
+       data-droptarget="1"><a href="#sb-1" class="skip-block">Skip Course overview</a>
 
-                            <div id="inst24" class="block_course_overview  block" role="complementary"
-                                 data-block="course_overview" data-instanceid="24" aria-labelledby="instance-24-header"
-                                 data-dockable="1">
-                                <div class="header">
-                                    <div class="title">
-                                        <div class="block_action"></div>
-                                        <h2 id="instance-24-header">Course overview</h2></div>
+<div id="inst24" class="block_course_overview  block" role="complementary"
+     data-block="course_overview" data-instanceid="24" aria-labelledby="instance-24-header"
+     data-dockable="1">
+    <div class="header">
+        <div class="title">
+            <div class="block_action"></div>
+            <h2 id="instance-24-header">Course overview</h2></div>
+    </div>
+    <div class="content">
+        <div class="course_list">
+            <div id="course-3" class="box coursebox">
+                <div class="course_title"><h2 class="title"><a title="Computer Security"
+                                                               href="http://localhost/moodle/course/view.php?id=3">Computer
+                    Security</a></h2>
+
+                    <div class="box flush"></div>
+                </div>
+                <div class="activity_info">
+                    <div class="activity_overview">
+                        <div id="region_3_assign" class="collapsibleregion  collapsed">
+                            <div id="region_3_assign_sizer">
+                                <div id="region_3_assign_caption"
+                                     class="collapsibleregioncaption"><a
+                                        href="http://localhost/moodle/mod/assign/index.php?id=3"><img
+                                        class="iconlarge" alt="Assignment"
+                                        title="Assignment"
+                                        src="http://localhost/moodle/theme/image.php/clean/mod_assign/1403939604/icon"/></a>You
+                                    have assignments that need attention
                                 </div>
-                                <div class="content">
-                                    <div class="course_list">
-                                        <div id="course-3" class="box coursebox">
-                                            <div class="course_title"><h2 class="title"><a title="Computer Security"
-                                                                                           href="http://localhost/moodle/course/view.php?id=3">Computer
-                                                Security</a></h2>
-
-                                                <div class="box flush"></div>
-                                            </div>
-                                            <div class="activity_info">
-                                                <div class="activity_overview">
-                                                    <div id="region_3_assign" class="collapsibleregion  collapsed">
-                                                        <div id="region_3_assign_sizer">
-                                                            <div id="region_3_assign_caption"
-                                                                 class="collapsibleregioncaption"><a
-                                                                    href="http://localhost/moodle/mod/assign/index.php?id=3"><img
-                                                                    class="iconlarge" alt="Assignment"
-                                                                    title="Assignment"
-                                                                    src="http://localhost/moodle/theme/image.php/clean/mod_assign/1403939604/icon"/></a>You
-                                                                have assignments that need attention
-                                                            </div>
-                                                            <div id="region_3_assign_inner"
-                                                                 class="collapsibleregioninner">
-                                                                <div class="assign overview">
-                                                                    <div class="name">Assignment: <a title="Assignment"
-                                                                                                     href="http://localhost/moodle/mod/assign/view.php?id=4">Practical
-                                                                        1</a></div>
-                                                                    <div class="info">Due date: Sunday, 7 September
-                                                                        2014, 12:00 AM
-                                                                    </div>
-                                                                    <div class="details">My submission: Not submitted
-                                                                        yet, Not graded
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="activity_overview">
-                                                    <div id="region_3_quiz" class="collapsibleregion  collapsed">
-                                                        <div id="region_3_quiz_sizer">
-                                                            <div id="region_3_quiz_caption"
-                                                                 class="collapsibleregioncaption"><a
-                                                                    href="http://localhost/moodle/mod/quiz/index.php?id=3"><img
-                                                                    class="iconlarge" alt="Quiz" title="Quiz"
-                                                                    src="http://localhost/moodle/theme/image.php/clean/mod_quiz/1403939604/icon"/></a>You
-                                                                have quizzes that are due
-                                                            </div>
-                                                            <div id="region_3_quiz_inner"
-                                                                 class="collapsibleregioninner">
-                                                                <div class="quiz overview">
-                                                                    <div class="name">Quiz: <a
-                                                                            href="http://localhost/moodle/mod/quiz/view.php?id=5">Quiz
-                                                                        1</a></div>
-                                                                    <div class="info">This quiz will close at Wednesday,
-                                                                        10 September 2014, 11:00 PM
-                                                                    </div>
-                                                                    <div class="info">No attempts have been made on this
-                                                                        quiz
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="box flush"></div>
+                                <div id="region_3_assign_inner" class="collapsibleregioninner">
+                                    <div class="assign overview">
+                                        <div class="name">Assignment: <a title="Assignment"
+                                                                         href="http://localhost/moodle/mod/assign/view.php?id=4">Practical
+                                            1</a></div>
+                                        <div class="info">Due date: Sunday, 7 September
+                                            2014, 12:00 AM
                                         </div>
-                                        <div id="course-2" class="box coursebox">
-                                            <div class="course_title"><h2 class="title"><a
-                                                    title="Software Engineering Project"
-                                                    href="http://localhost/moodle/course/view.php?id=2">Software
-                                                Engineering Project</a></h2>
-
-                                                <div class="box flush"></div>
-                                            </div>
-                                            <div class="box flush"></div>
+                                        <div class="details">My submission: Not submitted
+                                            yet, Not graded
                                         </div>
-                                        <div id="course-4" class="box coursebox">
-                                            <div class="course_title"><h2 class="title"><a title="Signals and Systems"
-                                                                                           href="http://localhost/moodle/course/view.php?id=4">Signals
-                                                and Systems</a></h2>
-
-                                                <div class="box flush"></div>
-                                            </div>
-                                            <div class="box flush"></div>
+                                    </div>
+                                    <div class="assign overview">
+                                        <div class="name">Assignment: <a title="Assignment"
+                                                                         href="http://localhost/moodle/mod/assign/view.php?id=6">Practical
+                                            2</a></div>
+                                        <div class="info">Due date: Monday, 8 September
+                                            2014, 12:00 AM
+                                        </div>
+                                        <div class="details">My submission: Not submitted
+                                            yet, Not graded
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <span id="sb-1" class="skip-block-to"></span></aside>
-                    </div>
-                </section>
-                <aside id="block-region-side-pre" class="span4 desktop-first-column block-region"
-                       data-blockregion="side-pre" data-droptarget="1"><a href="#sb-2" class="skip-block">Skip
-                    Navigation</a>
-
-                    <div id="inst4" class="block_navigation  block" role="navigation" data-block="navigation"
-                         data-instanceid="4" aria-labelledby="instance-4-header" data-dockable="1">
-                        <div class="header">
-                            <div class="title">
-                                <div class="block_action"></div>
-                                <h2 id="instance-4-header">Navigation</h2></div>
-                        </div>
-                        <div class="content">
-                            <ul class="block_tree list">
-                                <li class="type_unknown depth_1 contains_branch" aria-expanded="true"><p
-                                        class="tree_item branch navigation_node"><a
-                                        href="http://localhost/moodle/">Home</a></p>
-                                    <ul>
-                                        <li class="type_setting depth_2 item_with_icon current_branch"><p
-                                                class="tree_item leaf hasicon active_tree_node"><a
-                                                href="http://localhost/moodle/my/"><img alt="" class="smallicon navicon"
-                                                                                        title=""
-                                                                                        src="http://localhost/moodle/theme/image.php/clean/core/1403939604/i/navigationitem"/>My
-                                            home</a></p></li>
-                                        <li class="type_course depth_2 collapsed contains_branch" aria-expanded="false">
-                                            <p class="tree_item branch"><span tabindex="0">Site pages</span></p>
-                                            <ul>
-                                                <li class="type_custom depth_3 item_with_icon"><p
-                                                        class="tree_item leaf hasicon"><a
-                                                        href="http://localhost/moodle/blog/index.php?courseid=0"><img
-                                                        alt="" class="smallicon navicon" title=""
-                                                        src="http://localhost/moodle/theme/image.php/clean/core/1403939604/i/navigationitem"/>Site
-                                                    blogs</a></p></li>
-                                                <li class="type_custom depth_3 item_with_icon"><p
-                                                        class="tree_item leaf hasicon"><a
-                                                        href="http://localhost/moodle/badges/view.php?type=1"><img
-                                                        alt="" class="smallicon navicon" title=""
-                                                        src="http://localhost/moodle/theme/image.php/clean/core/1403939604/i/navigationitem"/>Site
-                                                    badges</a></p></li>
-                                                <li class="type_custom depth_3 item_with_icon"><p
-                                                        class="tree_item leaf hasicon"><a
-                                                        href="http://localhost/moodle/tag/search.php"><img alt=""
-                                                                                                           class="smallicon navicon"
-                                                                                                           title=""
-                                                                                                           src="http://localhost/moodle/theme/image.php/clean/core/1403939604/i/navigationitem"/>Tags</a>
-                                                </p></li>
-                                                <li class="type_custom depth_3 item_with_icon"><p
-                                                        class="tree_item leaf hasicon"><a
-                                                        href="http://localhost/moodle/calendar/view.php?view=month"><img
-                                                        alt="" class="smallicon navicon" title=""
-                                                        src="http://localhost/moodle/theme/image.php/clean/core/1403939604/i/navigationitem"/>Calendar</a>
-                                                </p></li>
-                                            </ul>
-                                        </li>
-                                        <li class="type_user depth_2 collapsed contains_branch" aria-expanded="false"><p
-                                                class="tree_item branch"><span tabindex="0">My profile</span></p>
-                                            <ul>
-                                                <li class="type_custom depth_3 item_with_icon"><p
-                                                        class="tree_item leaf hasicon"><a
-                                                        href="http://localhost/moodle/user/profile.php?id=3"><img alt=""
-                                                                                                                  class="smallicon navicon"
-                                                                                                                  title=""
-                                                                                                                  src="http://localhost/moodle/theme/image.php/clean/core/1403939604/i/navigationitem"/>View
-                                                    profile</a></p></li>
-                                                <li class="type_custom depth_3 collapsed contains_branch"
-                                                    aria-expanded="false"><p class="tree_item branch"><span
-                                                        tabindex="0">Forum posts</span></p>
-                                                    <ul>
-                                                        <li class="type_custom depth_4 item_with_icon"><p
-                                                                class="tree_item leaf hasicon"><a
-                                                                href="http://localhost/moodle/mod/forum/user.php?id=3"><img
-                                                                alt="" class="smallicon navicon" title=""
-                                                                src="http://localhost/moodle/theme/image.php/clean/core/1403939604/i/navigationitem"/>Posts</a>
-                                                        </p></li>
-                                                        <li class="type_custom depth_4 item_with_icon"><p
-                                                                class="tree_item leaf hasicon"><a
-                                                                href="http://localhost/moodle/mod/forum/user.php?id=3&amp;mode=discussions"><img
-                                                                alt="" class="smallicon navicon" title=""
-                                                                src="http://localhost/moodle/theme/image.php/clean/core/1403939604/i/navigationitem"/>Discussions</a>
-                                                        </p></li>
-                                                    </ul>
-                                                </li>
-                                                <li class="type_unknown depth_3 collapsed contains_branch"
-                                                    aria-expanded="false"><p class="tree_item branch"><span
-                                                        tabindex="0">Blogs</span></p>
-                                                    <ul>
-                                                        <li class="type_custom depth_4 item_with_icon"><p
-                                                                class="tree_item leaf hasicon"><a
-                                                                href="http://localhost/moodle/blog/index.php?userid=3"><img
-                                                                alt="" class="smallicon navicon" title=""
-                                                                src="http://localhost/moodle/theme/image.php/clean/core/1403939604/i/navigationitem"/>View
-                                                            all of my entries</a></p></li>
-                                                        <li class="type_custom depth_4 item_with_icon"><p
-                                                                class="tree_item leaf hasicon"><a
-                                                                href="http://localhost/moodle/blog/edit.php?action=add"><img
-                                                                alt="" class="smallicon navicon" title=""
-                                                                src="http://localhost/moodle/theme/image.php/clean/core/1403939604/i/navigationitem"/>Add
-                                                            a new entry</a></p></li>
-                                                    </ul>
-                                                </li>
-                                                <li class="type_setting depth_3 item_with_icon"><p
-                                                        class="tree_item leaf hasicon"><a
-                                                        href="http://localhost/moodle/message/index.php?user1=3"><img
-                                                        alt="" class="smallicon navicon" title=""
-                                                        src="http://localhost/moodle/theme/image.php/clean/core/1403939604/i/navigationitem"/>Messages</a>
-                                                </p></li>
-                                                <li class="type_setting depth_3 item_with_icon"><p
-                                                        class="tree_item leaf hasicon"><a
-                                                        href="http://localhost/moodle/user/files.php"><img alt=""
-                                                                                                           class="smallicon navicon"
-                                                                                                           title=""
-                                                                                                           src="http://localhost/moodle/theme/image.php/clean/core/1403939604/i/navigationitem"/>My
-                                                    private files</a></p></li>
-                                                <li class="type_setting depth_3 item_with_icon"><p
-                                                        class="tree_item leaf hasicon"><a
-                                                        href="http://localhost/moodle/badges/mybadges.php"><img alt=""
-                                                                                                                class="smallicon navicon"
-                                                                                                                title=""
-                                                                                                                src="http://localhost/moodle/theme/image.php/clean/core/1403939604/i/navigationitem"/>My
-                                                    badges</a></p></li>
-                                            </ul>
-                                        </li>
-                                        <li class="type_system depth_2 contains_branch current_branch"
-                                            aria-expanded="true"><p class="tree_item branch active_tree_node canexpand">
-                                            <a href="http://localhost/moodle/my/">My courses</a></p>
-                                            <ul>
-                                                <li class="type_course depth_3 collapsed contains_branch"
-                                                    aria-expanded="false"><p class="tree_item branch"
-                                                                             id="expandable_branch_20_3"><a
-                                                        title="Computer Security"
-                                                        href="http://localhost/moodle/course/view.php?id=3">Com Sec</a>
-                                                </p></li>
-                                                <li class="type_course depth_3 collapsed contains_branch"
-                                                    aria-expanded="false"><p class="tree_item branch"
-                                                                             id="expandable_branch_20_2"><a
-                                                        title="Software Engineering Project"
-                                                        href="http://localhost/moodle/course/view.php?id=2">SE
-                                                    Project</a></p></li>
-                                                <li class="type_course depth_3 collapsed contains_branch"
-                                                    aria-expanded="false"><p class="tree_item branch"
-                                                                             id="expandable_branch_20_4"><a
-                                                        title="Signals and Systems"
-                                                        href="http://localhost/moodle/course/view.php?id=4">SnS</a></p>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </li>
-                            </ul>
                         </div>
                     </div>
-                    <span id="sb-2" class="skip-block-to"></span><a href="#sb-3" class="skip-block">Skip
-                        Administration</a>
-
-                    <div id="inst5" class="block_settings  block" role="navigation" data-block="settings"
-                         data-instanceid="5" aria-labelledby="instance-5-header" data-dockable="1">
-                        <div class="header">
-                            <div class="title">
-                                <div class="block_action"></div>
-                                <h2 id="instance-5-header">Administration</h2></div>
-                        </div>
-                        <div class="content">
-                            <div id="settingsnav" class="box block_tree_box">
-                                <ul class="block_tree list">
-                                    <li class="type_unknown contains_branch current_branch" aria-expanded="true"><p
-                                            class="tree_item branch root_node active_tree_node" id="usersettings"><span
-                                            tabindex="0">My profile settings</span></p>
-                                        <ul>
-                                            <li class="type_setting collapsed item_with_icon"><p class="tree_item leaf">
-                                                <a href="http://localhost/moodle/user/edit.php?id=3&amp;course=1"><img
-                                                        alt="" class="smallicon navicon" title=""
-                                                        src="http://localhost/moodle/theme/image.php/clean/core/1403939604/i/navigationitem"/>Edit
-                                                    profile</a></p></li>
-                                            <li class="type_setting collapsed item_with_icon"><p class="tree_item leaf">
-                                                <a href="http://localhost/moodle/login/change_password.php?id=1"><img
-                                                        alt="" class="smallicon navicon" title=""
-                                                        src="http://localhost/moodle/theme/image.php/clean/core/1403939604/i/navigationitem"/>Change
-                                                    password</a></p></li>
-                                            <li class="type_setting collapsed item_with_icon"><p class="tree_item leaf">
-                                                <a href="http://localhost/moodle/message/edit.php?id=3"><img alt=""
-                                                                                                             class="smallicon navicon"
-                                                                                                             title=""
-                                                                                                             src="http://localhost/moodle/theme/image.php/clean/core/1403939604/i/navigationitem"/>Messaging</a>
-                                            </p></li>
-                                            <li class="type_unknown collapsed contains_branch" aria-expanded="false"><p
-                                                    class="tree_item branch"><span tabindex="0">Blogs</span></p>
-                                                <ul>
-                                                    <li class="type_setting collapsed item_with_icon"><p
-                                                            class="tree_item leaf"><a
-                                                            href="http://localhost/moodle/blog/preferences.php"><img
-                                                            alt="" class="smallicon navicon" title=""
-                                                            src="http://localhost/moodle/theme/image.php/clean/core/1403939604/i/navigationitem"/>Preferences</a>
-                                                    </p></li>
-                                                    <li class="type_setting collapsed item_with_icon"><p
-                                                            class="tree_item leaf"><a
-                                                            href="http://localhost/moodle/blog/external_blogs.php"><img
-                                                            alt="" class="smallicon navicon" title=""
-                                                            src="http://localhost/moodle/theme/image.php/clean/core/1403939604/i/navigationitem"/>External
-                                                        blogs</a></p></li>
-                                                    <li class="type_setting collapsed item_with_icon"><p
-                                                            class="tree_item leaf"><a
-                                                            href="http://localhost/moodle/blog/external_blog_edit.php"><img
-                                                            alt="" class="smallicon navicon" title=""
-                                                            src="http://localhost/moodle/theme/image.php/clean/core/1403939604/i/navigationitem"/>Register
-                                                        an external blog</a></p></li>
-                                                </ul>
-                                            </li>
-                                            <li class="type_unknown collapsed contains_branch" aria-expanded="false"><p
-                                                    class="tree_item branch"><span tabindex="0">Badges</span></p>
-                                                <ul>
-                                                    <li class="type_setting collapsed item_with_icon"><p
-                                                            class="tree_item leaf"><a
-                                                            href="http://localhost/moodle/badges/preferences.php"><img
-                                                            alt="" class="smallicon navicon" title=""
-                                                            src="http://localhost/moodle/theme/image.php/clean/core/1403939604/i/navigationitem"/>Preferences</a>
-                                                    </p></li>
-                                                    <li class="type_setting collapsed item_with_icon"><p
-                                                            class="tree_item leaf"><a
-                                                            href="http://localhost/moodle/badges/mybackpack.php"><img
-                                                            alt="" class="smallicon navicon" title=""
-                                                            src="http://localhost/moodle/theme/image.php/clean/core/1403939604/i/navigationitem"/>Backpack
-                                                        settings</a></p></li>
-                                                </ul>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                </ul>
+                    <div class="activity_overview">
+                        <div id="region_3_forum" class="collapsibleregion  collapsed">
+                            <div id="region_3_forum_sizer">
+                                <div id="region_3_forum_caption"
+                                     class="collapsibleregioncaption"><a
+                                        href="http://localhost/moodle/mod/forum/index.php?id=3"><img
+                                        class="iconlarge" alt="Forum" title="Forum"
+                                        src="http://localhost/moodle/theme/image.php/clean/mod_forum/1403939604/icon"/></a>There
+                                    are new forum posts
+                                </div>
+                                <div id="region_3_forum_inner"
+                                     class="collapsibleregioninner">
+                                    <div class="overview forum">
+                                        <div class="name">Forum: <a title="Forum"
+                                                                    href="http://localhost/moodle/mod/forum/view.php?f=2">News
+                                            forum</a></div>
+                                        <div class="info"><span class="postsincelogin">2 posts since last login</span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <span id="sb-3" class="skip-block-to"></span></aside>
+                    <div class="activity_overview">
+                        <div id="region_3_quiz" class="collapsibleregion  collapsed">
+                            <div id="region_3_quiz_sizer">
+                                <div id="region_3_quiz_caption"
+                                     class="collapsibleregioncaption"><a
+                                        href="http://localhost/moodle/mod/quiz/index.php?id=3"><img
+                                        class="iconlarge" alt="Quiz" title="Quiz"
+                                        src="http://localhost/moodle/theme/image.php/clean/mod_quiz/1403939604/icon"/></a>You
+                                    have quizzes that are due
+                                </div>
+                                <div id="region_3_quiz_inner"
+                                     class="collapsibleregioninner">
+                                    <div class="quiz overview">
+                                        <div class="name">Quiz: <a
+                                                href="http://localhost/moodle/mod/quiz/view.php?id=5">Quiz
+                                            1</a></div>
+                                        <div class="info">This quiz will close at Wednesday,
+                                            10 September 2014, 11:00 PM
+                                        </div>
+                                        <div class="info">No attempts have been made on this
+                                            quiz
+                                        </div>
+                                    </div>
+                                    <div class="quiz overview">
+                                        <div class="name">Quiz: <a
+                                                href="http://localhost/moodle/mod/quiz/view.php?id=7">Quiz
+                                            2</a></div>
+                                        <div class="info">This quiz will close at Wednesday,
+                                            10 September 2014, 12:15 PM
+                                        </div>
+                                        <div class="info">No attempts have been made on this
+                                            quiz
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box flush"></div>
+            </div>
+            <div id="course-2" class="box coursebox">
+                <div class="course_title"><h2 class="title"><a
+                        title="Software Engineering Project"
+                        href="http://localhost/moodle/course/view.php?id=2">Software
+                    Engineering Project</a></h2>
+
+                    <div class="box flush"></div>
+                </div>
+                <div class="activity_info">
+                    <div class="activity_overview">
+                        <div id="region_2_assign" class="collapsibleregion  collapsed">
+                            <div id="region_2_assign_sizer">
+                                <div id="region_2_assign_caption"
+                                     class="collapsibleregioncaption"><a
+                                        href="http://localhost/moodle/mod/assign/index.php?id=2"><img
+                                        class="iconlarge" alt="Assignment"
+                                        title="Assignment"
+                                        src="http://localhost/moodle/theme/image.php/clean/mod_assign/1403939604/icon"/></a>You
+                                    have assignments that need attention
+                                </div>
+                                <div id="region_2_assign_inner"
+                                     class="collapsibleregioninner">
+                                    <div class="assign overview">
+                                        <div class="name">Assignment: <a title="Assignment"
+                                                                         href="http://localhost/moodle/mod/assign/view.php?id=9">SEP
+                                            final</a></div>
+                                        <div class="info">Due date: Saturday, 20 September
+                                            2014, 12:00 AM
+                                        </div>
+                                        <div class="details">My submission: Not submitted
+                                            yet, Not graded
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box flush"></div>
+            </div>
+            <div id="course-4" class="box coursebox">
+                <div class="course_title"><h2 class="title"><a title="Signals and Systems"
+                                                               href="http://localhost/moodle/course/view.php?id=4">Signals
+                    and Systems</a></h2>
+
+                    <div class="box flush"></div>
+                </div>
+                <div class="activity_info">
+                    <div class="activity_overview">
+                        <div id="region_4_assign" class="collapsibleregion  collapsed">
+                            <div id="region_4_assign_sizer">
+                                <div id="region_4_assign_caption"
+                                     class="collapsibleregioncaption"><a
+                                        href="http://localhost/moodle/mod/assign/index.php?id=4"><img
+                                        class="iconlarge" alt="Assignment"
+                                        title="Assignment"
+                                        src="http://localhost/moodle/theme/image.php/clean/mod_assign/1403939604/icon"/></a>You
+                                    have assignments that need attention
+                                </div>
+                                <div id="region_4_assign_inner"
+                                     class="collapsibleregioninner">
+                                    <div class="assign overview">
+                                        <div class="name">Assignment: <a title="Assignment"
+                                                                         href="http://localhost/moodle/mod/assign/view.php?id=8">Assignment
+                                            1</a></div>
+                                        <div class="info">Due date: Monday, 8 September
+                                            2014, 12:00 AM
+                                        </div>
+                                        <div class="details">My submission: Not submitted
+                                            yet, Not graded
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box flush"></div>
             </div>
         </div>
-        <aside id="block-region-side-post" class="span3 block-region" data-blockregion="side-post" data-droptarget="1">
-            <a href="#sb-4" class="skip-block">Skip My private files</a>
+    </div>
+</div>
+<span id="sb-1" class="skip-block-to"></span></aside>
+</div>
+</section>
+<aside id="block-region-side-pre" class="span4 desktop-first-column block-region"
+       data-blockregion="side-pre" data-droptarget="1"><a href="#sb-2" class="skip-block">Skip
+    Navigation</a>
 
-            <div id="inst22" class="block_private_files  block" role="complementary" data-block="private_files"
-                 data-instanceid="22" aria-labelledby="instance-22-header" data-dockable="1">
-                <div class="header">
-                    <div class="title">
-                        <div class="block_action"></div>
-                        <h2 id="instance-22-header">My private files</h2></div>
-                </div>
-                <div class="content">
-                    <div class="box generalbox">No files available</div>
-                    <div class="singlebutton">
-                        <form method="get" action="http://localhost/moodle/user/files.php">
-                            <div><input type="submit" value="Manage my private files"/><input type="hidden"
-                                                                                              name="returnurl"
-                                                                                              value="http://localhost/moodle/my/index.php"/>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <span id="sb-4" class="skip-block-to"></span><a href="#sb-5" class="skip-block">Skip Online users</a>
+<div id="inst4" class="block_navigation  block" role="navigation" data-block="navigation"
+     data-instanceid="4" aria-labelledby="instance-4-header" data-dockable="1">
+    <div class="header">
+        <div class="title">
+            <div class="block_action"></div>
+            <h2 id="instance-4-header">Navigation</h2></div>
+    </div>
+    <div class="content">
+        <ul class="block_tree list">
+            <li class="type_unknown depth_1 contains_branch" aria-expanded="true"><p
+                    class="tree_item branch navigation_node"><a
+                    href="http://localhost/moodle/">Home</a></p>
+                <ul>
+                    <li class="type_setting depth_2 item_with_icon current_branch"><p
+                            class="tree_item leaf hasicon active_tree_node"><a
+                            href="http://localhost/moodle/my/"><img alt="" class="smallicon navicon"
+                                                                    title=""
+                                                                    src="http://localhost/moodle/theme/image.php/clean/core/1403939604/i/navigationitem"/>My
+                        home</a></p></li>
+                    <li class="type_course depth_2 collapsed contains_branch" aria-expanded="false">
+                        <p class="tree_item branch"><span tabindex="0">Site pages</span></p>
+                        <ul>
+                            <li class="type_custom depth_3 item_with_icon"><p
+                                    class="tree_item leaf hasicon"><a
+                                    href="http://localhost/moodle/blog/index.php?courseid=0"><img
+                                    alt="" class="smallicon navicon" title=""
+                                    src="http://localhost/moodle/theme/image.php/clean/core/1403939604/i/navigationitem"/>Site
+                                blogs</a></p></li>
+                            <li class="type_custom depth_3 item_with_icon"><p
+                                    class="tree_item leaf hasicon"><a
+                                    href="http://localhost/moodle/badges/view.php?type=1"><img
+                                    alt="" class="smallicon navicon" title=""
+                                    src="http://localhost/moodle/theme/image.php/clean/core/1403939604/i/navigationitem"/>Site
+                                badges</a></p></li>
+                            <li class="type_custom depth_3 item_with_icon"><p
+                                    class="tree_item leaf hasicon"><a
+                                    href="http://localhost/moodle/tag/search.php"><img alt=""
+                                                                                       class="smallicon navicon"
+                                                                                       title=""
+                                                                                       src="http://localhost/moodle/theme/image.php/clean/core/1403939604/i/navigationitem"/>Tags</a>
+                            </p></li>
+                            <li class="type_custom depth_3 item_with_icon"><p
+                                    class="tree_item leaf hasicon"><a
+                                    href="http://localhost/moodle/calendar/view.php?view=month"><img
+                                    alt="" class="smallicon navicon" title=""
+                                    src="http://localhost/moodle/theme/image.php/clean/core/1403939604/i/navigationitem"/>Calendar</a>
+                            </p></li>
+                        </ul>
+                    </li>
+                    <li class="type_user depth_2 collapsed contains_branch" aria-expanded="false"><p
+                            class="tree_item branch"><span tabindex="0">My profile</span></p>
+                        <ul>
+                            <li class="type_custom depth_3 item_with_icon"><p
+                                    class="tree_item leaf hasicon"><a
+                                    href="http://localhost/moodle/user/profile.php?id=3"><img alt=""
+                                                                                              class="smallicon navicon"
+                                                                                              title=""
+                                                                                              src="http://localhost/moodle/theme/image.php/clean/core/1403939604/i/navigationitem"/>View
+                                profile</a></p></li>
+                            <li class="type_custom depth_3 collapsed contains_branch"
+                                aria-expanded="false"><p class="tree_item branch"><span
+                                    tabindex="0">Forum posts</span></p>
+                                <ul>
+                                    <li class="type_custom depth_4 item_with_icon"><p
+                                            class="tree_item leaf hasicon"><a
+                                            href="http://localhost/moodle/mod/forum/user.php?id=3"><img
+                                            alt="" class="smallicon navicon" title=""
+                                            src="http://localhost/moodle/theme/image.php/clean/core/1403939604/i/navigationitem"/>Posts</a>
+                                    </p></li>
+                                    <li class="type_custom depth_4 item_with_icon"><p
+                                            class="tree_item leaf hasicon"><a
+                                            href="http://localhost/moodle/mod/forum/user.php?id=3&amp;mode=discussions"><img
+                                            alt="" class="smallicon navicon" title=""
+                                            src="http://localhost/moodle/theme/image.php/clean/core/1403939604/i/navigationitem"/>Discussions</a>
+                                    </p></li>
+                                </ul>
+                            </li>
+                            <li class="type_unknown depth_3 collapsed contains_branch"
+                                aria-expanded="false"><p class="tree_item branch"><span
+                                    tabindex="0">Blogs</span></p>
+                                <ul>
+                                    <li class="type_custom depth_4 item_with_icon"><p
+                                            class="tree_item leaf hasicon"><a
+                                            href="http://localhost/moodle/blog/index.php?userid=3"><img
+                                            alt="" class="smallicon navicon" title=""
+                                            src="http://localhost/moodle/theme/image.php/clean/core/1403939604/i/navigationitem"/>View
+                                        all of my entries</a></p></li>
+                                    <li class="type_custom depth_4 item_with_icon"><p
+                                            class="tree_item leaf hasicon"><a
+                                            href="http://localhost/moodle/blog/edit.php?action=add"><img
+                                            alt="" class="smallicon navicon" title=""
+                                            src="http://localhost/moodle/theme/image.php/clean/core/1403939604/i/navigationitem"/>Add
+                                        a new entry</a></p></li>
+                                </ul>
+                            </li>
+                            <li class="type_setting depth_3 item_with_icon"><p
+                                    class="tree_item leaf hasicon"><a
+                                    href="http://localhost/moodle/message/index.php?user1=3"><img
+                                    alt="" class="smallicon navicon" title=""
+                                    src="http://localhost/moodle/theme/image.php/clean/core/1403939604/i/navigationitem"/>Messages</a>
+                            </p></li>
+                            <li class="type_setting depth_3 item_with_icon"><p
+                                    class="tree_item leaf hasicon"><a
+                                    href="http://localhost/moodle/user/files.php"><img alt=""
+                                                                                       class="smallicon navicon"
+                                                                                       title=""
+                                                                                       src="http://localhost/moodle/theme/image.php/clean/core/1403939604/i/navigationitem"/>My
+                                private files</a></p></li>
+                            <li class="type_setting depth_3 item_with_icon"><p
+                                    class="tree_item leaf hasicon"><a
+                                    href="http://localhost/moodle/badges/mybadges.php"><img alt=""
+                                                                                            class="smallicon navicon"
+                                                                                            title=""
+                                                                                            src="http://localhost/moodle/theme/image.php/clean/core/1403939604/i/navigationitem"/>My
+                                badges</a></p></li>
+                        </ul>
+                    </li>
+                    <li class="type_system depth_2 contains_branch current_branch"
+                        aria-expanded="true"><p class="tree_item branch active_tree_node canexpand">
+                        <a href="http://localhost/moodle/my/">My courses</a></p>
+                        <ul>
+                            <li class="type_course depth_3 collapsed contains_branch"
+                                aria-expanded="false"><p class="tree_item branch"
+                                                         id="expandable_branch_20_3"><a
+                                    title="Computer Security"
+                                    href="http://localhost/moodle/course/view.php?id=3">Com Sec</a>
+                            </p></li>
+                            <li class="type_course depth_3 collapsed contains_branch"
+                                aria-expanded="false"><p class="tree_item branch"
+                                                         id="expandable_branch_20_2"><a
+                                    title="Software Engineering Project"
+                                    href="http://localhost/moodle/course/view.php?id=2">SE
+                                Project</a></p></li>
+                            <li class="type_course depth_3 collapsed contains_branch"
+                                aria-expanded="false"><p class="tree_item branch"
+                                                         id="expandable_branch_20_4"><a
+                                    title="Signals and Systems"
+                                    href="http://localhost/moodle/course/view.php?id=4">SnS</a></p>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>
+<span id="sb-2" class="skip-block-to"></span><a href="#sb-3" class="skip-block">Skip
+    Administration</a>
 
-            <div id="inst23" class="block_online_users  block" role="complementary" data-block="online_users"
-                 data-instanceid="23" aria-labelledby="instance-23-header" data-dockable="1">
-                <div class="header">
-                    <div class="title">
-                        <div class="block_action"></div>
-                        <h2 id="instance-23-header">Online users</h2></div>
-                </div>
-                <div class="content">
-                    <div class="info">(last 5 minutes)</div>
-                    <ul class='list'>
-                        <li class="listentry">
-                            <div class="user"><a href="http://localhost/moodle/user/view.php?id=3&amp;course=1"
-                                                 title="1 sec"><img
-                                    src="http://localhost/moodle/theme/image.php/clean/core/1403939604/u/f2" alt=""
-                                    title="" class="userpicture defaultuserpic" width="16" height="16"/>Sameera Fernando</a>
-                            </div>
+<div id="inst5" class="block_settings  block" role="navigation" data-block="settings"
+     data-instanceid="5" aria-labelledby="instance-5-header" data-dockable="1">
+    <div class="header">
+        <div class="title">
+            <div class="block_action"></div>
+            <h2 id="instance-5-header">Administration</h2></div>
+    </div>
+    <div class="content">
+        <div id="settingsnav" class="box block_tree_box">
+            <ul class="block_tree list">
+                <li class="type_unknown contains_branch current_branch" aria-expanded="true"><p
+                        class="tree_item branch root_node active_tree_node" id="usersettings"><span
+                        tabindex="0">My profile settings</span></p>
+                    <ul>
+                        <li class="type_setting collapsed item_with_icon"><p class="tree_item leaf">
+                            <a href="http://localhost/moodle/user/edit.php?id=3&amp;course=1"><img
+                                    alt="" class="smallicon navicon" title=""
+                                    src="http://localhost/moodle/theme/image.php/clean/core/1403939604/i/navigationitem"/>Edit
+                                profile</a></p></li>
+                        <li class="type_setting collapsed item_with_icon"><p class="tree_item leaf">
+                            <a href="http://localhost/moodle/login/change_password.php?id=1"><img
+                                    alt="" class="smallicon navicon" title=""
+                                    src="http://localhost/moodle/theme/image.php/clean/core/1403939604/i/navigationitem"/>Change
+                                password</a></p></li>
+                        <li class="type_setting collapsed item_with_icon"><p class="tree_item leaf">
+                            <a href="http://localhost/moodle/message/edit.php?id=3"><img alt=""
+                                                                                         class="smallicon navicon"
+                                                                                         title=""
+                                                                                         src="http://localhost/moodle/theme/image.php/clean/core/1403939604/i/navigationitem"/>Messaging</a>
+                        </p></li>
+                        <li class="type_unknown collapsed contains_branch" aria-expanded="false"><p
+                                class="tree_item branch"><span tabindex="0">Blogs</span></p>
+                            <ul>
+                                <li class="type_setting collapsed item_with_icon"><p
+                                        class="tree_item leaf"><a
+                                        href="http://localhost/moodle/blog/preferences.php"><img
+                                        alt="" class="smallicon navicon" title=""
+                                        src="http://localhost/moodle/theme/image.php/clean/core/1403939604/i/navigationitem"/>Preferences</a>
+                                </p></li>
+                                <li class="type_setting collapsed item_with_icon"><p
+                                        class="tree_item leaf"><a
+                                        href="http://localhost/moodle/blog/external_blogs.php"><img
+                                        alt="" class="smallicon navicon" title=""
+                                        src="http://localhost/moodle/theme/image.php/clean/core/1403939604/i/navigationitem"/>External
+                                    blogs</a></p></li>
+                                <li class="type_setting collapsed item_with_icon"><p
+                                        class="tree_item leaf"><a
+                                        href="http://localhost/moodle/blog/external_blog_edit.php"><img
+                                        alt="" class="smallicon navicon" title=""
+                                        src="http://localhost/moodle/theme/image.php/clean/core/1403939604/i/navigationitem"/>Register
+                                    an external blog</a></p></li>
+                            </ul>
+                        </li>
+                        <li class="type_unknown collapsed contains_branch" aria-expanded="false"><p
+                                class="tree_item branch"><span tabindex="0">Badges</span></p>
+                            <ul>
+                                <li class="type_setting collapsed item_with_icon"><p
+                                        class="tree_item leaf"><a
+                                        href="http://localhost/moodle/badges/preferences.php"><img
+                                        alt="" class="smallicon navicon" title=""
+                                        src="http://localhost/moodle/theme/image.php/clean/core/1403939604/i/navigationitem"/>Preferences</a>
+                                </p></li>
+                                <li class="type_setting collapsed item_with_icon"><p
+                                        class="tree_item leaf"><a
+                                        href="http://localhost/moodle/badges/mybackpack.php"><img
+                                        alt="" class="smallicon navicon" title=""
+                                        src="http://localhost/moodle/theme/image.php/clean/core/1403939604/i/navigationitem"/>Backpack
+                                    settings</a></p></li>
+                            </ul>
                         </li>
                     </ul>
-                    <div class="clearer"><!-- --></div>
-                </div>
-            </div>
-            <span id="sb-5" class="skip-block-to"></span></aside>
-    </div>
-
-    <footer id="page-footer">
-        <div id="course-footer"></div>
-        <p class="helplink"></p>
-
-        <div class="logininfo">You are logged in as <a href="http://localhost/moodle/user/profile.php?id=3"
-                                                       title="View profile">Sameera Fernando</a> (<a
-                href="http://localhost/moodle/login/logout.php?sesskey=r4eY4IzuuA">Log out</a>)
+                </li>
+            </ul>
         </div>
-        <div class="homelink"><a href="http://localhost/moodle/">Home</a></div>
-    </footer>
+    </div>
+</div>
+<span id="sb-3" class="skip-block-to"></span></aside>
+</div>
+</div>
+<aside id="block-region-side-post" class="span3 block-region" data-blockregion="side-post" data-droptarget="1">
+    <a href="#sb-4" class="skip-block">Skip My private files</a>
 
-    <script type="text/javascript" src="http://localhost/moodle/theme/javascript.php/clean/1403939604/footer"></script>
-    <script type="text/javascript">
-        //<![CDATA[
-        M.str = {"moodle": {"lastmodified": "Last modified", "name": "Name", "error": "Error", "info": "Information", "viewallcourses": "View all courses", "morehelp": "More help", "loadinghelp": "Loading...", "cancel": "Cancel", "yes": "Yes", "confirm": "Confirm", "no": "No", "areyousure": "Are you sure?", "closebuttontitle": "Close", "unknownerror": "Unknown error"}, "repository": {"type": "Type", "size": "Size:", "invalidjson": "Invalid JSON string", "nofilesattached": "No files attached", "filepicker": "File picker", "logout": "Logout", "nofilesavailable": "No files available", "norepositoriesavailable": "Sorry, none of your current repositories can return files in the required format.", "fileexistsdialogheader": "File exists", "fileexistsdialog_editor": "A file with that name has already been attached to the text you are editing.", "fileexistsdialog_filemanager": "A file with that name has already been attached", "renameto": "Rename to \"{$a}\"", "referencesexist": "There are {$a} alias\/shortcut files that use this file as their source", "select": "Select"}, "block": {"addtodock": "Move this to the dock", "undockitem": "Undock this item", "dockblock": "Dock {$a} block", "undockblock": "Undock {$a} block", "undockall": "Undock all", "hidedockpanel": "Hide the dock panel", "hidepanel": "Hide panel"}, "langconfig": {"thisdirectionvertical": "btt"}, "admin": {"confirmation": "Confirmation"}};
-        //]]>
-    </script>
-    <script type="text/javascript">
-        //<![CDATA[
-        var navtreeexpansions4 = [
-            {"id": "expandable_branch_20_3", "key": "3", "type": 20},
-            {"id": "expandable_branch_20_2", "key": "2", "type": 20},
-            {"id": "expandable_branch_20_4", "key": "4", "type": 20}
-        ];
-        //]]>
-    </script>
-    <script type="text/javascript">
-        //<![CDATA[
-        YUI().use('node', function (Y) {
-            M.util.load_flowplayer();
-            setTimeout("fix_column_widths()", 20);
-            Y.use("moodle-core-dock-loader", function () {
-                M.core.dock.loader.initLoader();
-            });
-            M.util.js_pending('random540327dc3d1641');
-            Y.use('block_course_overview', function (Y) {
-                M.block_course_overview.collapsible(Y, "region_3_assign", false, "Click to expand or collapse");
-                M.util.js_complete('random540327dc3d1641');
-            });
-            M.util.js_pending('random540327dc3d1642');
-            Y.use('block_course_overview', function (Y) {
-                M.block_course_overview.collapsible(Y, "region_3_quiz", false, "Click to expand or collapse");
-                M.util.js_complete('random540327dc3d1642');
-            });
-            Y.use("moodle-block_navigation-navigation", function () {
-                M.block_navigation.init_add_tree({"id": "4", "instance": "4", "candock": true, "courselimit": "20", "expansionlimit": 0});
-            });
-            Y.use("moodle-block_navigation-navigation", function () {
-                M.block_navigation.init_add_tree({"id": "5", "instance": "5", "candock": true});
-            });
-            M.util.help_popups.setup(Y);
-            Y.use("moodle-core-popuphelp", function () {
-                M.core.init_popuphelp();
-            });
-            M.util.init_block_hider(Y, {"id": "inst4", "title": "Navigation", "preference": "block4hidden", "tooltipVisible": "Hide Navigation block", "tooltipHidden": "Show Navigation block"});
-            M.util.init_block_hider(Y, {"id": "inst5", "title": "Administration", "preference": "block5hidden", "tooltipVisible": "Hide Administration block", "tooltipHidden": "Show Administration block"});
-            M.util.init_block_hider(Y, {"id": "inst22", "title": "My private files", "preference": "block22hidden", "tooltipVisible": "Hide My private files block", "tooltipHidden": "Show My private files block"});
-            M.util.init_block_hider(Y, {"id": "inst23", "title": "Online users", "preference": "block23hidden", "tooltipVisible": "Hide Online users block", "tooltipHidden": "Show Online users block"});
-            M.util.init_block_hider(Y, {"id": "inst24", "title": "Course overview", "preference": "block24hidden", "tooltipVisible": "Hide Course overview block", "tooltipHidden": "Show Course overview block"});
-            M.util.js_pending('random540327dc3d1649');
-            Y.on('domready', function () {
-                M.util.js_complete("init");
-                M.util.js_complete('random540327dc3d1649');
-            });
+    <div id="inst22" class="block_private_files  block" role="complementary" data-block="private_files"
+         data-instanceid="22" aria-labelledby="instance-22-header" data-dockable="1">
+        <div class="header">
+            <div class="title">
+                <div class="block_action"></div>
+                <h2 id="instance-22-header">My private files</h2></div>
+        </div>
+        <div class="content">
+            <div class="box generalbox">No files available</div>
+            <div class="singlebutton">
+                <form method="get" action="http://localhost/moodle/user/files.php">
+                    <div><input type="submit" value="Manage my private files"/><input type="hidden"
+                                                                                      name="returnurl"
+                                                                                      value="http://localhost/moodle/my/index.php"/>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <span id="sb-4" class="skip-block-to"></span><a href="#sb-5" class="skip-block">Skip Online users</a>
 
+    <div id="inst23" class="block_online_users  block" role="complementary" data-block="online_users"
+         data-instanceid="23" aria-labelledby="instance-23-header" data-dockable="1">
+        <div class="header">
+            <div class="title">
+                <div class="block_action"></div>
+                <h2 id="instance-23-header">Online users</h2></div>
+        </div>
+        <div class="content">
+            <div class="info">(last 5 minutes)</div>
+            <ul class='list'>
+                <li class="listentry">
+                    <div class="user"><a href="http://localhost/moodle/user/view.php?id=3&amp;course=1"
+                                         title="now"><img
+                            src="http://localhost/moodle/theme/image.php/clean/core/1403939604/u/f2" alt=""
+                            title="" class="userpicture defaultuserpic" width="16" height="16"/>Sameera Fernando</a>
+                    </div>
+                </li>
+                <li class="listentry">
+                    <div class="user"><a href="http://localhost/moodle/user/view.php?id=2&amp;course=1"
+                                         title="4 mins 50 secs"><img
+                            src="http://localhost/moodle/theme/image.php/clean/core/1403939604/u/f2" alt=""
+                            title="" class="userpicture defaultuserpic" width="16" height="16"/>Kasun
+                        Fernando</a></div>
+                    <div class="message"><a href="http://localhost/moodle/message/index.php?id=2"
+                                            title="Send a message"><img class="iconsmall"
+                                                                        src="http://localhost/moodle/theme/image.php/clean/core/1403939604/t/message"
+                                                                        alt="Send a message"/></a></div>
+                </li>
+            </ul>
+            <div class="clearer"><!-- --></div>
+        </div>
+    </div>
+    <span id="sb-5" class="skip-block-to"></span></aside>
+</div>
+
+<footer id="page-footer">
+    <div id="course-footer"></div>
+    <p class="helplink"></p>
+
+    <div class="logininfo">You are logged in as <a href="http://localhost/moodle/user/profile.php?id=3"
+                                                   title="View profile">Sameera Fernando</a> (<a
+            href="http://localhost/moodle/login/logout.php?sesskey=EdRY6NaB7g">Log out</a>)
+    </div>
+    <div class="homelink"><a href="http://localhost/moodle/">Home</a></div>
+</footer>
+
+<script type="text/javascript" src="http://localhost/moodle/theme/javascript.php/clean/1403939604/footer"></script>
+<script type="text/javascript">
+    //<![CDATA[
+    M.str = {"moodle": {"lastmodified": "Last modified", "name": "Name", "error": "Error", "info": "Information", "viewallcourses": "View all courses", "morehelp": "More help", "loadinghelp": "Loading...", "cancel": "Cancel", "yes": "Yes", "confirm": "Confirm", "no": "No", "areyousure": "Are you sure?", "closebuttontitle": "Close", "unknownerror": "Unknown error"}, "repository": {"type": "Type", "size": "Size:", "invalidjson": "Invalid JSON string", "nofilesattached": "No files attached", "filepicker": "File picker", "logout": "Logout", "nofilesavailable": "No files available", "norepositoriesavailable": "Sorry, none of your current repositories can return files in the required format.", "fileexistsdialogheader": "File exists", "fileexistsdialog_editor": "A file with that name has already been attached to the text you are editing.", "fileexistsdialog_filemanager": "A file with that name has already been attached", "renameto": "Rename to \"{$a}\"", "referencesexist": "There are {$a} alias\/shortcut files that use this file as their source", "select": "Select"}, "block": {"addtodock": "Move this to the dock", "undockitem": "Undock this item", "dockblock": "Dock {$a} block", "undockblock": "Undock {$a} block", "undockall": "Undock all", "hidedockpanel": "Hide the dock panel", "hidepanel": "Hide panel"}, "langconfig": {"thisdirectionvertical": "btt"}, "admin": {"confirmation": "Confirmation"}};
+    //]]>
+</script>
+<script type="text/javascript">
+    //<![CDATA[
+    var navtreeexpansions4 = [
+        {"id": "expandable_branch_20_3", "key": "3", "type": 20},
+        {"id": "expandable_branch_20_2", "key": "2", "type": 20},
+        {"id": "expandable_branch_20_4", "key": "4", "type": 20}
+    ];
+    //]]>
+</script>
+<script type="text/javascript">
+    //<![CDATA[
+    YUI().use('node', function (Y) {
+        M.util.load_flowplayer();
+        setTimeout("fix_column_widths()", 20);
+        Y.use("moodle-core-dock-loader", function () {
+            M.core.dock.loader.initLoader();
         });
-        //]]>
-    </script>
+        M.util.js_pending('random540448e0ade341');
+        Y.use('block_course_overview', function (Y) {
+            M.block_course_overview.collapsible(Y, "region_3_assign", false, "Click to expand or collapse");
+            M.util.js_complete('random540448e0ade341');
+        });
+        M.util.js_pending('random540448e0ade342');
+        Y.use('block_course_overview', function (Y) {
+            M.block_course_overview.collapsible(Y, "region_3_forum", false, "Click to expand or collapse");
+            M.util.js_complete('random540448e0ade342');
+        });
+        M.util.js_pending('random540448e0ade343');
+        Y.use('block_course_overview', function (Y) {
+            M.block_course_overview.collapsible(Y, "region_3_quiz", false, "Click to expand or collapse");
+            M.util.js_complete('random540448e0ade343');
+        });
+        M.util.js_pending('random540448e0ade344');
+        Y.use('block_course_overview', function (Y) {
+            M.block_course_overview.collapsible(Y, "region_2_assign", false, "Click to expand or collapse");
+            M.util.js_complete('random540448e0ade344');
+        });
+        M.util.js_pending('random540448e0ade345');
+        Y.use('block_course_overview', function (Y) {
+            M.block_course_overview.collapsible(Y, "region_4_assign", false, "Click to expand or collapse");
+            M.util.js_complete('random540448e0ade345');
+        });
+        Y.use("moodle-block_navigation-navigation", function () {
+            M.block_navigation.init_add_tree({"id": "4", "instance": "4", "candock": true, "courselimit": "20", "expansionlimit": 0});
+        });
+        Y.use("moodle-block_navigation-navigation", function () {
+            M.block_navigation.init_add_tree({"id": "5", "instance": "5", "candock": true});
+        });
+        M.util.help_popups.setup(Y);
+        Y.use("moodle-core-popuphelp", function () {
+            M.core.init_popuphelp();
+        });
+        M.util.init_block_hider(Y, {"id": "inst4", "title": "Navigation", "preference": "block4hidden", "tooltipVisible": "Hide Navigation block", "tooltipHidden": "Show Navigation block"});
+        M.util.init_block_hider(Y, {"id": "inst5", "title": "Administration", "preference": "block5hidden", "tooltipVisible": "Hide Administration block", "tooltipHidden": "Show Administration block"});
+        M.util.init_block_hider(Y, {"id": "inst22", "title": "My private files", "preference": "block22hidden", "tooltipVisible": "Hide My private files block", "tooltipHidden": "Show My private files block"});
+        M.util.init_block_hider(Y, {"id": "inst23", "title": "Online users", "preference": "block23hidden", "tooltipVisible": "Hide Online users block", "tooltipHidden": "Show Online users block"});
+        M.util.init_block_hider(Y, {"id": "inst24", "title": "Course overview", "preference": "block24hidden", "tooltipVisible": "Hide Course overview block", "tooltipHidden": "Show Course overview block"});
+        M.util.js_pending('random540448e0ade3412');
+        Y.on('domready', function () {
+            M.util.js_complete("init");
+            M.util.js_complete('random540448e0ade3412');
+        });
+
+    });
+    //]]>
+</script>
 
 </div>
 </body>
