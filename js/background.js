@@ -1,4 +1,5 @@
 var num_of_events;//This variable tracks the number of available events. This is used to show available events in extension button and prevent duplicated notifications.
+var const_num_of_events;
 
 /*
  This function called during start up of the extension
@@ -18,20 +19,20 @@ document.addEventListener('DOMContentLoaded', function () {
      //Check for the first run of the extension.
      If first run, open the options page to set user preferences.
      */
-    if (localStorage["notFirstRun"] != "true") {
+    if (getData("notFirstRun") != "true") {
         createTab("options.html");
     }
 
     connectionChecker = setInterval(function () {
-        if (localStorage["configured"] == "true") {
+        if (getData("configured") == "true") {
             location.reload(true);
             console.log("Preferences are changed!");
-            localStorage["configured"] = "false";
+            setData("configured", "false");
         }
         /*
          If automatic login is enabled, check availability of Moodle for each 10 seconds.
          */
-        if (localStorage["remember"] == "true") {//If automatic login enabled
+        if (getData("remember") == "true") {//If automatic login enabled
             console.log("Checking connection...");
             hasConnection = doesConnectionExist();//Check for connection to Moodle
             /*
@@ -72,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function () {
         else {
             chrome.browserAction.setIcon({path: "img/icon_inactive.png"});
         }
-    }, localStorage["poll_interval"]);
+    }, getData("poll_interval"));
 });
 
 /*
@@ -83,14 +84,14 @@ function automaticLogin() {
     var password;
     var xmlhttp;
 
-    password = CryptoJS.RC4Drop.decrypt(localStorage["password"], "Vw7F3ZcPqJwLqerFoF3sNDAmIDsB", { drop: 3072 / 4 }).toString(CryptoJS.enc.Utf8);//Decrypt password
+    password = CryptoJS.RC4Drop.decrypt(getData("password"), "Vw7F3ZcPqJwLqerFoF3sNDAmIDsB", { drop: 3072 / 4 }).toString(CryptoJS.enc.Utf8);//Decrypt password
     xmlhttp = new XMLHttpRequest();
     /*
      Create XML http request to send login information to the Moodle.
      */
-    xmlhttp.open("POST", localStorage["moodle_url"] + 'login/index.php', true);
+    xmlhttp.open("POST", getData("moodle_url") + 'login/index.php', true);
     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xmlhttp.send("username= " + localStorage["username"] + "& password=" + password);
+    xmlhttp.send("username= " + getData("username") + "& password=" + password);
 
     console.log("Submitted!");
 }
@@ -110,7 +111,7 @@ function doesConnectionExist() {
     var responseText;//Current response text of XML http request
 
     xmlhttp = new XMLHttpRequest();
-    sitePage = localStorage["moodle_url"] + "login/index.php";//Checks for login/index.php page
+    sitePage = getData("moodle_url") + "login/index.php";//Checks for login/index.php page
     randomNum = Math.round(Math.random() * 10000);//Random number prevents loading cached data
     xmlhttp.open('HEAD', sitePage + "?rand=" + randomNum, false);//Fetch header information of the request
 
@@ -146,7 +147,7 @@ function isLoggedIn() {
     var responseText;//Current response text of XML http request
 
     xmlhttp = new XMLHttpRequest();
-    sitePage = localStorage["moodle_url"] + "login/index.php";
+    sitePage = getData("moodle_url") + "login/index.php";
     randomNum = Math.round(Math.random() * 10000);//Random number prevents loading cached data.
     xmlhttp.open('GET', sitePage + "?rand=" + randomNum, false);//Fetch the response as an html string.
 
@@ -191,7 +192,7 @@ function fetchEvents() {
 
     num_of_events = 0;//Clear number of events to prevent over counting
     xmlhttp = new XMLHttpRequest();
-    sitePage = localStorage["moodle_url"] + "my";
+    sitePage = getData("moodle_url") + "my";
     randomNum = Math.round(Math.random() * 10000);//Random number prevents loading cached data.
     xmlhttp.open('GET', sitePage + "?rand=" + randomNum, false);//Fetch the response as an html string.
 
@@ -229,6 +230,14 @@ function fetchEvents() {
          */
         if (num_of_events > 0)
             chrome.browserAction.setBadgeText({text: "" + num_of_events});
+
+        /*
+
+         */
+        if (const_num_of_events != num_of_events) {
+            const_num_of_events = num_of_events;
+            setData("num_of_events", const_num_of_events);
+        }
     } catch (e) {
         console.log(e);//Log error
     }
@@ -261,7 +270,7 @@ function processEventTypes(textString) {
         position = textString.indexOf("activity_overview");
         eventString = textString.slice(0, position);
         /*
-        If event is an assignment, send the string to process as an assignment.
+         If event is an assignment, send the string to process as an assignment.
          */
         if (eventString.search("Assignment: <a") != -1) {
             processAssignments(eventString);
@@ -310,10 +319,6 @@ function processAssignments(textString) {
         textString = textString.slice(position);//position = Starting index of the url to the assignment in the string
         position = textString.indexOf("\">");
         url = textString.slice(0, position);
-        if (localStorage["assignmentUrl" + num_of_events] != url) {
-            localStorage["assignmentUrl" + num_of_events] = url;//Save in local storage if there's any change
-            hasChanged = true;//Set as changed
-        }
 
         /*
          Get the name of assignment
@@ -321,10 +326,6 @@ function processAssignments(textString) {
         textString = textString.slice(position + 2);//position+2 = Starting index of the name of assignment in the string
         position = textString.indexOf("<");
         name = textString.slice(0, position);
-        if (localStorage["assignmentName" + num_of_events] != name) {
-            localStorage["assignmentName" + num_of_events] = name;//Save in local storage if there's any change
-            hasChanged = true;//Set as changed
-        }
 
         /*
          Get the due date of assignment
@@ -333,10 +334,6 @@ function processAssignments(textString) {
         textString = textString.slice(position + 6);//position+6 = Due date of the assignment in the string
         position = textString.indexOf("</div>");
         due = textString.slice(0, position);
-        if (localStorage["assignmentDue" + num_of_events] != due) {
-            localStorage["assignmentDue" + num_of_events] = due;//Save in local storage if there's any change
-            hasChanged = true;//Set as changed
-        }
 
         /*
          Get the status of assignment
@@ -345,9 +342,28 @@ function processAssignments(textString) {
         textString = textString.slice(position + 9);//position+9 = Status about the assignment in the string
         position = textString.indexOf("</div>");
         status = textString.slice(0, position);
-        if (localStorage["assignmentStatus" + num_of_events] != status) {
-            localStorage["assignmentStatus" + num_of_events] = status;//Save in local storage if there's any change
-            hasChanged = true;//Set as changed
+
+        /*
+         Check for assignments that are not sumbmitted yet and store them in local storage.
+         */
+        if (status.search("Not submitted yet") != -1) {
+            if (getData("assignmentUrl" + num_of_events) != url) {
+                setData("assignmentUrl" + num_of_events, url);//Save in local storage if there's any change
+                hasChanged = true;//Set as changed
+            }
+            if (getData("assignmentName" + num_of_events) != name) {
+                setData("assignmentName" + num_of_events, name);//Save in local storage if there's any change
+                hasChanged = true;//Set as changed
+            }
+            if (getData("assignmentDue" + num_of_events) != due) {
+                setData("assignmentDue" + num_of_events, due);//Save in local storage if there's any change
+                hasChanged = true;//Set as changed
+            }
+            if (getData("assignmentStatus" + num_of_events) != status) {
+                setData("assignmentStatus" + num_of_events, status);//Save in local storage if there's any change
+                hasChanged = true;//Set as changed
+            }
+            ++num_of_events;
         }
 
         /*
@@ -357,13 +373,12 @@ function processAssignments(textString) {
         if (hasChanged) {
             showNotifications(name, due, status, url);
         }
-        ++num_of_events;
-        /*
-         console.log(name);
-         console.log(url);
-         console.log(due);
-         console.log(status + "\n");
-         */
+
+        console.log(name);
+        console.log(url);
+        console.log(due);
+        console.log(status + "\n");
+
     }
 }
 
@@ -395,10 +410,6 @@ function processQuizzes(textString) {
         textString = textString.slice(position);//position = Starting index of the url to the quiz in the string
         position = textString.indexOf("\">");
         url = textString.slice(0, position);
-        if (localStorage["quizUrl" + num_of_events] != url) {
-            localStorage["quizUrl" + num_of_events] = url;//Save in local storage if there's any change
-            hasChanged = true;//Set as changed
-        }
 
         /*
          Get the name of quiz
@@ -406,10 +417,6 @@ function processQuizzes(textString) {
         textString = textString.slice(position + 2);//position+2 = Starting index of the name of quiz in the string
         position = textString.indexOf("<");
         name = textString.slice(0, position);
-        if (localStorage["quizName" + num_of_events] != name) {
-            localStorage["quizName" + num_of_events] = name;//Save in local storage if there's any change
-            hasChanged = true;//Set as changed
-        }
 
         /*
          Get the due date of quiz
@@ -418,10 +425,6 @@ function processQuizzes(textString) {
         textString = textString.slice(position + 6);//position+6 = Due date of the quiz in the string
         position = textString.indexOf("</div>");
         due = textString.slice(0, position);
-        if (localStorage["quizDue" + num_of_events] != due) {
-            localStorage["quizDue" + num_of_events] = due;//Save in local storage if there's any change
-            hasChanged = true;//Set as changed
-        }
 
         /*
          Get the status of quiz
@@ -430,9 +433,28 @@ function processQuizzes(textString) {
         textString = textString.slice(position + 6);//position+2 = Status about the quiz in the string
         position = textString.indexOf("</div>");
         status = textString.slice(0, position);
-        if (localStorage["quizStatus" + num_of_events] != status) {
-            localStorage["quizStatus" + num_of_events] = status;//Save in local storage if there's any change
-            hasChanged = true;//Set as changed
+
+        /*
+         Check for quizzes that are not attempted yet and store them in local storage.
+         */
+        if (status.search("No attempts have been made") != -1) {
+            if (getData("quizUrl" + num_of_events) != url) {
+                setData("quizUrl" + num_of_events, url);//Save in local storage if there's any change
+                hasChanged = true;//Set as changed
+            }
+            if (getData("quizName" + num_of_events) != name) {
+                setData("quizName" + num_of_events, name);//Save in local storage if there's any change
+                hasChanged = true;//Set as changed
+            }
+            if (getData("qudizDue" + num_of_events) != due) {
+                setData("quizDue" + num_of_events, due);//Save in local storage if there's any change
+                hasChanged = true;//Set as changed
+            }
+            if (getData("quizStatus" + num_of_events) != status) {
+                setData("quizStatus" + num_of_events, status);//Save in local storage if there's any change
+                hasChanged = true;//Set as changed
+            }
+            ++num_of_events;
         }
 
         /*
@@ -442,13 +464,12 @@ function processQuizzes(textString) {
         if (hasChanged) {
             showNotifications(name, due, status, url);
         }
-        ++num_of_events;
-        /*
-         console.log(name);
-         console.log(url);
-         console.log(due);
-         console.log(status + "\n");
-         */
+
+        console.log(name);
+        console.log(url);
+        console.log(due);
+        console.log(status + "\n");
+
     }
 
 }
@@ -480,10 +501,6 @@ function processForumPosts(textString) {
         textString = textString.slice(position);//position = Starting index of the url to the forum in the string
         position = textString.indexOf("\">");
         url = textString.slice(0, position);
-        if (localStorage["forumUrl" + num_of_events] != url) {
-            localStorage["forumUrl" + num_of_events] = url;//Save in local storage if there's any change
-            hasChanged = true;//Set as changed
-        }
 
         /*
          Get the name of forum
@@ -491,11 +508,6 @@ function processForumPosts(textString) {
         textString = textString.slice(position + 2);//position+2 = Starting index of the name of forum in the string
         position = textString.indexOf("<");
         name = textString.slice(0, position);
-        if (localStorage["forumName" + num_of_events] != name) {
-            localStorage["forumName" + num_of_events] = name;//Save in local storage if there's any change
-            hasChanged = true;//Set as changed
-        }
-
         /*
          Get the status of forum
          */
@@ -503,8 +515,18 @@ function processForumPosts(textString) {
         textString = textString.slice(position + 16);//position+16 = Starting index of the status of forum in the string
         position = textString.indexOf("<");
         status = textString.slice(0, position);
-        if (localStorage["forumStatus" + num_of_events] != status) {
-            localStorage["forumStatus" + num_of_events] = status;//Save in local storage if there's any change
+
+        if (getData("forumUrl" + num_of_events) != url) {
+            setData("forumUrl" + num_of_events, url);//Save in local storage if there's any change
+            hasChanged = true;//Set as changed
+        }
+        if (getData("forumName" + num_of_events) != name) {
+            setData("forumName" + num_of_events, name);//Save in local storage if there's any change
+            hasChanged = true;//Set as changed
+        }
+
+        if (getData("forumStatus" + num_of_events) != status) {
+            setData("forumStatus" + num_of_events, status);//Save in local storage if there's any change
             hasChanged = true;//Set as changed
         }
 
@@ -531,19 +553,19 @@ function showNotifications(name, due, status, url) {
     /*
      Show desktop notification if enabled.
      */
-    if (localStorage["popup"] == "true") {
-        if (localStorage["popup_time"] == "Indefinitely") {
+    if (getData("popup") == "true") {
+        if (getData("popup_time") == "Indefinitely") {
             notifyEver(name, due + "\n" + status + "\n", url);
         }
         else {
-            notify(name, due + "\n" + status + "\n", url, localStorage["popup_time"]);
+            notify(name, due + "\n" + status + "\n", url, getData("popup_time"));
         }
     }
     /*
      Play audible notifications if enabled.
      */
-    if (localStorage["mute"] == "false") {
-        playAlert(localStorage["alert_sound"]);
+    if (getData("mute") == "false") {
+        getData("alert_sound");
     }
 }
 
@@ -555,18 +577,18 @@ function showForumNotifications(name, status, url) {
     /*
      Show desktop notification if enabled.
      */
-    if (localStorage["popup"] == "true") {
-        if (localStorage["popup_time"] == "Indefinitely") {
+    if (getData("popup") == "true") {
+        if (getData("popup_time") == "Indefinitely") {
             notifyEver(name, status + "\n", url);
         }
         else {
-            notify(name, status + "\n", url, localStorage["popup_time"]);
+            notify(name, status + "\n", url, getData("popup_time"));
         }
     }
     /*
      Play audible notifications if enabled.
      */
-    if (localStorage["mute"] == "false") {
-        playAlert(localStorage["alert_sound"]);
+    if (getData("mute") == "false") {
+        playAlert(getData("alert_sound"));
     }
 }

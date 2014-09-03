@@ -2,9 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2ced237e-81b9-4021-8c26-37429c9a0e89" name="Default" comment="">
-      <change type="DELETED" beforePath="C:\xampp\htdocs\moodleNotifier\test.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\xampp\htdocs\moodleNotifier\test2.html" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/background.html" afterPath="$PROJECT_DIR$/background.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/background.js" afterPath="$PROJECT_DIR$/js/background.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/options.html" afterPath="$PROJECT_DIR$/options.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/options.js" afterPath="$PROJECT_DIR$/js/options.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/popup.html" afterPath="$PROJECT_DIR$/popup.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/popup.js" afterPath="$PROJECT_DIR$/js/popup.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="moodleNotifier.iws" />
@@ -28,10 +31,19 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="background.js" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/js/background.js">
+      <file leaf-file-name="popup.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/js/popup.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="275" column="77" selection-start="10543" selection-end="10543" vertical-scroll-proportion="8.333333" vertical-offset="0" max-vertical-offset="9809">
+            <state line="11" column="6" selection-start="360" selection-end="360" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="374">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="popup.html" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/popup.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="29" column="32" selection-start="878" selection-end="878" vertical-scroll-proportion="0.41058394" vertical-offset="268" max-vertical-offset="952">
               <folding />
             </state>
           </provider>
@@ -55,19 +67,21 @@
         <option value="$PROJECT_DIR$/js/crypto.js" />
         <option value="$PROJECT_DIR$/js/test/backgroundTest.js" />
         <option value="$PROJECT_DIR$/js/notifications.js" />
-        <option value="$PROJECT_DIR$/background.html" />
         <option value="$USER_HOME$/Desktop/text.html" />
         <option value="$USER_HOME$/Desktop/SEP elemments/text.html" />
         <option value="$PROJECT_DIR$/css/style.css" />
-        <option value="$PROJECT_DIR$/js/popup.js" />
-        <option value="$PROJECT_DIR$/popup.html" />
-        <option value="$PROJECT_DIR$/js/options.js" />
         <option value="$PROJECT_DIR$/test.html" />
         <option value="$PROJECT_DIR$/post.html" />
         <option value="$PROJECT_DIR$/manifest.json" />
         <option value="$PROJECT_DIR$/test2.html" />
         <option value="$PROJECT_DIR$/js/notification.js" />
+        <option value="$PROJECT_DIR$/js/popup.js" />
+        <option value="$PROJECT_DIR$/popup.html" />
+        <option value="$PROJECT_DIR$/js/dataAccess.js" />
         <option value="$PROJECT_DIR$/js/background.js" />
+        <option value="$PROJECT_DIR$/js/options.js" />
+        <option value="$PROJECT_DIR$/options.html" />
+        <option value="$PROJECT_DIR$/background.html" />
       </list>
     </option>
   </component>
@@ -104,6 +118,7 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -122,23 +137,8 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="moodleNotifier" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="moodleNotifier" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="js" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -210,20 +210,20 @@
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="true" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2666163" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.26510575" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="JsTestDriver Server" active="false" anchor="bottom" auto_hide="true" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="true" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
@@ -254,13 +254,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/background.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="3" column="50" selection-start="65" selection-end="65" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="323">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/js/background.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="108" column="0" selection-start="3768" selection-end="4416" vertical-scroll-proportion="0.0" vertical-offset="1836" max-vertical-offset="3060">
@@ -270,9 +263,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/js/notification.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="52" column="5" selection-start="1442" selection-end="1442" vertical-scroll-proportion="0.0" vertical-offset="514" max-vertical-offset="1088">
-          <folding />
-        </state>
+        <state line="52" column="5" selection-start="1442" selection-end="1442" vertical-scroll-proportion="0.0" vertical-offset="514" max-vertical-offset="1088" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/popup.html">
@@ -289,9 +280,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/background.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="3" column="50" selection-start="65" selection-end="65" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="323">
-          <folding />
-        </state>
+        <state line="3" column="50" selection-start="65" selection-end="65" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="323" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/js/background.js">
@@ -303,9 +292,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/js/notification.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="52" column="5" selection-start="1442" selection-end="1442" vertical-scroll-proportion="0.0" vertical-offset="514" max-vertical-offset="1088">
-          <folding />
-        </state>
+        <state line="52" column="5" selection-start="1442" selection-end="1442" vertical-scroll-proportion="0.0" vertical-offset="514" max-vertical-offset="1088" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/popup.html">
@@ -322,9 +309,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/background.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="3" column="50" selection-start="65" selection-end="65" vertical-scroll-proportion="0.0" vertical-offset="51" max-vertical-offset="323">
-          <folding />
-        </state>
+        <state line="3" column="50" selection-start="65" selection-end="65" vertical-scroll-proportion="0.0" vertical-offset="51" max-vertical-offset="323" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/js/background.js">
@@ -348,9 +333,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/background.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="3" column="67" selection-start="82" selection-end="123" vertical-scroll-proportion="0.0" vertical-offset="51" max-vertical-offset="323">
-          <folding />
-        </state>
+        <state line="3" column="67" selection-start="82" selection-end="123" vertical-scroll-proportion="0.0" vertical-offset="51" max-vertical-offset="323" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/js/background.js">
@@ -384,9 +367,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/background.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="0" selection-start="222" selection-end="222" vertical-scroll-proportion="0.0" vertical-offset="204" max-vertical-offset="306">
-          <folding />
-        </state>
+        <state line="12" column="0" selection-start="222" selection-end="222" vertical-scroll-proportion="0.0" vertical-offset="204" max-vertical-offset="306" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/js/background.js">
@@ -427,9 +408,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/background.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="306">
-          <folding />
-        </state>
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="306" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/options.html">
@@ -489,70 +468,87 @@
         <state line="6" column="3" selection-start="153" selection-end="153" vertical-scroll-proportion="-10.969697" vertical-offset="6256" max-vertical-offset="6817" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/background.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="3" column="50" selection-start="65" selection-end="65" vertical-scroll-proportion="0.093065694" vertical-offset="0" max-vertical-offset="548">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/options.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="87" column="68" selection-start="4638" selection-end="4638" vertical-scroll-proportion="-7.6923075" vertical-offset="1279" max-vertical-offset="2108">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/options.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="107" column="39" selection-start="3878" selection-end="3913" vertical-scroll-proportion="0.0" vertical-offset="1615" max-vertical-offset="3723" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/popup.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="66" column="10" selection-start="2031" selection-end="2031" vertical-scroll-proportion="0.56569344" vertical-offset="812" max-vertical-offset="1360">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/popup.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="20" selection-start="344" selection-end="344" vertical-scroll-proportion="0.3554007" vertical-offset="0" max-vertical-offset="574" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/manifest.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="28" selection-start="280" selection-end="280" vertical-scroll-proportion="-5.230769" vertical-offset="0" max-vertical-offset="731">
-          <folding />
-        </state>
+        <state line="8" column="28" selection-start="280" selection-end="280" vertical-scroll-proportion="-5.230769" vertical-offset="0" max-vertical-offset="731" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/post.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="40" column="51" selection-start="2762" selection-end="2771" vertical-scroll-proportion="0.8218391" vertical-offset="251" max-vertical-offset="2261">
-          <folding />
-        </state>
+        <state line="40" column="51" selection-start="2762" selection-end="2771" vertical-scroll-proportion="0.8218391" vertical-offset="251" max-vertical-offset="2261" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/js/background - Copy.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="39" selection-start="230" selection-end="230" vertical-scroll-proportion="0.24817519" vertical-offset="0" max-vertical-offset="5491">
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
+        <state line="8" column="39" selection-start="230" selection-end="230" vertical-scroll-proportion="0.24817519" vertical-offset="0" max-vertical-offset="5491" />
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/lib/JavaScriptLanguage.jar!/com/intellij/lang/javascript/index/predefined/HTML5.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1342" column="0" selection-start="23543" selection-end="23543" vertical-scroll-proportion="0.33275262" vertical-offset="22623" max-vertical-offset="37060">
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/js/notification.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="21" column="21" selection-start="686" selection-end="686" vertical-scroll-proportion="0.08885018" vertical-offset="306" max-vertical-offset="1394">
+        <state line="67" column="49" selection-start="1857" selection-end="1857" vertical-scroll-proportion="0.5557491" vertical-offset="820" max-vertical-offset="1394">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/js/background.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="275" column="77" selection-start="10543" selection-end="10543" vertical-scroll-proportion="8.333333" vertical-offset="0" max-vertical-offset="9809">
+        <state line="591" column="18" selection-start="21806" selection-end="21806" vertical-scroll-proportion="-6.9636364" vertical-offset="9664" max-vertical-offset="10183">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/options.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="91" column="12" selection-start="3150" selection-end="3150" vertical-scroll-proportion="0.0" vertical-offset="1268" max-vertical-offset="3672">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/options.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="7" column="64" selection-start="279" selection-end="347" vertical-scroll-proportion="-4.576923" vertical-offset="0" max-vertical-offset="2125">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/dataAccess.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="574">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/background.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="4" column="67" selection-start="150" selection-end="150" vertical-scroll-proportion="0.124087594" vertical-offset="0" max-vertical-offset="548">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/popup.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="11" column="6" selection-start="360" selection-end="360" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="374">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="731">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/popup.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="29" column="32" selection-start="878" selection-end="878" vertical-scroll-proportion="0.41058394" vertical-offset="268" max-vertical-offset="952">
           <folding />
         </state>
       </provider>

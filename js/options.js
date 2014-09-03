@@ -73,23 +73,23 @@ function saveConfigData() {
      JavaScript function to save user preferences to local storage.
      */
     try {
-        localStorage["moodle_url"] = moodle_url;
-        localStorage["poll_interval"] = poll_interval;
-        localStorage["mute"] = mute;
-        localStorage["alert_sound"] = alert_sound;
-        localStorage["popup"] = popup;
-        localStorage["popup_time"] = popup_time;
-        localStorage["username"] = username;
-        localStorage["remember"] = remember;
+        setData("moodle_url", moodle_url);
+        setData("poll_interval", poll_interval);
+        setData("mute", mute);
+        setData("alert_sound", alert_sound);
+        setData("popup", popup);
+        setData("popup_time", popup_time);
+        setData("username", username);
+        setData("remember", remember);
 
         /*
          If the user need to save login data, encrypt the password and save in local storage.
          Otherwise clear previously saved password if available
          */
         if (remember)
-            localStorage["password"] = CryptoJS.RC4Drop.encrypt(password, "Vw7F3ZcPqJwLqerFoF3sNDAmIDsB", { drop: 3072 / 4 });
+            setData("password", CryptoJS.RC4Drop.encrypt(password, "Vw7F3ZcPqJwLqerFoF3sNDAmIDsB", { drop: 3072 / 4 }));
         else
-            localStorage["password"] = "";
+            setData("password", "");
 
         console.log("Preferences are saved!");//Print log on browser console
     } catch (e) {
@@ -105,7 +105,7 @@ function saveConfigData() {
      console.log("un: " + localStorage["username"]);
      console.log("remember: " + localStorage["remember"]);
      */
-    localStorage["configured"] = "true";
+    setData("configured", "true");
 }
 
 /*
@@ -113,8 +113,8 @@ function saveConfigData() {
  */
 function loadConfigData() {
     //Do not load config data during the first run of the extension.
-    if (localStorage["notFirstRun"] != "true") {
-        localStorage["notFirstRun"] = "true";
+    if (getData("notFirstRun") != "true") {
+        setData("notFirstRun", "true");
         console.log("First run");
     }
     /*
@@ -123,25 +123,25 @@ function loadConfigData() {
      */
     else {
         try {
-            document.getElementById('url').value = localStorage["moodle_url"];
-            document.getElementById('poll').value = localStorage["poll_interval"];
-            document.getElementById('popup_timeout').value = localStorage["popup_time"];
-            document.getElementById('alert').value = localStorage["alert_sound"];
-            document.getElementById('username').value = localStorage["username"];
+            document.getElementById('url').value = getData("moodle_url");
+            document.getElementById('poll').value = getData("poll_interval");
+            document.getElementById('popup_timeout').value = getData("popup_time");
+            document.getElementById('alert').value = getData("alert_sound");
+            document.getElementById('username').value = getData("username");
 
-            if (localStorage["mute"] == "false")
+            if (getData("mute") == "false")
                 document.getElementById('mute').checked = false;
             else
                 document.getElementById('mute').checked = true;
 
 
-            if (localStorage["popup"] == "false")
+            if (getData("popup") == "false")
                 document.getElementById('popup').checked = false;
             else
                 document.getElementById('popup').checked = true;
 
 
-            if (localStorage["remember"] == "false")
+            if (getData("remember") == "false")
                 document.getElementById('remember').checked = false;
             else
                 document.getElementById('remember').checked = true;
@@ -149,15 +149,15 @@ function loadConfigData() {
             console.log("Preferences are loaded!");//Print log on console
 
 
-            console.log("url: " + localStorage["moodle_url"]);
-            console.log("intrvl: " + localStorage["poll_interval"]);
-            console.log("mute: " + localStorage["mute"]);
-            console.log("alert: " + localStorage["alert_sound"]);
-            console.log("popup: " + localStorage["popup"]);
-            console.log("time: " + localStorage["popup_time"]);
-            console.log("un: " + localStorage["username"]);
-            console.log("pw: " + CryptoJS.RC4Drop.decrypt(localStorage["password"], "Vw7F3ZcPqJwLqerFoF3sNDAmIDsB", { drop: 3072 / 4 }).toString(CryptoJS.enc.Utf8));
-            console.log("remember: " + localStorage["remember"]);
+            console.log("url: " + getData("moodle_url"));
+            console.log("intrvl: " + getData("poll_interval"));
+            console.log("mute: " + getData("mute"));
+            console.log("alert: " + getData("alert_sound"));
+            console.log("popup: " + getData("popup"));
+            console.log("time: " + getData("popup_time"));
+            console.log("un: " + getData("username"));
+            console.log("pw: " + CryptoJS.RC4Drop.decrypt(getData("password"), "Vw7F3ZcPqJwLqerFoF3sNDAmIDsB", { drop: 3072 / 4 }).toString(CryptoJS.enc.Utf8));
+            console.log("remember: " + getData("remember"));
         }
         catch (e) {
             console.log("Preferences loading error!");//Print error log on console
@@ -174,7 +174,7 @@ function loadConfigData() {
  */
 function doesConnectionExist() {
     var xhr = new XMLHttpRequest();
-    var file = localStorage["moodle_url"] + "theme/image.php/clean/core/1403939604/help";
+    var file = getData("moodle_url") + "theme/image.php/clean/core/1403939604/help";
     var randomNum = Math.round(Math.random() * 10000);
 
     xhr.open('HEAD', file + "?rand=" + randomNum, false);
