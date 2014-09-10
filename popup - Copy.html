@@ -4,8 +4,8 @@
     <meta charset="utf-8"/>
     <title>Moodle Notifier</title>
     <link rel="stylesheet" media="all" href="css/style.css" type="text/css">
+    <script type="text/javascript" src="js/helper.js"></script>
     <script type="text/javascript" src="js/popup.js"></script>
-    <script type="text/javascript" src="js/dataAccess.js"></script>
 </head>
 
 <body>
@@ -26,24 +26,17 @@
     <div class="content" id="content">
         <article class="underline" id="underline">
             <h4>
-                <a id="visit_moodle" class="pointer">
-                    Visit Moodle
+                <a href="http://online.mrt.ac.lk/calendar/view.php?view=day&course=1&cal_d=15&cal_m=7&cal_y=2014#event_576"
+                   target="new" id="eventLink">
+                    Practical 10
                 </a>
             </h4>
-        </article>
-        <article class="underline" id="underline">
-            <h4>
-                <a id="reload_notifications" class="pointer">
-                    Reload Notifications
-                </a>
-            </h4>
-        </article>
-        <article class="underline" id="underline">
-            <h4>
-                <a id="settings" class="pointer">
-                    Settings
-                </a>
-            </h4>
+
+            <p id="eventStatus">
+                Steganography with images and histogram checks
+            </p>
+
+            <div class="date"><span id="eventDate">20 Jul 2014</span></div>
         </article>
     </div>
 

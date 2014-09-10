@@ -110,7 +110,7 @@ body {
     padding: 2px;
     overflow-x: hidden;
     height: 229px;
-    width: 400px;
+    width: 300px;
     background-position: left top;
     background-repeat: no-repeat;
     background-size: auto auto;
@@ -574,6 +574,10 @@ article h2 a {
     padding: 5px;
     border: 1px solid #333;
     background: #2d2d2d;
+}
+
+.pointer{
+	cursor:pointer;
 }
 
 .post-content {
