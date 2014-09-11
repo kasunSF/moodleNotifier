@@ -13,10 +13,9 @@ document.addEventListener('DOMContentLoaded', function () {
     chrome.browserAction.setBadgeText({text: ""});
     hasConnectionhasConnection = false;
     loggedIn = false;
-    //loggedIn = true;
 
     /*
-     //Check for the first run of the extension.
+     Check for the first run of the extension.
      If first run, open the options page to set user preferences.
      */
     if (getData("notFirstRun") != "true") {
@@ -24,11 +23,15 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     connectionChecker = setInterval(function () {
+        /*
+         If settings of the MoodleNotifier are changed, reload the extension and start to execute from the begining.
+         */
         if (getData("configured") == "true") {
             location.reload(true);
             console.log("Preferences are changed!");
             setData("configured", "false");
         }
+
         /*
          If automatic login is enabled, check availability of Moodle for each 10 seconds.
          */
@@ -60,7 +63,14 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         if (hasConnection && loggedIn) {//If connection is avaiable
             chrome.browserAction.setIcon({path: "img/icon_active.png"});
-            fetchEvents();//Show dektop and audible notifications
+
+            if (getData("reload") == "true") {
+                fetchEvents(true);//Show dektop and audible notifications
+                setData("reload", "false");
+                console.log("Desktop notifications are reloaded!");
+            }
+            else
+                fetchEvents(false);//Show dektop and audible notifications
         }
         /*
          If Moodle is not available, set as not logged in.
@@ -182,7 +192,7 @@ function createTab(url) {
  The response string is scratched to find available events.
  If events are available, rresponse string is sent to processing.
  */
-function fetchEvents() {
+function fetchEvents(has_reload_request) {
     var xmlhttp;//XML http request
     var sitePage;//URL of the home page of the user
     var randomNum;
@@ -218,7 +228,7 @@ function fetchEvents() {
             responseText = responseText.slice(position);
             position = responseText.indexOf("box flush");
 
-            processEventTypes(responseText.slice(0, position));//Send dtring to process
+            processEventTypes(responseText.slice(0, position), has_reload_request);//Send dtring to process
 
             responseText = responseText.slice(position);
             position = responseText.indexOf("<div");
@@ -248,7 +258,7 @@ function fetchEvents() {
  "activity_overview" separates the event types.
  After separation, this send text strings for processing to obtain name, url, due date and status of the event and store them in local storage.
  */
-function processEventTypes(textString) {
+function processEventTypes(textString, has_reload_request) {
     var num_of_event_types;//number of available event types
     var eventString;//Substring of the events
 
@@ -273,19 +283,19 @@ function processEventTypes(textString) {
          If event is an assignment, send the string to process as an assignment.
          */
         if (eventString.search("Assignment: <a") != -1) {
-            processAssignments(eventString);
+            processAssignments(eventString, has_reload_request);
         }
         /*
          If event is a quiz, send the string to process as a quiz.
          */
         else if (eventString.search("Quiz: <a") != -1) {
-            processQuizzes(eventString);
+            processQuizzes(eventString, has_reload_request);
         }
         /*
          If event is a forum post, send the string to process as a forum post.
          */
         else if (eventString.search("Forum: <a") != -1) {
-            processForumPosts(eventString);
+            processForumPosts(eventString, has_reload_request);
         }
     }
 }
@@ -293,7 +303,7 @@ function processEventTypes(textString) {
 /*
  This function scratch the given string and separate the name, url, due date and status of the assignments and store them in local storage.
  */
-function processAssignments(textString) {
+function processAssignments(textString, has_reload_request) {
     var events;
     var url;//URL to the assignment
     var name;//Name of the assignment
@@ -367,6 +377,14 @@ function processAssignments(textString) {
         }
 
         /*
+         Reload all desktop notifications.
+         This is done by changing the boolean variable value to 'true'. As hasChanged == true, it shows the notification by executing code within 'if (hasChanged)' condition.
+         */
+        if (has_reload_request) {
+            hasChanged = true;
+        }
+
+        /*
          If any change of the event is detected, notify to the user.
          Notifications are called only if the event page has been changed.
          */
@@ -385,7 +403,7 @@ function processAssignments(textString) {
 /*
  This function scratch the given string and separate the name, url, due date and status of the Quizzes and store them in local storage.
  */
-function processQuizzes(textString) {
+function processQuizzes(textString, has_reload_request) {
     var url;//URL to the quiz
     var name;//Name of the quiz
     var due;//Due date of the quiz
@@ -446,7 +464,7 @@ function processQuizzes(textString) {
                 setData("quizName" + num_of_events, name);//Save in local storage if there's any change
                 hasChanged = true;//Set as changed
             }
-            if (getData("qudizDue" + num_of_events) != due) {
+            if (getData("quizDue" + num_of_events) != due) {
                 setData("quizDue" + num_of_events, due);//Save in local storage if there's any change
                 hasChanged = true;//Set as changed
             }
@@ -455,6 +473,14 @@ function processQuizzes(textString) {
                 hasChanged = true;//Set as changed
             }
             ++num_of_events;
+        }
+
+        /*
+         Reload all desktop notifications.
+         This is done by changing the boolean variable value to 'true'. As hasChanged == true, it shows the notification by executing code within 'if (hasChanged)' condition.
+         */
+        if (has_reload_request) {
+            hasChanged = true;
         }
 
         /*
@@ -477,7 +503,7 @@ function processQuizzes(textString) {
 /*
  This function scratch the given string and separate the url of the forum posts and store them in local storage.
  */
-function processForumPosts(textString) {
+function processForumPosts(textString, has_reload_request) {
     var url;//URL to the forum
     var name;//Name of the forum
     var status;//Status of the forum
@@ -528,6 +554,14 @@ function processForumPosts(textString) {
         if (getData("forumStatus" + num_of_events) != status) {
             setData("forumStatus" + num_of_events, status);//Save in local storage if there's any change
             hasChanged = true;//Set as changed
+        }
+
+        /*
+         Reload all desktop notifications.
+         This is done by changing the boolean variable value to 'true'. As hasChanged == true, it shows the notification by executing code within 'if (hasChanged)' condition.
+         */
+        if (has_reload_request) {
+            hasChanged = true;
         }
 
         /*
