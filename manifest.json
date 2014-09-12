@@ -32,7 +32,7 @@
     "options_page": "options.html",
 
     "permissions": [
-        "contentSettings", "notifications", "tabs", "http://localhost/moodle/", "alarms", "tts", "idle", "storage", "cookies", "webRequest", "webRequestBlocking", "*://*.google.com/*","http://*/*"
+        "contentSettings", "notifications", "tabs", "storage", "webRequest", "webRequestBlocking", "http://*/*", "https://*/*"
     ]
 
 }

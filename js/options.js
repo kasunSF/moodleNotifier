@@ -44,6 +44,8 @@ function showContent(event) {
 
 /*
  Set default menu view in options page
+
+ contentId: HTML ID of the element
  */
 function defaultView(contentId) {
     $('.content').each(function (index) {
@@ -105,7 +107,29 @@ function saveConfigData() {
      console.log("un: " + localStorage["username"]);
      console.log("remember: " + localStorage["remember"]);
      */
+
+    /*
+     Set as preferences are changed. This causes reloading of the extension.
+     */
     setData("configured", "true");
+    /*
+     Set as "Not First Run" after user completed confuguring preferences and saved.
+     */
+    setData("notFirstRun", "true");
+
+    /*
+     Alert user that preferences are saved.
+     */
+    var item = document.getElementById('save_alert');
+    if (item.className == 'hidden') {
+        item.className = 'visible';
+    }
+    /*
+     Close the options page automatically after 2 seconds when preferences are saved.
+     */
+    setTimeout(function () {
+        window.close();
+    }, 2000);
 }
 
 /*
@@ -114,7 +138,6 @@ function saveConfigData() {
 function loadConfigData() {
     //Do not load config data during the first run of the extension.
     if (getData("notFirstRun") != "true") {
-        setData("notFirstRun", "true");
         console.log("First run");
     }
     /*
@@ -148,16 +171,17 @@ function loadConfigData() {
 
             console.log("Preferences are loaded!");//Print log on console
 
-
-            console.log("url: " + getData("moodle_url"));
-            console.log("intrvl: " + getData("poll_interval"));
-            console.log("mute: " + getData("mute"));
-            console.log("alert: " + getData("alert_sound"));
-            console.log("popup: " + getData("popup"));
-            console.log("time: " + getData("popup_time"));
-            console.log("un: " + getData("username"));
-            console.log("pw: " + CryptoJS.RC4Drop.decrypt(getData("password"), "Vw7F3ZcPqJwLqerFoF3sNDAmIDsB", { drop: 3072 / 4 }).toString(CryptoJS.enc.Utf8));
-            console.log("remember: " + getData("remember"));
+            /*
+             console.log("url: " + getData("moodle_url"));
+             console.log("intrvl: " + getData("poll_interval"));
+             console.log("mute: " + getData("mute"));
+             console.log("alert: " + getData("alert_sound"));
+             console.log("popup: " + getData("popup"));
+             console.log("time: " + getData("popup_time"));
+             console.log("un: " + getData("username"));
+             console.log("pw: " + CryptoJS.RC4Drop.decrypt(getData("password"), "Vw7F3ZcPqJwLqerFoF3sNDAmIDsB", { drop: 3072 / 4 }).toString(CryptoJS.enc.Utf8));
+             console.log("remember: " + getData("remember"));
+             */
         }
         catch (e) {
             console.log("Preferences loading error!");//Print error log on console

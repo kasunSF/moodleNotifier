@@ -2,6 +2,7 @@ var notification;
 
 /*
  Show desktop notification for a specific period of time.
+
  title: Title of the notification
  body: Notification body
  url: Redirect url on click
@@ -38,6 +39,7 @@ function notify(title, body, url, timeout) {
 
 /*
  Show desktop notification until user closes it or clicks on it.
+
  title: Title of the notification
  body: Notification body
  url: Redirect url on click
@@ -60,6 +62,8 @@ function notifyEver(title, body, url) {
 
 /*
  Function to play notification sounds that are available in the extension as preview.
+
+ alertID: ID od the audio file which is chosen by user.
  */
 function playAlert(alertID) {
     var source;

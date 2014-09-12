@@ -23,67 +23,72 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     connectionChecker = setInterval(function () {
-        /*
-         If settings of the MoodleNotifier are changed, reload the extension and start to execute from the begining.
-         */
-        if (getData("configured") == "true") {
-            location.reload(true);
-            console.log("Preferences are changed!");
-            setData("configured", "false");
-        }
-
-        /*
-         If automatic login is enabled, check availability of Moodle for each 10 seconds.
-         */
-        if (getData("remember") == "true") {//If automatic login enabled
-            console.log("Checking connection...");
-            hasConnection = doesConnectionExist();//Check for connection to Moodle
+        if (getData("notFirstRun") == "true") {
             /*
-             If Moodle is available and not logged in, login to the moodle automatically.
+             If settings of the MoodleNotifier are changed, reload the extension and start to execute from the begining.
              */
-            if (hasConnection && !loggedIn) {//If connection is avaiable
-                automaticLogin();//Login automatically
-                console.log("Logging in");
+            if (getData("configured") == "true") {
+                location.reload(true);
+                console.log("Preferences are changed!");
+                setData("configured", "false");
+            }
+
+            /*
+             If automatic login is enabled, check availability of Moodle for each 10 seconds.
+             */
+            if (getData("remember") == "true") {//If automatic login enabled
+                console.log("Checking connection...");
+                hasConnection = doesConnectionExist();//Check for connection to Moodle
+                /*
+                 If Moodle is available and not logged in, login to the moodle automatically.
+                 */
+                if (hasConnection && !loggedIn) {//If connection is avaiable
+                    automaticLogin();//Login automatically
+                    console.log("Logging in");
+
+                    sleep(2000);//Wait 2 seconds before checking whether user is logged in or not
+                    loggedIn = isLoggedIn();//Check whether user is logged in or not
+                }
+            }
+            /*
+             If automatic login is disabled, check whether user is logged in to the moodle for every 10 seconds.
+             This uses browser cookies.
+             */
+            else {
+                console.log("Automatic login disabled");
+                console.log("Checking connection...");
+                hasConnection = doesConnectionExist();//Check for connection to Moodle
                 loggedIn = isLoggedIn();
             }
-        }
-        /*
-         If automatic login is disabled, check whether user is logged in to the moodle for every 10 seconds.
-         This uses browser cookies.
-         */
-        else {
-            console.log("Automatic login disabled");
-            console.log("Checking connection...");
-            hasConnection = doesConnectionExist();//Check for connection to Moodle
-            loggedIn = isLoggedIn();
-        }
 
-        /*
-         If Moodle is available and logged in, fetch upcoming events.
-         */
-        if (hasConnection && loggedIn) {//If connection is avaiable
-            chrome.browserAction.setIcon({path: "img/icon_active.png"});
+            /*
+             If Moodle is available and logged in, fetch upcoming events.
+             */
+            if (hasConnection && loggedIn) {//If connection is avaiable
+                chrome.browserAction.setIcon({path: "img/icon_active.png"});
 
-            if (getData("reload") == "true") {
-                fetchEvents(true);//Show dektop and audible notifications
-                setData("reload", "false");
-                console.log("Desktop notifications are reloaded!");
+                if (getData("reload") == "true") {
+                    fetchEvents(true);//Show dektop and audible notifications
+                    setData("reload", "false");
+                    console.log("Desktop notifications are reloaded!");
+                }
+                else
+                    fetchEvents(false);//Show dektop and audible notifications
             }
-            else
-                fetchEvents(false);//Show dektop and audible notifications
-        }
-        /*
-         If Moodle is not available, set as not logged in.
-         Then whenever the connection become available, this cause re-check for logged in.
-         */
-        else if (!hasConnection) {//If connection is not available, set as not logged in.
-            chrome.browserAction.setIcon({path: "img/icon_inactive.png"});
-            loggedIn = false;
-        }
-        else {
-            chrome.browserAction.setIcon({path: "img/icon_inactive.png"});
+            /*
+             If Moodle is not available, set as not logged in.
+             Then whenever the connection become available, this cause re-check for logged in.
+             */
+            else if (!hasConnection) {//If connection is not available, set as not logged in.
+                chrome.browserAction.setIcon({path: "img/icon_inactive.png"});
+                loggedIn = false;
+            }
+            else {
+                chrome.browserAction.setIcon({path: "img/icon_inactive.png"});
+            }
         }
     }, getData("poll_interval"));
+
 });
 
 /*
@@ -96,6 +101,7 @@ function automaticLogin() {
 
     password = CryptoJS.RC4Drop.decrypt(getData("password"), "Vw7F3ZcPqJwLqerFoF3sNDAmIDsB", { drop: 3072 / 4 }).toString(CryptoJS.enc.Utf8);//Decrypt password
     xmlhttp = new XMLHttpRequest();
+
     /*
      Create XML http request to send login information to the Moodle.
      */
@@ -191,6 +197,8 @@ function createTab(url) {
  This sends an XML http request to the "my home" page of the moodle page and get te response as a string.
  The response string is scratched to find available events.
  If events are available, rresponse string is sent to processing.
+
+ has_reload_request: Boolean variable to determine whether user has requested to reload notification(s)
  */
 function fetchEvents(has_reload_request) {
     var xmlhttp;//XML http request
@@ -209,12 +217,13 @@ function fetchEvents(has_reload_request) {
     try {
         xmlhttp.send();//Send http request
         responseText = xmlhttp.responseText;//Get response html page as a string
+
         hasChanged = false;
 
         /*
          Find the number of courses that have events
          */
-        num_of_courses_with_event = (responseText.match(/box flush/g).length) / 2;//Get number of courses with events
+        num_of_courses_with_event = (responseText.match(/activity_info/g).length);//Get number of courses with events
 
         /*
          Separate the courses that have events and process the response string to get events.
@@ -222,18 +231,20 @@ function fetchEvents(has_reload_request) {
          Events of a course is processed at a time.
          */
         while (num_of_courses_with_event-- > 0) {
-            position = responseText.indexOf("box flush");
-            responseText = responseText.slice(position);
-            position = responseText.indexOf("<div");
-            responseText = responseText.slice(position);
-            position = responseText.indexOf("box flush");
+            position = responseText.indexOf("activity_info");
+            if (position > -1) {
+                responseText = responseText.slice(position);
+                position = responseText.indexOf("<div");
+                responseText = responseText.slice(position);
+                position = responseText.indexOf("box flush");
 
-            processEventTypes(responseText.slice(0, position), has_reload_request);//Send dtring to process
+                processEventTypes(responseText.slice(0, position), has_reload_request);//Send dtring to process
 
-            responseText = responseText.slice(position);
-            position = responseText.indexOf("<div");
-            responseText = responseText.slice(position);
-            position = responseText.indexOf("box flush");
+                responseText = responseText.slice(position);
+                position = responseText.indexOf("<div");
+                responseText = responseText.slice(position);
+                position = responseText.indexOf("box flush");
+            }
         }
         /*
          If there's at least one event, show number of available events at extension button.
@@ -242,7 +253,7 @@ function fetchEvents(has_reload_request) {
             chrome.browserAction.setBadgeText({text: "" + num_of_events});
 
         /*
-
+         Keep the track of available, unattempted events in a variable which is not subjected in incrementing/ decrementing/ resetting
          */
         if (const_num_of_events != num_of_events) {
             const_num_of_events = num_of_events;
@@ -257,6 +268,9 @@ function fetchEvents(has_reload_request) {
  This function separates the events according to the category.
  "activity_overview" separates the event types.
  After separation, this send text strings for processing to obtain name, url, due date and status of the event and store them in local storage.
+
+ textString: A part of the html response text which includes info of event(s)
+ has_reload_request: Boolean variable to determine whether user has requested to reload notification(s)
  */
 function processEventTypes(textString, has_reload_request) {
     var num_of_event_types;//number of available event types
@@ -302,6 +316,9 @@ function processEventTypes(textString, has_reload_request) {
 
 /*
  This function scratch the given string and separate the name, url, due date and status of the assignments and store them in local storage.
+
+ textString: A part of the html response text which includes info of assignment(s)
+ has_reload_request: Boolean variable to determine whether user has requested to reload notification(s)
  */
 function processAssignments(textString, has_reload_request) {
     var events;
@@ -374,14 +391,19 @@ function processAssignments(textString, has_reload_request) {
                 hasChanged = true;//Set as changed
             }
             ++num_of_events;
-        }
 
-        /*
-         Reload all desktop notifications.
-         This is done by changing the boolean variable value to 'true'. As hasChanged == true, it shows the notification by executing code within 'if (hasChanged)' condition.
-         */
-        if (has_reload_request) {
-            hasChanged = true;
+            /*
+             Reload all desktop notifications.
+             This is done by changing the boolean variable value to 'true'. As hasChanged == true, it shows the notification by executing code within 'if (hasChanged)' condition.
+             */
+            if (has_reload_request) {
+                hasChanged = true;
+            }
+
+             console.log(name);
+             console.log(url);
+             console.log(due);
+             console.log(status + "\n");
         }
 
         /*
@@ -389,19 +411,17 @@ function processAssignments(textString, has_reload_request) {
          Notifications are called only if the event page has been changed.
          */
         if (hasChanged) {
+            hasChanged = false;
             showNotifications(name, due, status, url);
         }
-
-        console.log(name);
-        console.log(url);
-        console.log(due);
-        console.log(status + "\n");
-
     }
 }
 
 /*
  This function scratch the given string and separate the name, url, due date and status of the Quizzes and store them in local storage.
+
+ textString: A part of the html response text which includes info of quiz(zes)
+ has_reload_request: Boolean variable to determine whether user has requested to reload notification(s)
  */
 function processQuizzes(textString, has_reload_request) {
     var url;//URL to the quiz
@@ -473,14 +493,19 @@ function processQuizzes(textString, has_reload_request) {
                 hasChanged = true;//Set as changed
             }
             ++num_of_events;
-        }
 
-        /*
-         Reload all desktop notifications.
-         This is done by changing the boolean variable value to 'true'. As hasChanged == true, it shows the notification by executing code within 'if (hasChanged)' condition.
-         */
-        if (has_reload_request) {
-            hasChanged = true;
+            /*
+             Reload all desktop notifications.
+             This is done by changing the boolean variable value to 'true'. As hasChanged == true, it shows the notification by executing code within 'if (hasChanged)' condition.
+             */
+            if (has_reload_request) {
+                hasChanged = true;
+            }
+
+             console.log(name);
+             console.log(url);
+             console.log(due);
+             console.log(status + "\n");
         }
 
         /*
@@ -488,20 +513,17 @@ function processQuizzes(textString, has_reload_request) {
          Notifications are called only if the event page has been changed.
          */
         if (hasChanged) {
+            hasChanged = false;
             showNotifications(name, due, status, url);
         }
-
-        console.log(name);
-        console.log(url);
-        console.log(due);
-        console.log(status + "\n");
-
     }
-
 }
 
 /*
  This function scratch the given string and separate the url of the forum posts and store them in local storage.
+
+ textString: A part of the html response text which includes info of forum post(s)
+ has_reload_request: Boolean variable to determine whether user has requested to reload notification(s)
  */
 function processForumPosts(textString, has_reload_request) {
     var url;//URL to the forum
@@ -554,6 +576,9 @@ function processForumPosts(textString, has_reload_request) {
         if (getData("forumStatus" + num_of_events) != status) {
             setData("forumStatus" + num_of_events, status);//Save in local storage if there's any change
             hasChanged = true;//Set as changed
+
+             console.log(url);
+             console.log(status + "\n");
         }
 
         /*
@@ -572,16 +597,16 @@ function processForumPosts(textString, has_reload_request) {
             showForumNotifications(name, status, url);
         }
         ++num_of_events;
-        /*
-         console.log(url);
-         console.log(status + "\n");
-         */
     }
 }
 
 /*
  Snow desktop notifications and play audible notifications according to user preferences.
  This function is used for events that have a deadline such as assignmnets and quizzes.
+
+ name: Name of the assignment/quiz
+ status: Status of the assignment/quiz
+ url: URL to the assignment/quiz
  */
 function showNotifications(name, due, status, url) {
     /*
@@ -606,6 +631,10 @@ function showNotifications(name, due, status, url) {
 /*
  Snow desktop notifications and play audible notifications according to user preferences.
  This function is used for events that do not have a deadline such as forum posts.
+
+ name: Name of the forum post
+ status: Status of the forum post
+ url: URL to the forum post
  */
 function showForumNotifications(name, status, url) {
     /*
@@ -625,4 +654,18 @@ function showForumNotifications(name, status, url) {
     if (getData("mute") == "false") {
         playAlert(getData("alert_sound"));
     }
+}
+
+/*
+ This function is used to sleep the entire javascript for a specific number of miliseconds.
+ This uses the system clock and check whether time difference is greater than given time.
+
+ milliseconds: Sleep time
+ */
+function sleep(milliseconds) {
+    var start = new Date().getTime();
+    /*
+     Do nothing until specified time period is expired
+     */
+    while ((new Date().getTime() - start) < milliseconds);
 }
