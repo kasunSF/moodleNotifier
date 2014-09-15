@@ -374,20 +374,20 @@ function processAssignments(textString, has_reload_request) {
          Check for assignments that are not sumbmitted yet and store them in local storage.
          */
         if (status.search("Not submitted yet") != -1) {
-            if (getData("assignmentUrl" + num_of_events) != url) {
-                setData("assignmentUrl" + num_of_events, url);//Save in local storage if there's any change
+            if (getData("url" + num_of_events) != url) {
+                setData("url" + num_of_events, url);//Save in local storage if there's any change
                 hasChanged = true;//Set as changed
             }
-            if (getData("assignmentName" + num_of_events) != name) {
-                setData("assignmentName" + num_of_events, name);//Save in local storage if there's any change
+            if (getData("name" + num_of_events) != name) {
+                setData("name" + num_of_events, name);//Save in local storage if there's any change
                 hasChanged = true;//Set as changed
             }
-            if (getData("assignmentDue" + num_of_events) != due) {
-                setData("assignmentDue" + num_of_events, due);//Save in local storage if there's any change
+            if (getData("due" + num_of_events) != due) {
+                setData("due" + num_of_events, due);//Save in local storage if there's any change
                 hasChanged = true;//Set as changed
             }
-            if (getData("assignmentStatus" + num_of_events) != status) {
-                setData("assignmentStatus" + num_of_events, status);//Save in local storage if there's any change
+            if (getData("status" + num_of_events) != status) {
+                setData("status" + num_of_events, status);//Save in local storage if there's any change
                 hasChanged = true;//Set as changed
             }
             ++num_of_events;
@@ -476,20 +476,20 @@ function processQuizzes(textString, has_reload_request) {
          Check for quizzes that are not attempted yet and store them in local storage.
          */
         if (status.search("No attempts have been made") != -1) {
-            if (getData("quizUrl" + num_of_events) != url) {
-                setData("quizUrl" + num_of_events, url);//Save in local storage if there's any change
+            if (getData("url" + num_of_events) != url) {
+                setData("url" + num_of_events, url);//Save in local storage if there's any change
                 hasChanged = true;//Set as changed
             }
-            if (getData("quizName" + num_of_events) != name) {
-                setData("quizName" + num_of_events, name);//Save in local storage if there's any change
+            if (getData("name" + num_of_events) != name) {
+                setData("name" + num_of_events, name);//Save in local storage if there's any change
                 hasChanged = true;//Set as changed
             }
-            if (getData("quizDue" + num_of_events) != due) {
-                setData("quizDue" + num_of_events, due);//Save in local storage if there's any change
+            if (getData("due" + num_of_events) != due) {
+                setData("due" + num_of_events, due);//Save in local storage if there's any change
                 hasChanged = true;//Set as changed
             }
-            if (getData("quizStatus" + num_of_events) != status) {
-                setData("quizStatus" + num_of_events, status);//Save in local storage if there's any change
+            if (getData("status" + num_of_events) != status) {
+                setData("status" + num_of_events, status);//Save in local storage if there's any change
                 hasChanged = true;//Set as changed
             }
             ++num_of_events;
@@ -564,19 +564,19 @@ function processForumPosts(textString, has_reload_request) {
         position = textString.indexOf("<");
         status = textString.slice(0, position);
 
-        if (getData("forumUrl" + num_of_events) != url) {
-            setData("forumUrl" + num_of_events, url);//Save in local storage if there's any change
+        if (getData("url" + num_of_events) != url) {
+            setData("url" + num_of_events, url);//Save in local storage if there's any change
             hasChanged = true;//Set as changed
         }
-        if (getData("forumName" + num_of_events) != name) {
-            setData("forumName" + num_of_events, name);//Save in local storage if there's any change
+        if (getData("name" + num_of_events) != name) {
+            setData("name" + num_of_events, name);//Save in local storage if there's any change
             hasChanged = true;//Set as changed
         }
 
-        if (getData("forumStatus" + num_of_events) != status) {
-            setData("forumStatus" + num_of_events, status);//Save in local storage if there's any change
+        if (getData("status" + num_of_events) != status) {
+            setData("status" + num_of_events, status);//Save in local storage if there's any change
             hasChanged = true;//Set as changed
-
+            setData("due" + num_of_events, "");//Save in local storage if there's any change
              console.log(url);
              console.log(status + "\n");
         }

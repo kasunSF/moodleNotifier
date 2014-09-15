@@ -3,6 +3,7 @@
  Purpose: Add event listnets to navigate through menus, load, save and preview user preferences.
  */
 document.addEventListener('DOMContentLoaded', function () {
+    console.log(getData("num_of_events"));
     var menu;
     var save_button;
     var play_button;
@@ -129,7 +130,7 @@ function saveConfigData() {
      */
     setTimeout(function () {
         window.close();
-    }, 2000);
+    }, 5000);
 }
 
 /*

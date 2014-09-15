@@ -38,9 +38,11 @@
 
                     <div id="content_0" class="content invisible">
                         <h2>General settings</h2>
-                        URL for moodle<br><input type="text" id="url"/> <label for="url"></label><br><br>
+                        URL for moodle<br><input type="text" id="url"
+                                                 title="Enter base URL for the moodle. eg: https://www.moodle.com/"/>
+                        <label for="url"></label><br><br>
                         Polling interval:
-                        <select id="poll">
+                        <select id="poll"title="Time interval between cheking of new events">
                             <option id="poll_15000" value="15000">15 seconds</option>
                             <option id="poll_30000" value="30000">30 seconds</option>
                             <option id="poll_60000" value="60000">1 minute</option>
@@ -56,7 +58,7 @@
                         <h2>Notification settings</h2>
                         <fieldset>
                             <legend>Sound notifications</legend>
-                            <input type="checkbox" id="mute"/> <label for="mute">Mute</label>
+                            <input type="checkbox" id="mute" title="Mute sound alerts"/> <label for="mute">Mute</label>
                             <br/>
                             <br/>
                             Notification sound:
@@ -68,20 +70,21 @@
                                 <option id="alert5" value="alert5.ogg">alert5</option>
                                 <option id="alert6" value="alert6.ogg">alert6</option>
                             </select>
-                            <a href="#" id="play" title="Play notification sound" style="border: 0"><img
-                                    src="img/play.png"/></a>
+                            <a href="#" id="play" style="border: 0">
+                                <img src="img/play.png" title="Play notification sound" title="Preview alert"/>
+                            </a>
                             <br>
                             <input type="hidden" id="sn_audio_enc"/>
                         </fieldset>
                         <br/>
                         <fieldset>
                             <legend>Desktop popup</legend>
-                            <input type="checkbox" id="popup"/>
+                            <input type="checkbox" id="popup" title="Enable popup notifications"/>
                             <label for="popup">Show desktop popup</label>
                             <br/>
                             <br/>
                             Timeout:
-                            <select id="popup_timeout">
+                            <select id="popup_timeout" title="Popup visible time">
                                 <option id="dn_timeout_5000" value="5000">5 seconds</option>
                                 <option id="dn_timeout_15000" value="15000">15 seconds</option>
                                 <option id="dn_timeout_60000" value="60000">1 minute</option>
@@ -94,9 +97,10 @@
                         <h2>Account settings</h2>
                         <fieldset>
                             <legend>Account details</legend>
-                            Username<br><input type="text" id="username"/> <br>
-                            Password<br><input type="password" id="password"/> <br>
-                            <input type="checkbox" id="remember"/><font size="2pt">Keep me signed in</font><br>
+                            Username<br><input type="text" id="username" title="Moodle username"/> <br>
+                            Password<br><input type="password" id="password" title="Moodle password"/> <br>
+                            <input type="checkbox" id="remember" title="Check this to enable automatic login."/><font
+                                size="2pt">Keep me signed in</font><br>
                         </fieldset>
                     </div>
                     <div id="content_3" class="content invisible">
@@ -110,8 +114,13 @@
             </tr>
             <tr>
                 <td>
-                    <p id="save_alert" class="hidden"><font color="RED">Preferences are saved!</font></p>
-                    <button type="button" class="button" id="submit" style="float: right;">Save</button>
+                    <p id="save_alert" class="hidden">
+                        <font color="RED">
+                        Preferences are saved! <br>
+                        This window will be closed automatically in 5 seconds.
+                    </font>
+                    </p>
+                    <button type="button" class="button" id="submit" style="float: right;"title="Save configurations">Save</button>
                 </td>
             </tr>
         </table>

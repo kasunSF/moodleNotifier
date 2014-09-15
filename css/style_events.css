@@ -107,10 +107,10 @@ img {
 body {
     font-family: Arial, Helvetica, sans-serif;
     margin: 0;
-    padding: 2px;
+    padding-left: 25%;
     overflow-x: hidden;
     height: 229px;
-    width: 420px;
+    width: 50%;
     background-position: left top;
     background-repeat: no-repeat;
     background-size: auto auto;
@@ -167,6 +167,7 @@ article img {
 }
 
 a {
+    padding-left: 5px;
     color: #fea727;
 }
 
@@ -213,6 +214,7 @@ h4, h5, h6 {
 
 /* paragraph */
 p {
+    padding-left: 28px;
     line-height: 26px;
     margin: 0 0 16px 0;
 }
@@ -401,7 +403,6 @@ footer {
 }
 
 footer {
-    position:static;
     border-top: 1px solid #5d5d5d;
     padding: 10px 20px 10px 20px;
     color: #777;
@@ -541,6 +542,7 @@ article h2 a {
 /* article */
 /* Date */
 .date {
+    padding-left: 28px;
     font-size: 10px;
 }
 
@@ -577,8 +579,8 @@ article h2 a {
     background: #2d2d2d;
 }
 
-.pointer{
-	cursor:pointer;
+.pointer {
+    cursor: pointer;
 }
 
 .post-content {
@@ -627,4 +629,41 @@ article h2 a {
     .post-content {
         width: 68%;
     }
+}
+
+
+/*Button style*/
+.button {
+    background: #ffbc5e;
+    background-image: -webkit-linear-gradient(top, #ffbc5e, #ff9500);
+    background-image: -moz-linear-gradient(top, #ffbc5e, #ff9500);
+    background-image: -ms-linear-gradient(top, #ffbc5e, #ff9500);
+    background-image: -o-linear-gradient(top, #ffbc5e, #ff9500);
+    background-image: linear-gradient(to bottom, #ffbc5e, #ff9500);
+    -webkit-border-radius: 7;
+    -moz-border-radius: 7;
+    border-radius: 7px;
+    -webkit-box-shadow: 0px 1px 5px #666666;
+    -moz-box-shadow: 0px 1px 5px #666666;
+    box-shadow: 0px 1px 5px #666666;
+    font-family: Arial;
+    color: #ffffff;
+    font-size: 20px;
+    padding: 3px 20px 3px 20px;
+    text-decoration: none;
+}
+
+.button:hover {
+    background: #ff9500;
+    background-image: -webkit-linear-gradient(top, #ff9500, #ffbc5e);
+    background-image: -moz-linear-gradient(top, #ff9500, #ffbc5e);
+    background-image: -ms-linear-gradient(top, #ff9500, #ffbc5e);
+    background-image: -o-linear-gradient(top, #ff9500, #ffbc5e);
+    background-image: linear-gradient(to bottom, #ff9500, #ffbc5e);
+    text-decoration: none;
+}
+
+.button:active {
+    background: #ff9500;
+    text-decoration: none;
 }
