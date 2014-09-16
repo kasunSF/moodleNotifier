@@ -192,36 +192,6 @@ function loadConfigData() {
 }
 
 /*
- Check whether connection to moodle is available or not.
- Return true if connection is available.
-
- Note: This function checks the availability of an image in Moodle using http header.
- Availability of the image is recognized as connection availability.
- */
-function doesConnectionExist() {
-    var xhr = new XMLHttpRequest();
-    var file = getData("moodle_url") + "theme/image.php/clean/core/1403939604/help";
-    var randomNum = Math.round(Math.random() * 10000);
-
-    xhr.open('HEAD', file + "?rand=" + randomNum, false);
-
-    try {
-        xhr.send();
-
-        if (xhr.status >= 200 && xhr.status < 304) {
-            console.log("Connection available");
-            return true;
-        } else {
-            console.log("Connection unavailable");
-            return false;
-        }
-    } catch (e) {
-        console.log("Connection unavailable");
-        return false;
-    }
-}
-
-/*
  Function to play notification sounds that are available in the extension as preview.
  */
 function playAlert() {

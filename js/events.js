@@ -11,6 +11,9 @@ document.addEventListener('DOMContentLoaded', function () {
     unhide_button.addEventListener('click', unhideEvents);//Add event listener to Hide button
 });
 
+/*
+This function prepares the events page dynamically adding savailable events.
+ */
 function preparePage() {
     var event_container;
     var num_of_events;
@@ -97,7 +100,7 @@ function hideEvents() {
      */
     for (var i = 0; i < checkboxes.length; ++i) {
         if (checkboxes[i].checked) {
-            hidden_urls = getData("hidden_events") + checkboxes[i].id + " ";
+            hidden_urls = getData("hidden_events") + checkboxes[i].id + " ";//Append URL to hidden events
             setData("hidden_events", hidden_urls);
         }
     }
@@ -113,11 +116,11 @@ function hideEvents() {
     }
 
     /*
-     Reload the events page automatically after 16 seconds when preferences are saved.
+     Reload the events page automatically after 15.1 seconds when preferences are saved.
      */
     setTimeout(function () {
         location.reload(true);
-    }, 16000);
+    }, 15100);
 }
 
 /*

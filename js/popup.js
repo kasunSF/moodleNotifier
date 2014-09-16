@@ -12,14 +12,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var settings;
     var visit_moodle;
 
-    num_of_events = getData("num_of_events");
-    for (var i = 0; i < num_of_events; ++i) {
-        url = getData("url" + i);
-        name = getData("name" + i);
-        status = getData("status" + i);
-        due = getData("due" + i);
-        loadEvent(url, name, status, due);
-    }
+    preparePage();
 
     refresh_button = document.getElementById('refresh');//Get refresh button
     refresh_button.addEventListener('click', refresh);//Add event listener to refresh button
@@ -30,6 +23,25 @@ document.addEventListener('DOMContentLoaded', function () {
     visit_moodle = document.getElementById('visit_moodle');//Get link to moodle page
     visit_moodle.addEventListener('click', visitMoodle);//Add event listener to the link
 });
+
+
+/*
+ This function prepares the popup page dynamically adding savailable events.
+ */
+function preparePage() {
+    num_of_events = getData("num_of_events");//Get number of available events.
+
+    /*
+     Get html tag of event_container, URL, name, staus and due date of each event and send to loadEvent function.
+     */
+    for (var i = 0; i < num_of_events; ++i) {
+        url = getData("url" + i);
+        name = getData("name" + i);
+        status = getData("status" + i);
+        due = getData("due" + i);
+        loadEvent(url, name, status, due);
+    }
+}
 
 /*
  Load all available events to popup page
@@ -47,7 +59,7 @@ function loadEvent(url, name, status, due) {
 }
 
 /*
-Write to the local storage that it is required to restart the extension.
+ Write to the local storage that it is required to restart the extension.
  */
 function refresh() {
     localStorage["configured"] = "true";
