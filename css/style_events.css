@@ -667,3 +667,13 @@ article h2 a {
     background: #ff9500;
     text-decoration: none;
 }
+
+.hidden {
+    visibility: hidden;
+    float: left;
+}
+
+.visible {
+    visibility: visible;
+    float: left;
+}

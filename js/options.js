@@ -125,6 +125,7 @@ function saveConfigData() {
     if (item.className == 'hidden') {
         item.className = 'visible';
     }
+
     /*
      Close the options page automatically after 2 seconds when preferences are saved.
      */

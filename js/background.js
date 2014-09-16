@@ -327,7 +327,9 @@ function processAssignments(textString, has_reload_request) {
     var due;//Due date of the assignment
     var status;//Status of the assignment
     var hasChanged;//Boolean variable for determining changes of the assignment events
+    var temp;
 
+    temp = getData("hidden_events") + "";
     hasChanged = false;
     events = textString.match(/assign overview/g).length;//Get number of available assignments
 
@@ -371,9 +373,10 @@ function processAssignments(textString, has_reload_request) {
         status = textString.slice(0, position);
 
         /*
-         Check for assignments that are not sumbmitted yet and store them in local storage.
+         Check for assignments that are not sumbmitted yet and not hidden by the user.
+         Then store them in local storage.
          */
-        if (status.search("Not submitted yet") != -1) {
+        if (status.search("Not submitted yet") != -1 && temp.indexOf(url) == -1) {
             if (getData("url" + num_of_events) != url) {
                 setData("url" + num_of_events, url);//Save in local storage if there's any change
                 hasChanged = true;//Set as changed
@@ -391,19 +394,19 @@ function processAssignments(textString, has_reload_request) {
                 hasChanged = true;//Set as changed
             }
             ++num_of_events;
-
             /*
              Reload all desktop notifications.
-             This is done by changing the boolean variable value to 'true'. As hasChanged == true, it shows the notification by executing code within 'if (hasChanged)' condition.
+             This is done by changing the boolean variable value to 'true'.
+             As hasChanged == true, it shows the notification by executing code within 'if (hasChanged)' condition.
              */
             if (has_reload_request) {
                 hasChanged = true;
             }
 
-             console.log(name);
-             console.log(url);
-             console.log(due);
-             console.log(status + "\n");
+            console.log(name);
+            console.log(url);
+            console.log(due);
+            console.log(status + "\n");
         }
 
         /*
@@ -429,7 +432,9 @@ function processQuizzes(textString, has_reload_request) {
     var due;//Due date of the quiz
     var status;//Status of the quiz
     var hasChanged;//Boolean variable for determining changes of the quiz events
+    var temp;
 
+    temp = getData("hidden_events") + "";
     hasChanged = false;
     events = textString.match(/quiz overview/g).length;//Get number of available quiz event.
 
@@ -473,9 +478,10 @@ function processQuizzes(textString, has_reload_request) {
         status = textString.slice(0, position);
 
         /*
-         Check for quizzes that are not attempted yet and store them in local storage.
+         Check for quizzes that are not attempted yet and and not hidden by the user.
+         Then store them in local storage.
          */
-        if (status.search("No attempts have been made") != -1) {
+        if (status.search("No attempts have been made") != -1 && temp.indexOf(url) == -1) {
             if (getData("url" + num_of_events) != url) {
                 setData("url" + num_of_events, url);//Save in local storage if there's any change
                 hasChanged = true;//Set as changed
@@ -502,10 +508,10 @@ function processQuizzes(textString, has_reload_request) {
                 hasChanged = true;
             }
 
-             console.log(name);
-             console.log(url);
-             console.log(due);
-             console.log(status + "\n");
+            console.log(name);
+            console.log(url);
+            console.log(due);
+            console.log(status + "\n");
         }
 
         /*
@@ -530,7 +536,9 @@ function processForumPosts(textString, has_reload_request) {
     var name;//Name of the forum
     var status;//Status of the forum
     var hasChanged;//Boolean variable for determining changes of the forum events
+    var temp;
 
+    temp = getData("hidden_events") + "";
     hasChanged = false;
     events = textString.match(/overview forum/g).length;//Get number of available forum events
 
@@ -564,29 +572,40 @@ function processForumPosts(textString, has_reload_request) {
         position = textString.indexOf("<");
         status = textString.slice(0, position);
 
-        if (getData("url" + num_of_events) != url) {
-            setData("url" + num_of_events, url);//Save in local storage if there's any change
-            hasChanged = true;//Set as changed
-        }
-        if (getData("name" + num_of_events) != name) {
-            setData("name" + num_of_events, name);//Save in local storage if there's any change
-            hasChanged = true;//Set as changed
-        }
-
-        if (getData("status" + num_of_events) != status) {
-            setData("status" + num_of_events, status);//Save in local storage if there's any change
-            hasChanged = true;//Set as changed
-            setData("due" + num_of_events, "");//Save in local storage if there's any change
-             console.log(url);
-             console.log(status + "\n");
-        }
-
         /*
-         Reload all desktop notifications.
-         This is done by changing the boolean variable value to 'true'. As hasChanged == true, it shows the notification by executing code within 'if (hasChanged)' condition.
+         Check for forum posts that are not hidden by the user.
+         Then store them in local storage.
          */
-        if (has_reload_request) {
-            hasChanged = true;
+        if (temp.indexOf(url) == -1) {
+            if (getData("url" + num_of_events) != url) {
+                setData("url" + num_of_events, url);//Save in local storage if there's any change
+                hasChanged = true;//Set as changed
+            }
+            if (getData("name" + num_of_events) != name) {
+                setData("name" + num_of_events, name);//Save in local storage if there's any change
+                hasChanged = true;//Set as changed
+            }
+
+            if (getData("status" + num_of_events) != status) {
+                setData("status" + num_of_events, status);//Save in local storage if there's any change
+                hasChanged = true;//Set as changed
+                setData("due" + num_of_events, "");//Save in local storage if there's any change
+                console.log(url);
+                console.log(status + "\n");
+            }
+            ++num_of_events;
+
+            /*
+             Reload all desktop notifications.
+             This is done by changing the boolean variable value to 'true'. As hasChanged == true, it shows the notification by executing code within 'if (hasChanged)' condition.
+             */
+            if (has_reload_request) {
+                hasChanged = true;
+            }
+
+            console.log(name);
+            console.log(url);
+            console.log(status + "\n");
         }
 
         /*
@@ -594,9 +613,9 @@ function processForumPosts(textString, has_reload_request) {
          Notifications are called only if the event page has been changed.
          */
         if (hasChanged) {
+            hasChanged = false;
             showForumNotifications(name, status, url);
         }
-        ++num_of_events;
     }
 }
 
