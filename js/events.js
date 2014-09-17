@@ -27,7 +27,7 @@ function preparePage() {
     event_container = document.getElementById('event_container');//Get location of event container in events.html
     unhide_button = "<br><br><button type='button' class='button' id='unhide' style='float: right;'title='Unhide all events'>Unhide All</button>";//Unhide button
     hide_button = "<button type='button' class='button' id='hide' style='float: right;'title='Hide selected events'>Hide</button>";//Hide button
-    button_alert = "<p id='save_alert' class='hidden'><font color='RED' size='2'>Preferences are saved! <br>This window will be reloaded automatically in 15 seconds.</font></p><br><br><br>"
+    button_alert = "<p id='save_alert' class='hidden'><font color='#fea727' size='2'>Preferences are saved! <br>This window will be updated automatically in 15 seconds.</font></p><br><br><br>"
     ''
     num_of_events = getData("num_of_events");//Get number of available events.
 
