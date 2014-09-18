@@ -148,11 +148,15 @@ function loadConfigData() {
      */
     else {
         try {
-            document.getElementById('url').value = getData("moodle_url");
             document.getElementById('poll').value = getData("poll_interval");
             document.getElementById('popup_timeout').value = getData("popup_time");
             document.getElementById('alert').value = getData("alert_sound");
-            document.getElementById('username').value = getData("username");
+
+            if (getData("moodle_url") == "")
+                document.getElementById('url').value = "https://";
+            else
+                document.getElementById('url').value = getData("moodle_url");
+
 
             if (getData("mute") == "false")
                 document.getElementById('mute').checked = false;
