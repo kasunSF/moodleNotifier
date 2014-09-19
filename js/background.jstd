@@ -1,7 +1,0 @@
-server: http://127.0.0.1:9876/capture
-
-load:
-  - /background.js
-  - /dataAccess.js
-test:
-  - test/background.Test.js

@@ -3,20 +3,22 @@
  Purpose: Add event listnets to navigate through menus, load, save and preview user preferences.
  */
 document.addEventListener('DOMContentLoaded', function () {
-    console.log(getData("num_of_events"));
     var menu;
     var save_button;
     var play_button;
+    var url_input;
 
     menu = document.querySelectorAll('li');//Get menu list
     save_button = document.getElementById('submit');//Save button
     play_button = document.getElementById('play');//Alert previewe button
+    url_input = document.getElementById('url');//Alert previewe button
 
     for (var i = 0; i < menu.length; ++i) {
         menu[i].addEventListener('click', showContent);//Add event listener to the menu
     }
     save_button.addEventListener('click', saveConfigData);//Add event listener to save button
     play_button.addEventListener('click', playAlert);//Add event listener to play alerts
+    //url_input.addEventListener('focusout', autoformatURL);//Add event listener to play alerts
 
     defaultView(0);//Set default view of the menu: "General settings"
     loadConfigData();//Load saved preferences
@@ -73,58 +75,60 @@ function saveConfigData() {
     var remember = document.getElementById('remember').checked;
 
     /*
+     Add a back slash at the end of the URL
+     */
+    if (moodle_url.charAt(moodle_url.length - 1) != "/") {
+        moodle_url = moodle_url + "/";
+    }
+
+    /*
+     Validate URL
+     */
+    if (!isValidURL()) {
+        alert("URL is invalid. Make sure you have entered full URL.\neg: https://online.mrt.ac.lk");
+        return;
+    }
+
+    /*
      JavaScript function to save user preferences to local storage.
      */
     try {
-        setData("moodle_url", moodle_url);
-        setData("poll_interval", poll_interval);
-        setData("mute", mute);
-        setData("alert_sound", alert_sound);
-        setData("popup", popup);
-        setData("popup_time", popup_time);
-        setData("username", username);
-        setData("remember", remember);
+        DataAccess.setData("moodle_url", moodle_url);
+        DataAccess.setData("poll_interval", poll_interval);
+        DataAccess.setData("mute", mute);
+        DataAccess.setData("alert_sound", alert_sound);
+        DataAccess.setData("popup", popup);
+        DataAccess.setData("popup_time", popup_time);
+        DataAccess.setData("username", username);
+        DataAccess.setData("remember", remember);
 
         /*
          If the user need to save login data, encrypt the password and save in local storage.
          Otherwise clear previously saved password if available
          */
         if (remember)
-            setData("password", CryptoJS.RC4Drop.encrypt(password, "Vw7F3ZcPqJwLqerFoF3sNDAmIDsB", { drop: 3072 / 4 }));
+            DataAccess.setData("password", CryptoJS.RC4Drop.encrypt(password, "Vw7F3ZcPqJwLqerFoF3sNDAmIDsB", { drop: 3072 / 4 }));
         else
-            setData("password", "");
+            DataAccess.setData("password", "");
 
         console.log("Preferences are saved!");//Print log on browser console
     } catch (e) {
         console.log("Save Error!");//Print error log on browser console
     }
-    /*
-     console.log("url: " + localStorage["moodle_url"]);
-     console.log("intrvl: " + localStorage["poll_interval"]);
-     console.log("mute: " + localStorage["mute"]);
-     console.log("alert: " + localStorage["alert_sound"]);
-     console.log("popup: " + localStorage["popup"]);
-     console.log("time: " + localStorage["popup_time"]);
-     console.log("un: " + localStorage["username"]);
-     console.log("remember: " + localStorage["remember"]);
-     */
 
     /*
      Set as preferences are changed. This causes reloading of the extension.
      */
-    setData("configured", "true");
+    DataAccess.setData("configured", "true");
     /*
      Set as "Not First Run" after user completed confuguring preferences and saved.
      */
-    setData("notFirstRun", "true");
+    DataAccess.setData("notFirstRun", "true");
 
     /*
      Alert user that preferences are saved.
      */
-    var item = document.getElementById('save_alert');
-    if (item.className == 'hidden') {
-        item.className = 'visible';
-    }
+    showSaveAlert();
 
     /*
      Close the options page automatically after 2 seconds when preferences are saved.
@@ -139,8 +143,9 @@ function saveConfigData() {
  */
 function loadConfigData() {
     //Do not load config data during the first run of the extension.
-    if (getData("notFirstRun") != "true") {
+    if (DataAccess.getData("notFirstRun") != "true") {
         console.log("First run");
+        document.getElementById('url').value = "https://";
     }
     /*
      Retrive user preferences from local storage.
@@ -148,50 +153,110 @@ function loadConfigData() {
      */
     else {
         try {
-            document.getElementById('poll').value = getData("poll_interval");
-            document.getElementById('popup_timeout').value = getData("popup_time");
-            document.getElementById('alert').value = getData("alert_sound");
+            document.getElementById('poll').value = DataAccess.getData("poll_interval");
+            document.getElementById('popup_timeout').value = DataAccess.getData("popup_time");
+            document.getElementById('alert').value = DataAccess.getData("alert_sound");
+            document.getElementById('username').value = DataAccess.getData("username");
 
-            if (getData("moodle_url") == "")
+            if (DataAccess.getData("moodle_url") == "")
                 document.getElementById('url').value = "https://";
             else
-                document.getElementById('url').value = getData("moodle_url");
+                document.getElementById('url').value = DataAccess.getData("moodle_url");
 
 
-            if (getData("mute") == "false")
+            if (DataAccess.getData("mute") == "false")
                 document.getElementById('mute').checked = false;
             else
                 document.getElementById('mute').checked = true;
 
 
-            if (getData("popup") == "false")
+            if (DataAccess.getData("popup") == "false")
                 document.getElementById('popup').checked = false;
             else
                 document.getElementById('popup').checked = true;
 
 
-            if (getData("remember") == "false")
+            if (DataAccess.getData("remember") == "false")
                 document.getElementById('remember').checked = false;
             else
                 document.getElementById('remember').checked = true;
 
             console.log("Preferences are loaded!");//Print log on console
-
-            /*
-             console.log("url: " + getData("moodle_url"));
-             console.log("intrvl: " + getData("poll_interval"));
-             console.log("mute: " + getData("mute"));
-             console.log("alert: " + getData("alert_sound"));
-             console.log("popup: " + getData("popup"));
-             console.log("time: " + getData("popup_time"));
-             console.log("un: " + getData("username"));
-             console.log("pw: " + CryptoJS.RC4Drop.decrypt(getData("password"), "Vw7F3ZcPqJwLqerFoF3sNDAmIDsB", { drop: 3072 / 4 }).toString(CryptoJS.enc.Utf8));
-             console.log("remember: " + getData("remember"));
-             */
         }
         catch (e) {
             console.log("Preferences loading error!");//Print error log on console
         }
+    }
+}
+
+/*
+ This function validates the URL given by the user.
+ URL should contain 'http' or 'https' and length should be more than 15 characters.
+
+ Returns true if URL is valid.
+ Returns false in URL is invalid.
+ */
+function isValidURL() {
+    moodle_url = document.getElementById('url').value;
+    /*
+     Reject invalid URLs and avoid saving given URL
+     Invalid URL->   URLs without http or https
+     */
+    if (moodle_url.search("http") == -1 || moodle_url.length < 15) {
+        return false;
+    }
+    return true;
+}
+
+/*
+ This function obtains the base URL from the user input.
+
+ Returns the base URL.
+ */
+function autoformatURL() {
+    var url_array;
+    var moodle_url;
+    var rebuid_url;
+
+    moodle_url = document.getElementById('url').value;
+
+    if (moodle_url.split("/").length > 4) {
+        url_array = (moodle_url.split("/"));
+        rebuid_url = "";
+
+        for (var i = url_array.length - 1; i > 2; --i) {
+            url_array[i] = "";
+            //console.log(url_array);
+        }
+
+        for (var i = 0; i < 3; ++i) {
+            rebuid_url = rebuid_url + url_array[i] + "/";
+        }
+        console.log(rebuid_url);
+    }
+    document.getElementById('url').value = rebuid_url;
+    return rebuid_url;
+}
+
+/*
+ This is a test function for getting saved data and compare with given inputs.
+ */
+function testSavedData() {
+    console.log("url: " + DataAccess.getData("moodle_url"));
+    console.log("intrvl: " + DataAccess.getData("poll_interval"));
+    console.log("mute: " + DataAccess.getData("mute"));
+    console.log("alert: " + DataAccess.getData("alert_sound"));
+    console.log("popup: " + DataAccess.getData("popup"));
+    console.log("time: " + DataAccess.getData("popup_time"));
+    console.log("un: " + DataAccess.getData("username"));
+    //console.log("pw: " + CryptoJS.RC4Drop.decrypt(DataAccess.getData("password"), "Vw7F3ZcPqJwLqerFoF3sNDAmIDsB", { drop: 3072 / 4 }).toString(CryptoJS.enc.Utf8));
+    console.log("remember: " + DataAccess.getData("remember"));
+}
+
+function showSaveAlert() {
+    var item = document.getElementById('save_alert');
+    if (item.className == 'hidden') {
+        item.className = 'visible';
     }
 }
 

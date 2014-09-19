@@ -1,10 +1,10 @@
-BackgroundTest = TestCase("BackgroundTest");
+dataAccessTest = TestCase("dataAccessTest");
 
-BackgroundTest.prototype.checkConn = function () {
+dataAccessTest.prototype.testConnection = function () {
     var result = Background.doesConnectionExist();
     assertEquals(result, true);
 };
-BackgroundTest.prototype.checkLogin = function () {
+dataAccessTest.prototype.testLogin = function () {
     var result = Background.isLoggedIn();
     assertEquals(result, true);
 };

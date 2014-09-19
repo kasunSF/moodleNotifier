@@ -1,5 +1,7 @@
 var num_of_events;//This variable tracks the number of available events. This is used to show available events in extension button and prevent duplicated notifications.
 var const_num_of_events;
+var loggedIn;
+
 
 /*
  This function called during start up of the extension
@@ -7,6 +9,7 @@ var const_num_of_events;
 document.addEventListener('DOMContentLoaded', function () {
     var connectionChecker;
 
+    loggedIn = false;
     Background.initialize();
     Background.backgroundProcess();
 
@@ -15,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function () {
      */
     connectionChecker = setInterval(function () {
         Background.backgroundProcess();
-    }, getData("poll_interval"));
+    }, DataAccess.getData("poll_interval"));
 
 });
 
@@ -31,7 +34,7 @@ var Background = {
          Check for the first run of the extension.
          If first run, open the options page to set user preferences.
          */
-        if (getData("notFirstRun") != "true") {
+        if (DataAccess.getData("notFirstRun") != "true") {
             Background.createTab("options.html");
         }
     },
@@ -41,25 +44,22 @@ var Background = {
      */
     backgroundProcess: function () {
         var hasConnection;
-        var loggedIn;
-
         hasConnection = false;
-        loggedIn = false;
 
-        if (getData("notFirstRun") == "true") {
+        if (DataAccess.getData("notFirstRun") == "true") {
             /*
              If settings of the MoodleNotifier are changed, reload the extension and start to execute from the begining.
              */
-            if (getData("configured") == "true") {
+            if (DataAccess.getData("configured") == "true") {
                 location.reload(true);
                 console.log("Preferences are changed!");
-                setData("configured", "false");
+                DataAccess.setData("configured", "false");
             }
 
             /*
              If automatic login is enabled, check availability of Moodle for each 10 seconds.
              */
-            if (getData("remember") == "true") {//If automatic login enabled
+            if (DataAccess.getData("remember") == "true") {//If automatic login enabled
                 console.log("Checking connection...");
                 hasConnection = Background.doesConnectionExist();//Check for connection to Moodle
                 /*
@@ -90,9 +90,9 @@ var Background = {
             if (hasConnection && loggedIn) {//If connection is avaiable
                 chrome.browserAction.setIcon({path: "img/icon_active.png"});
 
-                if (getData("reload") == "true") {
+                if (DataAccess.getData("reload") == "true") {
                     Background.fetchEvents(true);//Show dektop and audible notifications
-                    setData("reload", "false");
+                    DataAccess.setData("reload", "false");
                     console.log("Desktop notifications are reloaded!");
                 }
                 else
@@ -120,15 +120,15 @@ var Background = {
         var password;
         var xmlhttp;
 
-        password = CryptoJS.RC4Drop.decrypt(getData("password"), "Vw7F3ZcPqJwLqerFoF3sNDAmIDsB", { drop: 3072 / 4 }).toString(CryptoJS.enc.Utf8);//Decrypt password
+        password = CryptoJS.RC4Drop.decrypt(DataAccess.getData("password"), "Vw7F3ZcPqJwLqerFoF3sNDAmIDsB", { drop: 3072 / 4 }).toString(CryptoJS.enc.Utf8);//Decrypt password
         xmlhttp = new XMLHttpRequest();
 
         /*
          Create XML http request to send login information to the Moodle.
          */
-        xmlhttp.open("POST", getData("moodle_url") + 'login/index.php', true);
+        xmlhttp.open("POST", DataAccess.getData("moodle_url") + 'login/index.php', true);
         xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xmlhttp.send("username= " + getData("username") + "& password=" + password);
+        xmlhttp.send("username= " + DataAccess.getData("username") + "& password=" + password);
 
         console.log("Submitted!");
     },
@@ -148,7 +148,7 @@ var Background = {
         var responseText;//Current response text of XML http request
 
         xmlhttp = new XMLHttpRequest();
-        sitePage = getData("moodle_url") + "login/index.php";//Checks for login/index.php page
+        sitePage = DataAccess.getData("moodle_url") + "login/index.php";//Checks for login/index.php page
         randomNum = Math.round(Math.random() * 10000);//Random number prevents loading cached data
         xmlhttp.open('HEAD', sitePage + "?rand=" + randomNum, false);//Fetch header information of the request
 
@@ -184,7 +184,7 @@ var Background = {
         var responseText;//Current response text of XML http request
 
         xmlhttp = new XMLHttpRequest();
-        sitePage = getData("moodle_url") + "login/index.php";
+        sitePage = DataAccess.getData("moodle_url") + "login/index.php";
         randomNum = Math.round(Math.random() * 10000);//Random number prevents loading cached data.
         xmlhttp.open('GET', sitePage + "?rand=" + randomNum, false);//Fetch the response as an html string.
 
@@ -231,7 +231,7 @@ var Background = {
 
         num_of_events = 0;//Clear number of events to prevent over counting
         xmlhttp = new XMLHttpRequest();
-        sitePage = getData("moodle_url") + "my";
+        sitePage = DataAccess.getData("moodle_url") + "my";
         randomNum = Math.round(Math.random() * 10000);//Random number prevents loading cached data.
         xmlhttp.open('GET', sitePage + "?rand=" + randomNum, false);//Fetch the response as an html string.
 
@@ -280,7 +280,7 @@ var Background = {
              */
             if (const_num_of_events != num_of_events) {
                 const_num_of_events = num_of_events;
-                setData("num_of_events", const_num_of_events);
+                DataAccess.setData("num_of_events", const_num_of_events);
             }
         } catch (e) {
             console.log(e);//Log error
@@ -352,7 +352,7 @@ var Background = {
         var hasChanged;//Boolean variable for determining changes of the assignment events
         var temp;
 
-        temp = getData("hidden_events") + "";
+        temp = DataAccess.getData("hidden_events") + "";
         hasChanged = false;
         events = textString.match(/assign overview/g).length;//Get number of available assignments
 
@@ -400,20 +400,20 @@ var Background = {
              Then store them in local storage.
              */
             if (status.search("Not submitted yet") != -1 && temp.indexOf(url) == -1) {
-                if (getData("url" + num_of_events) != url) {
-                    setData("url" + num_of_events, url);//Save in local storage if there's any change
+                if (DataAccess.getData("url" + num_of_events) != url) {
+                    DataAccess.setData("url" + num_of_events, url);//Save in local storage if there's any change
                     hasChanged = true;//Set as changed
                 }
-                if (getData("name" + num_of_events) != name) {
-                    setData("name" + num_of_events, name);//Save in local storage if there's any change
+                if (DataAccess.getData("name" + num_of_events) != name) {
+                    DataAccess.setData("name" + num_of_events, name);//Save in local storage if there's any change
                     hasChanged = true;//Set as changed
                 }
-                if (getData("due" + num_of_events) != due) {
-                    setData("due" + num_of_events, due);//Save in local storage if there's any change
+                if (DataAccess.getData("due" + num_of_events) != due) {
+                    DataAccess.setData("due" + num_of_events, due);//Save in local storage if there's any change
                     hasChanged = true;//Set as changed
                 }
-                if (getData("status" + num_of_events) != status) {
-                    setData("status" + num_of_events, status);//Save in local storage if there's any change
+                if (DataAccess.getData("status" + num_of_events) != status) {
+                    DataAccess.setData("status" + num_of_events, status);//Save in local storage if there's any change
                     hasChanged = true;//Set as changed
                 }
                 ++num_of_events;
@@ -457,7 +457,7 @@ var Background = {
         var hasChanged;//Boolean variable for determining changes of the quiz events
         var temp;
 
-        temp = getData("hidden_events") + "";
+        temp = DataAccess.getData("hidden_events") + "";
         hasChanged = false;
         events = textString.match(/quiz overview/g).length;//Get number of available quiz event.
 
@@ -505,20 +505,20 @@ var Background = {
              Then store them in local storage.
              */
             if (status.search("No attempts have been made") != -1 && temp.indexOf(url) == -1) {
-                if (getData("url" + num_of_events) != url) {
-                    setData("url" + num_of_events, url);//Save in local storage if there's any change
+                if (DataAccess.getData("url" + num_of_events) != url) {
+                    DataAccess.setData("url" + num_of_events, url);//Save in local storage if there's any change
                     hasChanged = true;//Set as changed
                 }
-                if (getData("name" + num_of_events) != name) {
-                    setData("name" + num_of_events, name);//Save in local storage if there's any change
+                if (DataAccess.getData("name" + num_of_events) != name) {
+                    DataAccess.setData("name" + num_of_events, name);//Save in local storage if there's any change
                     hasChanged = true;//Set as changed
                 }
-                if (getData("due" + num_of_events) != due) {
-                    setData("due" + num_of_events, due);//Save in local storage if there's any change
+                if (DataAccess.getData("due" + num_of_events) != due) {
+                    DataAccess.setData("due" + num_of_events, due);//Save in local storage if there's any change
                     hasChanged = true;//Set as changed
                 }
-                if (getData("status" + num_of_events) != status) {
-                    setData("status" + num_of_events, status);//Save in local storage if there's any change
+                if (DataAccess.getData("status" + num_of_events) != status) {
+                    DataAccess.setData("status" + num_of_events, status);//Save in local storage if there's any change
                     hasChanged = true;//Set as changed
                 }
                 ++num_of_events;
@@ -561,7 +561,7 @@ var Background = {
         var hasChanged;//Boolean variable for determining changes of the forum events
         var temp;
 
-        temp = getData("hidden_events") + "";
+        temp = DataAccess.getData("hidden_events") + "";
         hasChanged = false;
         events = textString.match(/overview forum/g).length;//Get number of available forum events
 
@@ -600,19 +600,19 @@ var Background = {
              Then store them in local storage.
              */
             if (temp.indexOf(url) == -1) {
-                if (getData("url" + num_of_events) != url) {
-                    setData("url" + num_of_events, url);//Save in local storage if there's any change
+                if (DataAccess.getData("url" + num_of_events) != url) {
+                    DataAccess.setData("url" + num_of_events, url);//Save in local storage if there's any change
                     hasChanged = true;//Set as changed
                 }
-                if (getData("name" + num_of_events) != name) {
-                    setData("name" + num_of_events, name);//Save in local storage if there's any change
+                if (DataAccess.getData("name" + num_of_events) != name) {
+                    DataAccess.setData("name" + num_of_events, name);//Save in local storage if there's any change
                     hasChanged = true;//Set as changed
                 }
 
-                if (getData("status" + num_of_events) != status) {
-                    setData("status" + num_of_events, status);//Save in local storage if there's any change
+                if (DataAccess.getData("status" + num_of_events) != status) {
+                    DataAccess.setData("status" + num_of_events, status);//Save in local storage if there's any change
                     hasChanged = true;//Set as changed
-                    setData("due" + num_of_events, "");//Save in local storage if there's any change
+                    DataAccess.setData("due" + num_of_events, "");//Save in local storage if there's any change
                     console.log(url);
                     console.log(status + "\n");
                 }
@@ -654,19 +654,19 @@ var Background = {
         /*
          Show desktop notification if enabled.
          */
-        if (getData("popup") == "true") {
-            if (getData("popup_time") == "Indefinitely") {
+        if (DataAccess.getData("popup") == "true") {
+            if (DataAccess.getData("popup_time") == "Indefinitely") {
                 notifyEver(name, due + "\n" + status + "\n", url);
             }
             else {
-                notify(name, due + "\n" + status + "\n", url, getData("popup_time"));
+                notify(name, due + "\n" + status + "\n", url, DataAccess.getData("popup_time"));
             }
         }
         /*
          Play audible notifications if enabled.
          */
-        if (getData("mute") == "false") {
-            getData("alert_sound");
+        if (DataAccess.getData("mute") == "false") {
+            playAlert(DataAccess.getData("alert_sound"));
         }
     },
 
@@ -682,19 +682,19 @@ var Background = {
         /*
          Show desktop notification if enabled.
          */
-        if (getData("popup") == "true") {
-            if (getData("popup_time") == "Indefinitely") {
+        if (DataAccess.getData("popup") == "true") {
+            if (DataAccess.getData("popup_time") == "Indefinitely") {
                 notifyEver(name, status + "\n", url);
             }
             else {
-                notify(name, status + "\n", url, getData("popup_time"));
+                notify(name, status + "\n", url, DataAccess.getData("popup_time"));
             }
         }
         /*
          Play audible notifications if enabled.
          */
-        if (getData("mute") == "false") {
-            playAlert(getData("alert_sound"));
+        if (DataAccess.getData("mute") == "false") {
+            playAlert(DataAccess.getData("alert_sound"));
         }
     },
 
