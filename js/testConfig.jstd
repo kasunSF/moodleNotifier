@@ -2,7 +2,6 @@ load:
   - /popup.js
   - /events.js
   - /dataAccess.js
-  - /background.js
 
 test:
   - test/popup.Test.js

@@ -85,7 +85,7 @@ var Popup = {
      */
     visitMoodle: function () {
         chrome.tabs.create({
-            "url": DataAccess.getData("moodle_url") + "my",
+            "url": "http://online.mrt.ac.lk/my/",
             "selected": true
         });
     }

@@ -2,68 +2,7 @@ var num_of_events;//This variable tracks the number of available events. This is
 var const_num_of_events;
 var loggedIn;
 
-
-/*
- This function called during start up of the extension
- */
-document.addEventListener('DOMContentLoaded', function () {
-    var connectionChecker;
-
-    loggedIn = false;
-
-    Background.initialize();
-    Background.backgroundProcess();
-
-    /*
-     Check for preferences change for each 10 seconds
-     */
-    preferenceChecker = setInterval(function () {
-        /*
-         If settings of the MoodleNotifier are changed, reload the extension and start to execute from the begining.
-         */
-        if (DataAccess.getData("configured") == "true") {
-            console.log("Preferences are changed!");
-            DataAccess.setData("configured", "false");
-            Background.backgroundProcess();
-        }
-    }, 10000);
-
-    /*
-     Run background process repeatedly.
-     */
-    connectionChecker = setInterval(function () {
-        Background.backgroundProcess();
-    }, DataAccess.getData("poll_interval"));
-
-});
-
-var Background = {
-    /*
-     This function initilaizes the extension.
-     */
-    initialize: function () {
-        var notified_urls;
-
-        /*
-         If currently there are no any notified events, clear the local storage data
-         */
-        notified_urls = "" + DataAccess.getData("notified_urls");
-        if (notified_urls.search("http") == -1) {
-            DataAccess.setData("notified_urls", "");
-        }
-
-        chrome.browserAction.setIcon({path: "img/icon_inactive.png"});
-        chrome.browserAction.setBadgeText({text: ""});
-
-        /*
-         Check for the first run of the extension.
-         If first run, open the options page to set user preferences.
-         */
-        if (DataAccess.getData("notFirstRun") != "true") {
-            Background.createTab("options.html");
-        }
-    },
-
+var BackgroundPassive = {
     /*
      This function is called repeatedly while extension is running.
      */
@@ -78,16 +17,16 @@ var Background = {
              */
             if (DataAccess.getData("remember") == "true") {//If automatic login enabled
                 console.log("Checking connection...");
-                hasConnection = Background.doesConnectionExist();//Check for connection to Moodle
+                hasConnection = BackgroundPassive.doesConnectionExist();//Check for connection to Moodle
                 /*
                  If Moodle is available and not logged in, login to the moodle automatically.
                  */
                 if (hasConnection && !loggedIn) {//If connection is avaiable
-                    Background.automaticLogin();//Login automatically
+                    BackgroundPassive.automaticLogin();//Login automatically
                     console.log("Logging in");
 
-                    Background.sleep(2000);//Wait 2 seconds before checking whether user is logged in or not
-                    loggedIn = Background.isLoggedIn();//Check whether user is logged in or not
+                    BackgroundPassive.sleep(2000);//Wait 2 seconds before checking whether user is logged in or not
+                    loggedIn = BackgroundPassive.isLoggedIn();//Check whether user is logged in or not
                 }
             }
             /*
@@ -97,8 +36,8 @@ var Background = {
             else {
                 console.log("Automatic login disabled");
                 console.log("Checking connection...");
-                hasConnection = Background.doesConnectionExist();//Check for connection to Moodle
-                loggedIn = Background.isLoggedIn();
+                hasConnection = BackgroundPassive.doesConnectionExist();//Check for connection to Moodle
+                loggedIn = BackgroundPassive.isLoggedIn();
             }
 
             /*
@@ -108,12 +47,12 @@ var Background = {
                 chrome.browserAction.setIcon({path: "img/icon_active.png"});
 
                 if (DataAccess.getData("reload") == "true") {
-                    Background.fetchEvents(true);//Show dektop and audible notifications
+                    BackgroundPassive.fetchEvents(true);//Show dektop and audible notifications
                     DataAccess.setData("reload", "false");
                     console.log("Desktop notifications are reloaded!");
                 }
                 else
-                    Background.fetchEvents(false);//Show dektop and audible notifications
+                    BackgroundPassive.fetchEvents(false);//Show dektop and audible notifications
             }
             /*
              If Moodle is not available, set as not logged in.
@@ -276,7 +215,7 @@ var Background = {
                     responseText = responseText.slice(position);
                     position = responseText.indexOf("box flush");
 
-                    Background.processEventTypes(responseText.slice(0, position), has_reload_request);//Send string to process
+                    BackgroundPassive.processEventTypes(responseText.slice(0, position), has_reload_request);//Send dtring to process
 
                     responseText = responseText.slice(position);
                     position = responseText.indexOf("<div");
@@ -337,19 +276,19 @@ var Background = {
              If event is an assignment, send the string to process as an assignment.
              */
             if (eventString.search("Assignment: <a") != -1) {
-                Background.processAssignments(eventString, has_reload_request);
+                BackgroundPassive.processAssignments(eventString, has_reload_request);
             }
             /*
              If event is a quiz, send the string to process as a quiz.
              */
             else if (eventString.search("Quiz: <a") != -1) {
-                Background.processQuizzes(eventString, has_reload_request);
+                BackgroundPassive.processQuizzes(eventString, has_reload_request);
             }
             /*
              If event is a forum post, send the string to process as a forum post.
              */
             else if (eventString.search("Forum: <a") != -1) {
-                Background.processForumPosts(eventString, has_reload_request);
+                BackgroundPassive.processForumPosts(eventString, has_reload_request);
             }
         }
     },
@@ -367,12 +306,9 @@ var Background = {
         var due;//Due date of the assignment
         var status;//Status of the assignment
         var hasChanged;//Boolean variable for determining changes of the assignment events
-        var hidden_urls;
-        var notified_urls;
+        var temp;
 
-        notified_urls = "" + DataAccess.getData("notified_urls");
-
-        hidden_urls = DataAccess.getData("hidden_events") + "";
+        temp = DataAccess.getData("hidden_events") + "";
         hasChanged = false;
         events = textString.match(/assign overview/g).length;//Get number of available assignments
 
@@ -419,7 +355,7 @@ var Background = {
              Check for assignments that are not sumbmitted yet and not hidden by the user.
              Then store them in local storage.
              */
-            if (status.search("Not submitted yet") != -1 && hidden_urls.indexOf(url) == -1) {
+            if (status.search("Not submitted yet") != -1 && temp.indexOf(url) == -1) {
                 if (DataAccess.getData("url" + num_of_events) != url) {
                     DataAccess.setData("url" + num_of_events, url);//Save in local storage if there's any change
                     hasChanged = true;//Set as changed
@@ -458,11 +394,7 @@ var Background = {
              */
             if (hasChanged) {
                 hasChanged = false;
-                if (notified_urls.indexOf(url) == -1){
-                    notified_urls = notified_urls + url +" ";
-                    DataAccess.setData("notified_urls", notified_urls);
-                    Background.showNotifications(name, due, status, url);
-                }
+                BackgroundPassive.showNotifications(name, due, status, url);
             }
         }
     },
@@ -479,12 +411,9 @@ var Background = {
         var due;//Due date of the quiz
         var status;//Status of the quiz
         var hasChanged;//Boolean variable for determining changes of the quiz events
-        var hidden_urls;
-        var notified_urls;
+        var temp;
 
-        notified_urls = "" + DataAccess.getData("notified_urls");
-
-        hidden_urls = DataAccess.getData("hidden_events") + "";
+        temp = DataAccess.getData("hidden_events") + "";
         hasChanged = false;
         events = textString.match(/quiz overview/g).length;//Get number of available quiz event.
 
@@ -531,7 +460,7 @@ var Background = {
              Check for quizzes that are not attempted yet and and not hidden by the user.
              Then store them in local storage.
              */
-            if (status.search("No attempts have been made") != -1 && hidden_urls.indexOf(url) == -1) {
+            if (status.search("No attempts have been made") != -1 && temp.indexOf(url) == -1) {
                 if (DataAccess.getData("url" + num_of_events) != url) {
                     DataAccess.setData("url" + num_of_events, url);//Save in local storage if there's any change
                     hasChanged = true;//Set as changed
@@ -570,11 +499,7 @@ var Background = {
              */
             if (hasChanged) {
                 hasChanged = false;
-                if (notified_urls.indexOf(url) == -1){
-                    notified_urls = notified_urls + url +" ";
-                    DataAccess.setData("notified_urls", notified_urls);
-                    Background.showNotifications(name, due, status, url);
-                }
+                BackgroundPassive.showNotifications(name, due, status, url);
             }
         }
     },
@@ -590,12 +515,9 @@ var Background = {
         var name;//Name of the forum
         var status;//Status of the forum
         var hasChanged;//Boolean variable for determining changes of the forum events
-        var hidden_urls;
-        var notified_urls;
+        var temp;
 
-        notified_urls = "" + DataAccess.getData("notified_urls");
-
-        hidden_urls = DataAccess.getData("hidden_events") + "";
+        temp = DataAccess.getData("hidden_events") + "";
         hasChanged = false;
         events = textString.match(/overview forum/g).length;//Get number of available forum events
 
@@ -633,7 +555,7 @@ var Background = {
              Check for forum posts that are not hidden by the user.
              Then store them in local storage.
              */
-            if (hidden_urls.indexOf(url) == -1) {
+            if (temp.indexOf(url) == -1) {
                 if (DataAccess.getData("url" + num_of_events) != url) {
                     DataAccess.setData("url" + num_of_events, url);//Save in local storage if there's any change
                     hasChanged = true;//Set as changed
@@ -671,11 +593,7 @@ var Background = {
              */
             if (hasChanged) {
                 hasChanged = false;
-                if (notified_urls.indexOf(url) == -1){
-                    notified_urls = notified_urls + url +" ";
-                    DataAccess.setData("notified_urls", notified_urls);
-                    Background.showForumNotifications(name, status, url);
-                }
+                BackgroundPassive.showForumNotifications(name, status, url);
             }
         }
     },
@@ -689,23 +607,6 @@ var Background = {
      url: URL to the assignment/quiz
      */
     showNotifications: function (name, due, status, url) {
-        /*
-         Show desktop notification if enabled.
-         */
-        if (DataAccess.getData("popup") == "true") {
-            if (DataAccess.getData("popup_time") == "Indefinitely") {
-                notifyEver(name, due + "\n" + status + "\n", url);
-            }
-            else {
-                notify(name, due + "\n" + status + "\n", url, DataAccess.getData("popup_time"));
-            }
-        }
-        /*
-         Play audible notifications if enabled.
-         */
-        if (DataAccess.getData("mute") == "false") {
-            playAlert(DataAccess.getData("alert_sound"));
-        }
     },
 
     /*
@@ -717,23 +618,6 @@ var Background = {
      url: URL to the forum post
      */
     showForumNotifications: function (name, status, url) {
-        /*
-         Show desktop notification if enabled.
-         */
-        if (DataAccess.getData("popup") == "true") {
-            if (DataAccess.getData("popup_time") == "Indefinitely") {
-                notifyEver(name, status + "\n", url);
-            }
-            else {
-                notify(name, status + "\n", url, DataAccess.getData("popup_time"));
-            }
-        }
-        /*
-         Play audible notifications if enabled.
-         */
-        if (DataAccess.getData("mute") == "false") {
-            playAlert(DataAccess.getData("alert_sound"));
-        }
     },
 
     /*

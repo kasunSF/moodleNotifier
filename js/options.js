@@ -142,10 +142,11 @@ function saveConfigData() {
  JavaScript function to load configuration data to options page
  */
 function loadConfigData() {
+    testSavedData();
     //Do not load config data during the first run of the extension.
     if (DataAccess.getData("notFirstRun") != "true") {
         console.log("First run");
-        document.getElementById('url').value = "https://";
+        document.getElementById('url').value = "https://online.mrt.ac.lk";
     }
     /*
      Retrive user preferences from local storage.
@@ -158,10 +159,7 @@ function loadConfigData() {
             document.getElementById('alert').value = DataAccess.getData("alert_sound");
             document.getElementById('username').value = DataAccess.getData("username");
 
-            if (DataAccess.getData("moodle_url") == "")
-                document.getElementById('url').value = "https://";
-            else
-                document.getElementById('url').value = DataAccess.getData("moodle_url");
+            document.getElementById('url').value = "https://online.mrt.ac.lk";
 
 
             if (DataAccess.getData("mute") == "false")
@@ -242,15 +240,15 @@ function autoformatURL() {
  This is a test function for getting saved data and compare with given inputs.
  */
 function testSavedData() {
-    console.log("url: " + DataAccess.getData("moodle_url"));
-    console.log("intrvl: " + DataAccess.getData("poll_interval"));
+    console.log("Moodle url: " + DataAccess.getData("moodle_url"));
+    console.log("Polling interval: " + DataAccess.getData("poll_interval"));
     console.log("mute: " + DataAccess.getData("mute"));
-    console.log("alert: " + DataAccess.getData("alert_sound"));
-    console.log("popup: " + DataAccess.getData("popup"));
-    console.log("time: " + DataAccess.getData("popup_time"));
-    console.log("un: " + DataAccess.getData("username"));
+    console.log("Alert sound: " + DataAccess.getData("alert_sound"));
+    console.log("Desktop pop-up: " + DataAccess.getData("popup"));
+    console.log("Desktop pop-up time out: " + DataAccess.getData("popup_time"));
+    console.log("Username: " + DataAccess.getData("username"));
     //console.log("pw: " + CryptoJS.RC4Drop.decrypt(DataAccess.getData("password"), "Vw7F3ZcPqJwLqerFoF3sNDAmIDsB", { drop: 3072 / 4 }).toString(CryptoJS.enc.Utf8));
-    console.log("remember: " + DataAccess.getData("remember"));
+    console.log("Remember login: " + DataAccess.getData("remember"));
 }
 
 function showSaveAlert() {

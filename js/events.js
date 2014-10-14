@@ -4,6 +4,8 @@
 document.addEventListener('DOMContentLoaded', function () {
     Events.preparePage();
 
+    console.log(DataAccess.getData("hidden_events"));
+
     try {
         hide_button = document.getElementById('hide');//Hide button
         hide_button.addEventListener('click', Events.hideEvents);//Add event listener to Hide button
@@ -92,15 +94,14 @@ var Events = {
     hideEvents: function () {
         var checkboxes;
         var hidden_urls;
-        var temp;
 
         checkboxes = document.querySelectorAll('input');//Get menu list
 
         /*
          If cunrrent there are no any hidden events, clear the local storage data
          */
-        var temp = "" + DataAccess.getData("hidden_events");
-        if (temp.search("http") == -1) {
+        var hidden_urls = "" + DataAccess.getData("hidden_events");
+        if (hidden_urls.search("http") == -1) {
             DataAccess.setData("hidden_events", "");
         }
 
@@ -125,11 +126,10 @@ var Events = {
         }
 
         /*
-         Reload the events page automatically after 15.1 seconds when preferences are saved.
+         Reload the events page.
          */
-        setTimeout(function () {
-            location.reload(true);
-        }, 15100);
+        BackgroundPassive.backgroundProcess();
+        location.reload(true);
     },
 
     /*
@@ -148,11 +148,10 @@ var Events = {
             }
 
             /*
-             Reload the events page automatically after 15.1 seconds when preferences are saved.
+             Reload the events page.
              */
-            setTimeout(function () {
-                location.reload(true);
-            }, 15100);
+            BackgroundPassive.backgroundProcess();
+            location.reload(true);
         } catch (e) {
             console.log(e);
         }

@@ -5,3 +5,15 @@ popupTest.prototype.testRefresh = function () {
     var result = DataAccess.getData("configured");
     assertEquals(result, "true");
 };
+
+popupTest.prototype.testVisitMoodle = function () {
+    Popup.refresh();
+    var result = DataAccess.getData("configured");
+    assertEquals(result, "true");
+};
+
+popupTest.prototype.testAllEvents = function () {
+    Popup.refresh();
+    var result = DataAccess.getData("configured");
+    assertEquals(result, "true");
+};
