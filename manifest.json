@@ -1,26 +1,21 @@
 {
     "manifest_version": 2,
-    "name": "Moodle Notifier",
+    "name": "SiteCat",
     "version": "1.0",
-    "description": "Get desktop notifications from Moodle for assignments, quizzes and forum posts.",
+    "description": "Get intelligent suggestions for the current site reference",
     "icons": {
-        "48": "img/icon48.png",
-        "inactive": "img/icon_inactive.png",
-        "active": "img/icon_active.png",
-        "16": "img/icon16.png"
+        "48": "img/logo.png",
+        "inactive": "img/logo.png",
+        "active": "img/logo.png",
+        "16": "img/logo.png"
     },
 
     "browser_action": {
-        "default_icon": "/img/icon_inactive.png",
-        "default_title": "Moodle Notifier",
+        "default_icon": "/img/logo.png",
+        "default_title": "Site Categorizer",
         "default_popup": "popup.html"
     },
 
-    "background": {
-        "page": "background.html"
-    },
-
-    "options_page": "options.html",
 
     "permissions": [
         "notifications", "tabs", "storage", "http://*/*", "https://*/*"
