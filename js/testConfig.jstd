@@ -1,0 +1,10 @@
+load:
+  - /popup.js
+  - /events.js
+  - /dataAccess.js
+
+test:
+  - test/popup.Test.js
+  - test/events.Test.js
+  - test/dataAccess.Test.js
+  - test/background.Test.js
