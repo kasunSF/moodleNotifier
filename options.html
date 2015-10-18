@@ -7,13 +7,13 @@
 
     <script type="text/javascript" src="js/options.js"></script>
     <script type="text/javascript" src="js/dataAccess.js"></script>
-    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/lib/jquery-2.1.4.min.js"></script>
     <script src="js/crypto.js"></script>
 </head>
 <body>
 
 <div id="main">
-    <h1 class="title"><font color="#fea727">Moodle Notifier 1.0</font></h1>
+    <h1 class="title"><font color="#fea727">MoodleNotifier 1.1  </font></h1>
 
     <form>
         <table>
@@ -23,36 +23,36 @@
 
                     <h1>Options</h1>
 
-                    <p>Thank you for installing Moodle Notifier. Please configure the extension to fit your
-                        requirements.</p>
+                    <p>Thank you for installing MoodleNotifier. Please configure the extension according to your
+                        preferences.</p>
                 </td>
             </tr>
             <tr>
                 <td style="padding: 0">
                     <ul class="menu">
-                        <li id="0" title="View general settings">General</li>
+                        <li id="0" class="active" title="View general settings">General</li>
                         <li id="1" title="View notification settings">Notifications</li>
                         <li id="2" title="View account settings">Accounts</li>
                         <li id="3" title="View account settings">About</li>
                     </ul>
 
-                    <div id="content_0" class="content invisible">
+                    <div id="content_0" class="content">
                         <h2>General settings</h2>
                         URL for moodle<br><input type="text" id="url" disabled
-                                                 title="Enter URL for the moodle. eg: https://online.mrt.ac.lk"/>
+                                                 title="URL of UOM moodle"/>
                         <label for="url"></label><br><br>
                         Polling interval:
                         <select id="poll"title="Time interval between cheking of new events">
-                            <option id="poll_15000" value="15000">15 seconds</option>
-                            <option id="poll_300000" value="300000">5 minutes</option>
-                            <option id="poll_900000" value="900000">15 minutes</option>
-                            <option id="poll_1800000" value="1800000">30 minutes</option>
-                            <option id="poll_3600000" value="3600000">1 hour</option>
-                            <option id="poll_18000000" value="18000000">5 hours</option>
+                            <option id="poll_1" value="1">1 minute</option>
+                            <option id="poll_5" value="5">5 minutes</option>
+                            <option id="poll_15" value="15">15 minutes</option>
+                            <option id="poll_30" value="30">30 minutes</option>
+                            <option id="poll_60" value="60">1 hour</option>
+                            <option id="poll_300" value="300">5 hours</option>
                         </select>
                     </div>
 
-                    <div id="content_1" class="content invisible">
+                    <div id="content_1" class="content" style="display: none">
                         <h2>Notification settings</h2>
                         <fieldset>
                             <legend>Sound notifications</legend>
@@ -91,7 +91,7 @@
                             </select>
                         </fieldset>
                     </div>
-                    <div id="content_2" class="content invisible">
+                    <div id="content_2" class="content" style="display: none">
                         <h2>Account settings</h2>
                         <fieldset>
                             <legend>Account details</legend>
@@ -101,7 +101,7 @@
                                 size="2pt">Keep me signed in</font><br>
                         </fieldset>
                     </div>
-                    <div id="content_3" class="content invisible">
+                    <div id="content_3" class="content" style="display: none">
                         <h2>About Moodle Notifier</h2>
 
                         <p>Moodle Notifier is an extension for Google Chrome web browser <br>

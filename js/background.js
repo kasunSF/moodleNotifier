@@ -137,7 +137,7 @@ var Background = {
         var password;
         var xmlhttp;
 
-        password = CryptoJS.RC4Drop.decrypt(DataAccess.getData("password"), "Vw7F3ZcPqJwLqerFoF3sNDAmIDsB", { drop: 3072 / 4 }).toString(CryptoJS.enc.Utf8);//Decrypt password
+        password = CryptoJS.RC4Drop.decrypt(DataAccess.getData("password"), "Vw7F3ZcPqJwLqerFoF3sNDAmIDsB", {drop: 3072 / 4}).toString(CryptoJS.enc.Utf8);//Decrypt password
         xmlhttp = new XMLHttpRequest();
 
         /*
@@ -287,11 +287,14 @@ var Background = {
             /*
              If there's at least one event, show number of available events at extension button.
              */
-            if (num_of_events > 0)
+            if (num_of_events > 0) {
                 chrome.browserAction.setBadgeText({text: "" + num_of_events});
-            else if (num_of_events == 0)
+                chrome.browserAction.setTitle({title: "You have " + num_of_events + " tasks due"});
+            }
+            else if (num_of_events == 0) {
                 chrome.browserAction.setBadgeText({text: ""});
-
+                chrome.browserAction.setTitle({title: "MoodleNotifier: No connection"});
+            }
             /*
              Keep the track of available, unattempted events in a variable which is not subjected in incrementing/ decrementing/ resetting
              */
@@ -458,8 +461,8 @@ var Background = {
              */
             if (hasChanged) {
                 hasChanged = false;
-                if (notified_urls.indexOf(url) == -1){
-                    notified_urls = notified_urls + url +" ";
+                if (notified_urls.indexOf(url) == -1) {
+                    notified_urls = notified_urls + url + " ";
                     DataAccess.setData("notified_urls", notified_urls);
                     Background.showNotifications(name, due, status, url);
                 }
@@ -570,8 +573,8 @@ var Background = {
              */
             if (hasChanged) {
                 hasChanged = false;
-                if (notified_urls.indexOf(url) == -1){
-                    notified_urls = notified_urls + url +" ";
+                if (notified_urls.indexOf(url) == -1) {
+                    notified_urls = notified_urls + url + " ";
                     DataAccess.setData("notified_urls", notified_urls);
                     Background.showNotifications(name, due, status, url);
                 }
@@ -671,8 +674,8 @@ var Background = {
              */
             if (hasChanged) {
                 hasChanged = false;
-                if (notified_urls.indexOf(url) == -1){
-                    notified_urls = notified_urls + url +" ";
+                if (notified_urls.indexOf(url) == -1) {
+                    notified_urls = notified_urls + url + " ";
                     DataAccess.setData("notified_urls", notified_urls);
                     Background.showForumNotifications(name, status, url);
                 }
@@ -694,7 +697,7 @@ var Background = {
          */
         if (DataAccess.getData("popup") == "true") {
             if (DataAccess.getData("popup_time") == "Indefinitely") {
-                notifyEver(name, due + "\n" + status + "\n", url);
+                notifyEvent(name, due + "\n" + status + "\n", url);
             }
             else {
                 notify(name, due + "\n" + status + "\n", url, DataAccess.getData("popup_time"));
@@ -722,7 +725,7 @@ var Background = {
          */
         if (DataAccess.getData("popup") == "true") {
             if (DataAccess.getData("popup_time") == "Indefinitely") {
-                notifyEver(name, status + "\n", url);
+                notifyEvent(name, status + "\n", url);
             }
             else {
                 notify(name, status + "\n", url, DataAccess.getData("popup_time"));

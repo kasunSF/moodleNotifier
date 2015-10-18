@@ -44,7 +44,7 @@ function notify(title, body, url, timeout) {
  body: Notification body
  url: Redirect url on click
  */
-function notifyEver(title, body, url) {
+function notifyEvent(title, body, url) {
     if (window.webkitNotifications) {
         notification = webkitNotifications.createNotification(title, body, "/img/icon_active.png");
     } else {

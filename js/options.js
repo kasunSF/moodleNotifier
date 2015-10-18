@@ -29,20 +29,12 @@ document.addEventListener('DOMContentLoaded', function () {
  This controls the visibility of menus in options page.
  */
 function showContent(event) {
-    $('.content').each(function (index) {
-        if (!($(this).hasClass('invisible')))
-            $(this).addClass('invisible');
-
-        if (index == event.target.id)
-            $(this).removeClass('invisible');
+    $('.content').filter(function() {return $(this).css('display') == 'block'}).slideUp("slow", function(){
+        $("#content_"+event.target.id).slideDown("slow");
     });
 
-    $('ul.menu > li > a').each(function (index) {
-        $(this).removeClass('active');
-
-        if (index == event.target.id)
-            $(this).addClass('active');
-    });
+    $('ul.menu > li').removeClass('active');
+    $('#'+event.target.id).addClass('active');
 }
 
 /*
@@ -107,7 +99,7 @@ function saveConfigData() {
          Otherwise clear previously saved password if available
          */
         if (remember)
-            DataAccess.setData("password", CryptoJS.RC4Drop.encrypt(password, "Vw7F3ZcPqJwLqerFoF3sNDAmIDsB", { drop: 3072 / 4 }));
+            DataAccess.setData("password", CryptoJS.RC4Drop.encrypt(password, "Vw7F3ZcPqJwLqerFoF3sNDAmIDsB", {drop: 3072 / 4}));
         else
             DataAccess.setData("password", "");
 

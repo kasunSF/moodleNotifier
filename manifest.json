@@ -4,10 +4,11 @@
     "version": "1.0",
     "description": "Get desktop notifications from Moodle for assignments, quizzes and forum posts.",
     "icons": {
+        "16": "img/icon16.png",
         "48": "img/icon48.png",
+        "128": "img/icon128.png",
         "inactive": "img/icon_inactive.png",
-        "active": "img/icon_active.png",
-        "16": "img/icon16.png"
+        "active": "img/icon_active.png"
     },
 
     "browser_action": {
@@ -23,7 +24,7 @@
     "options_page": "options.html",
 
     "permissions": [
-        "notifications", "tabs", "storage", "http://*/*", "https://*/*"
+        "notifications", "tabs", "alarms", "storage", "http://online.mrt.ac.lk/*", "https://online.mrt.ac.lk/*"
     ]
 
 }
