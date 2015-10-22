@@ -25,7 +25,7 @@
     "options_page": "options.html",
 
     "permissions": [
-        "notifications", "tabs", "alarms", "storage", "http://online.mrt.ac.lk/*", "https://online.mrt.ac.lk/*", "http://localhost/*"
+        "notifications", "tabs", "alarms", "storage", "http://online.mrt.ac.lk/*", "https://online.mrt.ac.lk/*"
     ]
 
 }
