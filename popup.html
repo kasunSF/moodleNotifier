@@ -4,6 +4,7 @@
     <meta charset="utf-8"/>
     <title>Moodle Notifier</title>
     <link rel="stylesheet" media="all" href="css/style.css" type="text/css">
+    <script type="text/javascript" src="js/lib/jquery-2.1.4.min.js"></script>
     <script type="text/javascript" src="js/popup.js"></script>
     <script type="text/javascript" src="js/dataAccess.js"></script>
 </head>
@@ -17,7 +18,7 @@
         <div class="options">
             <ul>
                 <a href="#">
-                    <li id="edit_events" title="Edit events">Refresh</li>
+                    <li id="edit_events" title="Show hidden events">Show hidden events</li>
                     <li id="refresh" title="Refresh">Refresh</li>
                 </a>
             </ul>
@@ -25,11 +26,12 @@
         <div class="clear"></div>
     </header>
 
-    <div class="content" id="event_container"></div>
+    <div class="content" id="event_container">
+    </div>
 
     <footer>
         <p style="padding-left: 0px;">
-            Moodle Notifier&trade; &nbsp;
+            MoodleNotifier&trade; &nbsp;
         </p>
     </footer>
 </div>

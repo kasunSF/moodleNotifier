@@ -6,12 +6,12 @@ document.addEventListener('DOMContentLoaded', function () {
     var menu;
     var save_button;
     var play_button;
-    var url_input;
+    //var url_input;
 
     menu = document.querySelectorAll('li');//Get menu list
     save_button = document.getElementById('submit');//Save button
-    play_button = document.getElementById('play');//Alert previewe button
-    url_input = document.getElementById('url');//Alert previewe button
+    play_button = document.getElementById('play');//Alert preview button
+    //url_input = document.getElementById('url');//Alert preview button
 
     for (var i = 0; i < menu.length; ++i) {
         menu[i].addEventListener('click', showContent);//Add event listener to the menu
@@ -135,10 +135,10 @@ function saveConfigData() {
  */
 function loadConfigData() {
     testSavedData();
+    document.getElementById('url').value = "https://online.mrt.ac.lk/";
     //Do not load config data during the first run of the extension.
     if (DataAccess.getData("notFirstRun") != "true") {
         console.log("First run");
-        document.getElementById('url').value = "https://online.mrt.ac.lk";
     }
     /*
      Retrive user preferences from local storage.
@@ -150,9 +150,6 @@ function loadConfigData() {
             document.getElementById('popup_timeout').value = DataAccess.getData("popup_time");
             document.getElementById('alert').value = DataAccess.getData("alert_sound");
             document.getElementById('username').value = DataAccess.getData("username");
-
-            document.getElementById('url').value = "https://online.mrt.ac.lk";
-
 
             if (DataAccess.getData("mute") == "false")
                 document.getElementById('mute').checked = false;

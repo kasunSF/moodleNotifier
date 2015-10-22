@@ -1,159 +1,113 @@
+var eventElement = "<article class='underline' id='event_id'><button class='button' id='event_unhide' style='float: right;'>Unhide</button><h4><a href='' target='new' id='event_url'>Name</a></h4><p id='event_status'>Status</p><div class='date'><span id='event_due'>Date</span></div></article>";
+var eventContainer;
 /*
  This function is called when popup page is loaded.
  */
 document.addEventListener('DOMContentLoaded', function () {
-    Events.preparePage();
-
-    console.log(DataAccess.getData("hidden_events"));
+    eventContainer = $("#event_container");
+    preparePage();
 
     try {
-        hide_button = document.getElementById('hide');//Hide button
-        hide_button.addEventListener('click', Events.hideEvents);//Add event listener to Hide button
-
-        unhide_button = document.getElementById('unhide');//Hide button
-        unhide_button.addEventListener('click', Events.unhideEvents);//Add event listener to Hide button
+        $("button[id^='event_unhide']").bind("click", unhideEvent);
     } catch (e) {
         console.log(e);
     }
 });
 
-var Events = {
-    /*
-     This function prepares the events page dynamically adding savailable events.
-     */
-    preparePage: function () {
-        var event_container;
-        var num_of_events;
-        var url;
-        var name;
-        var status;
-        var due;
-        var hide_button;
-        var unhide_button;
+/*
+ This function prepares the popup page dynamically adding savailable events.
+ */
+function preparePage() {
+    prepareAssignments();
+    prepareQuizzes();
+    prepareForumPosts();
+    showNoEvent();
+}
 
-        try {
-            event_container = document.getElementById('event_container');//Get location of event container in events.html
-            unhide_button = "<br><br><button type='button' class='button' id='unhide' style='float: right;'title='Unhide all events'>Unhide All</button>";//Unhide button
-            hide_button = "<button type='button' class='button' id='hide' style='float: right;'title='Hide selected events'>Hide</button>";//Hide button
-            button_alert = "<p id='save_alert' class='hidden'><font color='#fea727' size='2'>Preferences are saved! <br>This window will be updated automatically in 15 seconds.</font></p><br><br><br>"
-            ''
-            num_of_events = DataAccess.getData("num_of_events");//Get number of available events.
-
-            /*
-             Get html tag of event_container, URL, name, staus and due date of each event and send to loadEvent function.
-             */
-            for (var i = 0; i < num_of_events; ++i) {
-                url = DataAccess.getData("url" + i);
-                name = DataAccess.getData("name" + i);
-                status = DataAccess.getData("status" + i);
-                due = DataAccess.getData("due" + i);
-                Events.loadEvent(event_container, url, name, status, due);
-            }
-            event_container.innerHTML = event_container.innerHTML + unhide_button + hide_button + button_alert;//Place the hide and unhide buttons at the bottom of the events page.
-        } catch (e) {
-            console.log(e);
+function prepareAssignments() {
+    eventContainer.append("<h3 id='assignment_header' style='text-align: center;color: #a8a8a8;display: none'>Assignments</h3>");
+    var assignmentIdList = DataAccess.getData("assignment_id_list");
+    assignmentIdList = assignmentIdList.substring(0, assignmentIdList.length - 1).split(",");
+    assignmentIdList.forEach(function (assignmentID) {
+        if (assignmentID != "" && DataAccess.getData("hidden_events").search(assignmentID) != -1) {
+            loadEvent(assignmentID);
+            $("#assignment_header").show();
         }
-    },
+    });
+}
 
-    /*
-     This function loads each event to the events.html page with a check box for each event.
-     */
-    loadEvent: function (event_container, url, name, status, due) {
-        /*
-         Following string variables contains HTML code that are used to create events page dynamically.
-         */
-        var before_checkbox_id;
-        var before_event_url;
-        var before_event_name;
-        var before_event_status;
-        var before_event_due;
-        var final_html;
-
-        before_checkbox_id = "<article class='underline'><h4 ><input type='checkbox' id='";
-        before_event_url = "'><a href='";
-        before_event_name = "' target='new'>";
-        before_event_status = "</a></h4><p>";
-        before_event_due = "</p><div class='date'><span>";
-        final_html = "</span></div></article>";
-
-        /*
-         Organize HTML code and update events page
-         */
-        event_container.innerHTML = event_container.innerHTML +
-            before_checkbox_id + url +
-            before_event_url + url +
-            before_event_name + name +
-            before_event_status + status +
-            before_event_due + due +
-            final_html;
-    },
-
-    /*
-     This function get the URL of unwanted events from the available events using user preference and stop notifications for them.
-     */
-    hideEvents: function () {
-        var checkboxes;
-        var hidden_urls;
-
-        checkboxes = document.querySelectorAll('input');//Get menu list
-
-        /*
-         If cunrrent there are no any hidden events, clear the local storage data
-         */
-        var hidden_urls = "" + DataAccess.getData("hidden_events");
-        if (hidden_urls.search("http") == -1) {
-            DataAccess.setData("hidden_events", "");
+function prepareQuizzes() {
+    eventContainer.append("<h3 id='quiz_header' style='text-align: center;color: #a8a8a8;display: none;padding-top: 10px;'>Quizzes</h3>");
+    var quizIdList = DataAccess.getData("quiz_id_list");
+    quizIdList = quizIdList.substring(0, quizIdList.length - 1).split(",");
+    quizIdList.forEach(function (quizID) {
+        if (quizID != "" && DataAccess.getData("hidden_events").search(quizID) != -1) {
+            loadEvent(quizID);
+            $("#quiz_header").show();
         }
+    });
+}
 
-        /*
-         Obtain URLs for unwanted events and store them in local storage.
-         */
-        for (var i = 0; i < checkboxes.length; ++i) {
-            if (checkboxes[i].checked) {
-                hidden_urls = DataAccess.getData("hidden_events") + checkboxes[i].id + " ";//Append URL to hidden events
-                DataAccess.setData("hidden_events", hidden_urls);
-            }
+function prepareForumPosts() {
+    eventContainer.append("<h3 id='forum_header' style='text-align: center;color: #a8a8a8;display: none;padding-top: 10px;'>Forum Posts</h3>");
+    var forumIdList = DataAccess.getData("forum_id_list");
+    forumIdList = forumIdList.substring(0, forumIdList.length - 1).split(",");
+    forumIdList.forEach(function (forumID) {
+        if (forumID != "" && DataAccess.getData("hidden_events").search(forumID) != -1) {
+            loadEvent(forumID);
+            $("#forum_header").show();
         }
-        console.log("Following events are hidden.");
-        console.log(DataAccess.getData("hidden_events"));
+    });
+}
 
-        /*
-         Alert user that preferences are saved.
-         */
-        var item = document.getElementById('save_alert');
-        if (item.className == 'hidden') {
-            item.className = 'visible';
+/*
+ Load all available events to popup page
+ */
+function loadEvent(eventId) {
+    var event_url = DataAccess.getData(eventId + "-url");
+    var event_name = DataAccess.getData(eventId + "-name");
+    var event_status = DataAccess.getData(eventId + "-status");
+    var event_due = DataAccess.getData(eventId + "-due");
+
+    //console.log(event_url);
+    //console.log(event_name);
+    //console.log(event_status);
+    //console.log(event_due);
+
+    eventContainer.append(eventElement);
+    $("#event_id").attr("id", eventId);
+    $("#event_url").text(event_name).attr("href", event_url).attr("id", "event_url-" + eventId);
+    $("#event_status").text(event_status).attr("id", "event_status-" + eventId);
+    $("#event_due").text(event_due).attr("id", "event_due-" + eventId);
+    $("#event_unhide").attr("id", "event_unhide_" + eventId).attr("event", eventId);
+}
+
+function unhideEvent(event) {
+    var eventID = $(event.toElement).attr("event");
+    var hiddenEventList = DataAccess.getData("hidden_events");
+    if (hiddenEventList.search(eventID) != -1) {
+        DataAccess.setData("hidden_events", hiddenEventList.replace(eventID + ",",""));
+        DataAccess.setData("configured", "true");
+    }
+    var eventElement = $("#" + eventID);
+    eventElement.slideUp("slow", function () {
+        eventElement.remove();
+        if (eventID.search("assign") != -1 && eventContainer.find("article[id^='assign']").length == 0) {
+            $("#assignment_header").slideUp("slow", showNoEvent());
         }
+        if (eventID.search("quiz") != -1 && eventContainer.find("article[id^='quiz']").length == 0) {
+            $("#quiz_header").slideUp("slow", showNoEvent());
+        }
+        if (eventID.search("forum") != -1 && eventContainer.find("article[id^='forum']").length == 0) {
+            $("#forum_header").slideUp("slow", showNoEvent());
+        }
+    });
+}
 
-        /*
-         Reload the events page.
-         */
-        BackgroundPassive.backgroundProcess();
-        location.reload(true);
-    },
-
-    /*
-     This function unhides all the hidden events by clearing hidden URLs in local storage.
-     */
-    unhideEvents: function () {
-        try {
-            DataAccess.setData("hidden_events", "");
-
-            /*
-             Alert user that preferences are saved.
-             */
-            var item = document.getElementById('save_alert');
-            if (item.className == 'hidden') {
-                item.className = 'visible';
-            }
-
-            /*
-             Reload the events page.
-             */
-            BackgroundPassive.backgroundProcess();
-            location.reload(true);
-        } catch (e) {
-            console.log(e);
+function showNoEvent() {
+    if (eventContainer.find("article").length == 0) {
+        if (DataAccess.getData("hidden_events") == "") {
+            eventContainer.append("<article class='underline' id='event_id'><h4>No hidden events!<br>You may hide any unwanted event.</h4></article>")
         }
     }
 }

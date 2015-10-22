@@ -8,12 +8,13 @@
         "48": "img/icon48.png",
         "128": "img/icon128.png",
         "inactive": "img/icon_inactive.png",
-        "active": "img/icon_active.png"
+        "active": "img/icon_active.png",
+        "sleep": "img/icon_sleep.png"
     },
 
     "browser_action": {
-        "default_icon": "/img/icon_inactive.png",
-        "default_title": "Moodle Notifier",
+        "default_icon": "img/icon_sleep.png",
+        "default_title": "MoodleNotifier",
         "default_popup": "popup.html"
     },
 
@@ -24,7 +25,7 @@
     "options_page": "options.html",
 
     "permissions": [
-        "notifications", "tabs", "alarms", "storage", "http://online.mrt.ac.lk/*", "https://online.mrt.ac.lk/*"
+        "notifications", "tabs", "alarms", "storage", "http://online.mrt.ac.lk/*", "https://online.mrt.ac.lk/*", "http://localhost/*"
     ]
 
 }

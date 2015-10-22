@@ -1,755 +1,382 @@
-var num_of_events;//This variable tracks the number of available events. This is used to show available events in extension button and prevent duplicated notifications.
-var const_num_of_events;
-var loggedIn;
-
-
-/*
- This function called during start up of the extension
+/**
+ * Created by Kasun on 10/18/2015.
  */
+var loggedIn;
+var hadConnection = false;
+var numOfAssignments;
+var numOfQuizzes;
+var numOfForumPosts;
+var terminated;
+
 document.addEventListener('DOMContentLoaded', function () {
-    var connectionChecker;
-
-    loggedIn = false;
-
-    Background.initialize();
-    Background.backgroundProcess();
-
-    /*
-     Check for preferences change for each 10 seconds
-     */
-    preferenceChecker = setInterval(function () {
-        /*
-         If settings of the MoodleNotifier are changed, reload the extension and start to execute from the begining.
-         */
-        if (DataAccess.getData("configured") == "true") {
-            console.log("Preferences are changed!");
-            DataAccess.setData("configured", "false");
-            Background.backgroundProcess();
-        }
-    }, 10000);
-
-    /*
-     Run background process repeatedly.
-     */
-    connectionChecker = setInterval(function () {
-        Background.backgroundProcess();
-    }, DataAccess.getData("poll_interval"));
-
+    initialize();
 });
 
-var Background = {
-    /*
-     This function initilaizes the extension.
-     */
-    initialize: function () {
-        var notified_urls;
+function initialize() {
+    loggedIn = false;
+    terminated = false;
+    initializeLocalStorage();
 
-        /*
-         If currently there are no any notified events, clear the local storage data
-         */
-        notified_urls = "" + DataAccess.getData("notified_urls");
-        if (notified_urls.search("http") == -1) {
-            DataAccess.setData("notified_urls", "");
-        }
+    var connection_check_timeout = 0.1;
+    var preference_check_timeout = 0.1;
+    chrome.browserAction.setIcon({path: "img/icon_inactive.png"});
 
-        chrome.browserAction.setIcon({path: "img/icon_inactive.png"});
-        chrome.browserAction.setBadgeText({text: ""});
+    chrome.alarms.create('connectionChecker', {periodInMinutes: connection_check_timeout});
+    chrome.alarms.create('preferenceChecker', {periodInMinutes: preference_check_timeout});
+    chrome.alarms.onAlarm.addListener(onAlarmm);
 
-        /*
-         Check for the first run of the extension.
-         If first run, open the options page to set user preferences.
-         */
-        if (DataAccess.getData("notFirstRun") != "true") {
-            Background.createTab("options.html");
-        }
-    },
-
-    /*
-     This function is called repeatedly while extension is running.
-     */
-    backgroundProcess: function () {
-        var hasConnection;
-        hasConnection = false;
-
-        if (DataAccess.getData("notFirstRun") == "true") {
-
-            /*
-             If automatic login is enabled, check availability of Moodle for each 10 seconds.
-             */
-            if (DataAccess.getData("remember") == "true") {//If automatic login enabled
-                console.log("Checking connection...");
-                hasConnection = Background.doesConnectionExist();//Check for connection to Moodle
-                /*
-                 If Moodle is available and not logged in, login to the moodle automatically.
-                 */
-                if (hasConnection && !loggedIn) {//If connection is avaiable
-                    Background.automaticLogin();//Login automatically
-                    console.log("Logging in");
-
-                    Background.sleep(2000);//Wait 2 seconds before checking whether user is logged in or not
-                    loggedIn = Background.isLoggedIn();//Check whether user is logged in or not
-                }
-            }
-            /*
-             If automatic login is disabled, check whether user is logged in to the moodle for every 10 seconds.
-             This uses browser cookies.
-             */
-            else {
-                console.log("Automatic login disabled");
-                console.log("Checking connection...");
-                hasConnection = Background.doesConnectionExist();//Check for connection to Moodle
-                loggedIn = Background.isLoggedIn();
-            }
-
-            /*
-             If Moodle is available and logged in, fetch upcoming events.
-             */
-            if (hasConnection && loggedIn) {//If connection is avaiable
-                chrome.browserAction.setIcon({path: "img/icon_active.png"});
-
-                if (DataAccess.getData("reload") == "true") {
-                    Background.fetchEvents(true);//Show dektop and audible notifications
-                    DataAccess.setData("reload", "false");
-                    console.log("Desktop notifications are reloaded!");
-                }
-                else
-                    Background.fetchEvents(false);//Show dektop and audible notifications
-            }
-            /*
-             If Moodle is not available, set as not logged in.
-             Then whenever the connection become available, this cause re-check for logged in.
-             */
-            else if (!hasConnection) {//If connection is not available, set as not logged in.
-                chrome.browserAction.setIcon({path: "img/icon_inactive.png"});
-                loggedIn = false;
-            }
-            else {
-                chrome.browserAction.setIcon({path: "img/icon_inactive.png"});
-            }
-        }
-    },
-
-    /*
-     This function creates an html form.
-     Then fill it with login detils that are provided by the user and login to Moodle automatically.
-     */
-    automaticLogin: function () {
-        var password;
-        var xmlhttp;
-
-        password = CryptoJS.RC4Drop.decrypt(DataAccess.getData("password"), "Vw7F3ZcPqJwLqerFoF3sNDAmIDsB", {drop: 3072 / 4}).toString(CryptoJS.enc.Utf8);//Decrypt password
-        xmlhttp = new XMLHttpRequest();
-
-        /*
-         Create XML http request to send login information to the Moodle.
-         */
-        xmlhttp.open("POST", DataAccess.getData("moodle_url") + 'login/index.php', true);
-        xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xmlhttp.send("username= " + DataAccess.getData("username") + "& password=" + password);
-
-        console.log("Submitted!");
-    },
-
-    /*
-     Check whether connection to moodle is available or not.
-     Return true if connection is available.
-     Otherwise returns false.
-
-     Note: This function checks the availability of a page of Moodle using http header.
-     Availability of the web page is recognized as connection availability.
-     */
-    doesConnectionExist: function () {
-        var xmlhttp;//XML http request
-        var sitePage;//URL of the home page of the user
-        var randomNum;
-        var responseText;//Current response text of XML http request
-
-        xmlhttp = new XMLHttpRequest();
-        sitePage = DataAccess.getData("moodle_url") + "login/index.php";//Checks for login/index.php page
-        randomNum = Math.round(Math.random() * 10000);//Random number prevents loading cached data
-        xmlhttp.open('HEAD', sitePage + "?rand=" + randomNum, false);//Fetch header information of the request
-
-        try {
-            xmlhttp.send();//Send http request
-
-            /*
-             200 and 304 are http response codes. Any number above 304 is detected as connection unavaiability or error.
-             */
-            if (xmlhttp.status >= 200 && xmlhttp.status < 304) {
-                console.log("Connection available");
-                return true;
-            } else {
-                console.log("Connection unavailable");
-                return false;
-            }
-        } catch (e) {
-            console.log("Connection error!");//Log error
-            return false;
-        }
-    },
-
-    /*
-     This function checks whether user is logged in or not.
-     It is identified by scratching the response of login/index.php page.
-
-     Returns true if logged in. Otherwise returns false.
-     */
-    isLoggedIn: function () {
-        var xmlhttp;//XML http request
-        var sitePage;//URL of the home page of the user
-        var randomNum;
-        var responseText;//Current response text of XML http request
-
-        xmlhttp = new XMLHttpRequest();
-        sitePage = DataAccess.getData("moodle_url") + "login/index.php";
-        randomNum = Math.round(Math.random() * 10000);//Random number prevents loading cached data.
-        xmlhttp.open('GET', sitePage + "?rand=" + randomNum, false);//Fetch the response as an html string.
-
-        try {
-            xmlhttp.send();//Send http request
-            responseText = xmlhttp.responseText;//Get response html page as a string
-            if (responseText.search("Cookies must be enabled in your browser") > -1)//Scratch the html string.
-                return false;
-            else {
-                console.log("Logged in")
-                return true;
-            }
-        } catch (e) {
-            return false;
-        }
-    },
-
-    /*
-     Function to create tab with given url in Chrome browser.
-     url: Desired url
-     */
-    createTab: function (url) {
+    if (DataAccess.getData("notFirstRun") != "true") {
         chrome.tabs.create({
-            "url": url,
+            "url": "options.html",
             "selected": true
         });
-    },
+    }
+}
 
-    /*
-     This function is called periodically in user preferred time intervals.
-     This sends an XML http request to the "my home" page of the moodle page and get te response as a string.
-     The response string is scratched to find available events.
-     If events are available, rresponse string is sent to processing.
+function initializeLocalStorage() {
+    if ((DataAccess.getData("hidden_events") + "").indexOf("undefined") != -1) {
+        DataAccess.setData("hidden_events", "");
+    }
+}
 
-     has_reload_request: Boolean variable to determine whether user has requested to reload notification(s)
-     */
-    fetchEvents: function (has_reload_request) {
-        var xmlhttp;//XML http request
-        var sitePage;//URL of the home page of the user
-        var randomNum;
-        var responseText;//Response text of XML http request
-        var num_of_courses_with_event;//Number of courses that has events
-        var position;//Index of the occurance
+function onAlarmm(alarm) {
+    if (alarm && alarm.name == 'refresh') {
+        runBackgroundProcess();
+    }
+    else if (alarm && alarm.name == 'connectionChecker') {
+        checkConnection();
+    }
+    else if (alarm && alarm.name == 'preferenceChecker') {
+        checkPreferences();
+    }
+}
 
-        num_of_events = 0;//Clear number of events to prevent over counting
-        xmlhttp = new XMLHttpRequest();
-        sitePage = DataAccess.getData("moodle_url") + "my";
-        randomNum = Math.round(Math.random() * 10000);//Random number prevents loading cached data.
-        xmlhttp.open('GET', sitePage + "?rand=" + randomNum, false);//Fetch the response as an html string.
+function checkConnection() {
+    var randomNum = Math.round(Math.random() * 10000);//Random number prevents loading cached data
+    var sitePage = DataAccess.getData("moodle_url") + "login/index.php?" + randomNum;//Checks for login/index.php page
 
-        try {
-            xmlhttp.send();//Send http request
-            responseText = xmlhttp.responseText;//Get response html page as a string
+    $.ajax({
+        url: sitePage,
+        type: "HEAD",
+        timeout: 5000,
+        complete: function (xhr) {
+            if (xhr.status == 200 && (!hadConnection || !loggedIn)) {
+                hadConnection = true;
+                terminated = false;
+                console.log("Has connection. Initializing background process...");
+                chrome.alarms.create('refresh', {periodInMinutes: parseInt(DataAccess.getData("poll_interval")      )});//
+                runBackgroundProcess();
+            }
+            else if (xhr.status != 200 && !terminated) {
+                hadConnection = false;
+                terminated = true;
+                console.log("No connection. Terminating background process...");
+                chrome.alarms.clear('refresh');
+                terminate();
+            }
+        }
+    });
+}
 
+function checkPreferences() {
+    if (DataAccess.getData("configured") == "true") {
+        console.log("Preferences are changed!");
+        DataAccess.setData("configured", "false");
+        runBackgroundProcess();
+    }
+}
+
+function runBackgroundProcess() {
+    if (!loggedIn) {
+        chrome.browserAction.setIcon({path: "img/icon_inactive.png"});
+        chrome.browserAction.setBadgeText({text: "..."});
+        chrome.browserAction.setTitle({title: "Connecting..."});
+        login();
+    }
+    else if (loggedIn) {
+        getMyHome();
+    }
+}
+
+function login() {
+    var randomNum = Math.round(Math.random() * 10000);//Random number prevents loading cached data
+    var url = DataAccess.getData("moodle_url") + "login/index.php?" + randomNum;
+    $.post(url,
+        function (data) {
+            if (data.search("You are logged in as") != -1) {
+                loggedIn = true;
+                console.log("Login detected!");
+                chrome.browserAction.setIcon({path: "img/icon_active.png"});
+                getMyHome();
+            }
+        }
+    );
+    if (!loggedIn && DataAccess.getData("remember") == "true") {
+        var username = DataAccess.getData("username");
+        var password = CryptoJS.RC4Drop.decrypt(DataAccess.getData("password"), "Vw7F3ZcPqJwLqerFoF3sNDAmIDsB", {drop: 3072 / 4}).toString(CryptoJS.enc.Utf8);//Decrypt password
+
+        $.post(url,
+            {
+                username: username,
+                password: password
+            },
+            function (data) {
+                if (data.search("You are logged in as") != -1) {
+                    loggedIn = true;
+                    console.log("Logged in automatically");
+                    chrome.browserAction.setIcon({path: "img/icon_active.png"});
+                    getMyHome();
+                }
+                else {
+                    loggedIn = false;
+                    console.log("Login error!");
+                }
+            }
+        );
+    }
+}
+
+function getMyHome() {
+    var document;
+    var randomNum = Math.round(Math.random() * 10000);//Random number prevents loading cached data
+    var url = DataAccess.getData("moodle_url") + "my?" + randomNum;
+    $.post(url,
+        function (data) {
+            if (data.search("You are logged in as") != -1) {
+                var parser = new DOMParser();
+                document = parser.parseFromString(data, "text/html");
+                processDocument(document);
+            }
+            else {
+                loggedIn = false;
+                console.log("Login expired!");
+            }
+        }
+    );
+}
+
+function processDocument(document) {
+    processAssignments($(document).find(".assign"));
+    processQuizzes($(document).find(".quiz"));
+    processForumPosts($(document).find(".forum"));
+    if ((numOfAssignments + numOfQuizzes + numOfForumPosts) > 0) {
+        chrome.browserAction.setBadgeText({text: "" + (numOfAssignments + numOfQuizzes + numOfForumPosts)});
+    }
+    else {
+        chrome.browserAction.setBadgeText({text: ""});
+    }
+
+    chrome.browserAction.setTitle({title: "You have " + (numOfAssignments + numOfQuizzes + numOfForumPosts) + " tasks due"});
+}
+
+function processAssignments(assignments) {
+    if (numOfAssignments != assignments.length) {
+        numOfAssignments = assignments.length;
+    }
+
+    var assignmentIdList = "";
+    var nameElement;
+    var assignmentName;
+    var assignmentUrl;
+    var assignmentID;
+    var assignmentDue;
+    var assignmentStatus;
+    var hasChanged;
+
+    assignments.each(function (index) {
+        assignmentStatus = $(this).find(".details").text();
+        nameElement = $(this).find(".name");
+        assignmentName = $(nameElement).text().replace("Assignment: ", "");
+        assignmentUrl = $(nameElement).find("a").attr("href");
+        assignmentID = "assign-" + assignmentUrl.split("=")[1];
+
+        if (assignmentStatus.search("Not submitted yet") != -1) {
+            assignmentDue = $(this).find(".info").text();
             hasChanged = false;
 
-            /*
-             Find the number of courses that have events
-             */
-            num_of_courses_with_event = (responseText.match(/activity_info/g).length);//Get number of courses with events
+            if (DataAccess.getData("hidden_events").search(assignmentID) != -1) {
+                --numOfAssignments;
+            }
 
-            /*
-             Separate the courses that have events and process the response string to get events.
-             "box flush" separates the courses that have events.
-             Events of a course is processed at a time.
-             */
-            while (num_of_courses_with_event-- > 0) {
-                position = responseText.indexOf("activity_info");
-                if (position > -1) {
-                    responseText = responseText.slice(position);
-                    position = responseText.indexOf("<div");
-                    responseText = responseText.slice(position);
-                    position = responseText.indexOf("box flush");
+            if (assignmentIdList.search(assignmentID) == -1) {
+                assignmentIdList = assignmentIdList + assignmentID + ",";
+            }
+            //showEvents("Assignment "+index, assignmentName, assignmentUrl, assignmentID, assignmentDue, assignmentStatus);
 
-                    Background.processEventTypes(responseText.slice(0, position), has_reload_request);//Send string to process
+            if (DataAccess.getData(assignmentID + "-url") != assignmentUrl) {
+                DataAccess.setData(assignmentID + "-url", assignmentUrl);//Save in local storage if there's any change
+                hasChanged = true;//Set as changed
+            }
+            if (DataAccess.getData(assignmentID + "-name") != assignmentName) {
+                DataAccess.setData(assignmentID + "-name", assignmentName);//Save in local storage if there's any change
+                hasChanged = true;//Set as changed
+            }
+            if (DataAccess.getData(assignmentID + "-due") != assignmentDue) {
+                DataAccess.setData(assignmentID + "-due", assignmentDue);//Save in local storage if there's any change
+                hasChanged = true;//Set as changed
+            }
+            if (DataAccess.getData(assignmentID + "-status") != assignmentStatus) {
+                DataAccess.setData(assignmentID + "-status", assignmentStatus);//Save in local storage if there's any change
+                hasChanged = true;//Set as changed
+            }
 
-                    responseText = responseText.slice(position);
-                    position = responseText.indexOf("<div");
-                    responseText = responseText.slice(position);
-                    position = responseText.indexOf("box flush");
-                }
+            if (hasChanged && DataAccess.getData("popup") == "true") {
+                DataAccess.setData(assignmentID + "-notified", "true");
+                showNotification(assignmentName, assignmentDue, assignmentStatus, assignmentUrl);
             }
-            /*
-             If there's at least one event, show number of available events at extension button.
-             */
-            if (num_of_events > 0) {
-                chrome.browserAction.setBadgeText({text: "" + num_of_events});
-                chrome.browserAction.setTitle({title: "You have " + num_of_events + " tasks due"});
-            }
-            else if (num_of_events == 0) {
-                chrome.browserAction.setBadgeText({text: ""});
-                chrome.browserAction.setTitle({title: "MoodleNotifier: No connection"});
-            }
-            /*
-             Keep the track of available, unattempted events in a variable which is not subjected in incrementing/ decrementing/ resetting
-             */
-            if (const_num_of_events != num_of_events) {
-                const_num_of_events = num_of_events;
-                DataAccess.setData("num_of_events", const_num_of_events);
-            }
-        } catch (e) {
-            console.log(e);//Log error
+        }else{
+            --numOfAssignments;
         }
-    },
+    });
+    if (assignmentIdList != DataAccess.getData("assignment_id_list")) {
+        DataAccess.setData("assignment_id_list", assignmentIdList);
+    }
+}
 
-    /*
-     This function separates the events according to the category.
-     "activity_overview" separates the event types.
-     After separation, this send text strings for processing to obtain name, url, due date and status of the event and store them in local storage.
+function processQuizzes(quizzes) {
+    if (numOfQuizzes != quizzes.length) {
+        numOfQuizzes = quizzes.length;
+    }
+    var quizIdList = "";
+    var nameElement;
+    var quizName;
+    var quizUrl;
+    var quizID;
+    var quizDue;
+    var quizStatus;
+    var hasChanged;
 
-     textString: A part of the html response text which includes info of event(s)
-     has_reload_request: Boolean variable to determine whether user has requested to reload notification(s)
-     */
-    processEventTypes: function (textString, has_reload_request) {
-        var num_of_event_types;//number of available event types
-        var eventString;//Substring of the events
-
-        /*
-         Find the number of event types that available in the course
-         */
-        num_of_event_types = textString.match(/activity_overview/g).length;//Get number of available event types
-
-        /*
-         Separate the event types that available in the course.
-         "activity_overview" separates the event types.
-         Then each event is sent for processing to get details of the event.
-         */
-        while (num_of_event_types-- > 0) {
-            position = textString.indexOf("activity_overview");
-            textString = textString.slice(position);
-            position = textString.indexOf("<div");
-            textString = textString.slice(position);
-            position = textString.indexOf("activity_overview");
-            eventString = textString.slice(0, position);
-            /*
-             If event is an assignment, send the string to process as an assignment.
-             */
-            if (eventString.search("Assignment: <a") != -1) {
-                Background.processAssignments(eventString, has_reload_request);
-            }
-            /*
-             If event is a quiz, send the string to process as a quiz.
-             */
-            else if (eventString.search("Quiz: <a") != -1) {
-                Background.processQuizzes(eventString, has_reload_request);
-            }
-            /*
-             If event is a forum post, send the string to process as a forum post.
-             */
-            else if (eventString.search("Forum: <a") != -1) {
-                Background.processForumPosts(eventString, has_reload_request);
-            }
-        }
-    },
-
-    /*
-     This function scratch the given string and separate the name, url, due date and status of the assignments and store them in local storage.
-
-     textString: A part of the html response text which includes info of assignment(s)
-     has_reload_request: Boolean variable to determine whether user has requested to reload notification(s)
-     */
-    processAssignments: function (textString, has_reload_request) {
-        var events;
-        var url;//URL to the assignment
-        var name;//Name of the assignment
-        var due;//Due date of the assignment
-        var status;//Status of the assignment
-        var hasChanged;//Boolean variable for determining changes of the assignment events
-        var hidden_urls;
-        var notified_urls;
-
-        notified_urls = "" + DataAccess.getData("notified_urls");
-
-        hidden_urls = DataAccess.getData("hidden_events") + "";
+    quizzes.each(function (index) {
+        nameElement = $(this).find(".name");
+        quizName = $(nameElement).text().replace("Quiz: ", "");
+        quizUrl = $(nameElement).find("a").attr("href");
+        quizID = "quiz-" + quizUrl.split("=")[1];
+        quizDue = $(this).find(".info")[0].textContent;
+        quizStatus = $(this).find(".info")[1].textContent;
         hasChanged = false;
-        events = textString.match(/assign overview/g).length;//Get number of available assignments
 
-        while (events-- > 0) {
-
-            /*
-             Remove unwanted string above the assignment
-             */
-            position = textString.indexOf("assign overview");
-            textString = textString.slice(position);
-
-            /*
-             Get the url of assignment
-             */
-            position = textString.indexOf("http");
-            textString = textString.slice(position);//position = Starting index of the url to the assignment in the string
-            position = textString.indexOf("\">");
-            url = textString.slice(0, position);
-
-            /*
-             Get the name of assignment
-             */
-            textString = textString.slice(position + 2);//position+2 = Starting index of the name of assignment in the string
-            position = textString.indexOf("<");
-            name = textString.slice(0, position);
-
-            /*
-             Get the due date of assignment
-             */
-            position = textString.indexOf("info");
-            textString = textString.slice(position + 6);//position+6 = Due date of the assignment in the string
-            position = textString.indexOf("</div>");
-            due = textString.slice(0, position);
-
-            /*
-             Get the status of assignment
-             */
-            position = textString.indexOf("details");
-            textString = textString.slice(position + 9);//position+9 = Status about the assignment in the string
-            position = textString.indexOf("</div>");
-            status = textString.slice(0, position);
-
-            /*
-             Check for assignments that are not sumbmitted yet and not hidden by the user.
-             Then store them in local storage.
-             */
-            if (status.search("Not submitted yet") != -1 && hidden_urls.indexOf(url) == -1) {
-                if (DataAccess.getData("url" + num_of_events) != url) {
-                    DataAccess.setData("url" + num_of_events, url);//Save in local storage if there's any change
-                    hasChanged = true;//Set as changed
-                }
-                if (DataAccess.getData("name" + num_of_events) != name) {
-                    DataAccess.setData("name" + num_of_events, name);//Save in local storage if there's any change
-                    hasChanged = true;//Set as changed
-                }
-                if (DataAccess.getData("due" + num_of_events) != due) {
-                    DataAccess.setData("due" + num_of_events, due);//Save in local storage if there's any change
-                    hasChanged = true;//Set as changed
-                }
-                if (DataAccess.getData("status" + num_of_events) != status) {
-                    DataAccess.setData("status" + num_of_events, status);//Save in local storage if there's any change
-                    hasChanged = true;//Set as changed
-                }
-                ++num_of_events;
-                /*
-                 Reload all desktop notifications.
-                 This is done by changing the boolean variable value to 'true'.
-                 As hasChanged == true, it shows the notification by executing code within 'if (hasChanged)' condition.
-                 */
-                if (has_reload_request) {
-                    hasChanged = true;
-                }
-
-                console.log(name);
-                console.log(url);
-                console.log(due);
-                console.log(status + "\n");
-            }
-
-            /*
-             If any change of the event is detected, notify to the user.
-             Notifications are called only if the event page has been changed.
-             */
-            if (hasChanged) {
-                hasChanged = false;
-                if (notified_urls.indexOf(url) == -1) {
-                    notified_urls = notified_urls + url + " ";
-                    DataAccess.setData("notified_urls", notified_urls);
-                    Background.showNotifications(name, due, status, url);
-                }
-            }
+        if (DataAccess.getData("hidden_events").search(quizID) != -1) {
+            --numOfQuizzes;
         }
-    },
 
-    /*
-     This function scratch the given string and separate the name, url, due date and status of the Quizzes and store them in local storage.
+        if (quizIdList.search(quizID) == -1) {
+            quizIdList = quizIdList + quizID + ",";
+        }
 
-     textString: A part of the html response text which includes info of quiz(zes)
-     has_reload_request: Boolean variable to determine whether user has requested to reload notification(s)
-     */
-    processQuizzes: function (textString, has_reload_request) {
-        var url;//URL to the quiz
-        var name;//Name of the quiz
-        var due;//Due date of the quiz
-        var status;//Status of the quiz
-        var hasChanged;//Boolean variable for determining changes of the quiz events
-        var hidden_urls;
-        var notified_urls;
+        if (DataAccess.getData(quizID + "-url") != quizUrl) {
+            DataAccess.setData(quizID + "-url", quizUrl);//Save in local storage if there's any change
+            hasChanged = true;//Set as changed
+        }
+        if (DataAccess.getData(quizID + "-name") != quizName) {
+            DataAccess.setData(quizID + "-name", quizName);//Save in local storage if there's any change
+            hasChanged = true;//Set as changed
+        }
+        if (DataAccess.getData(quizID + "-due") != quizDue) {
+            DataAccess.setData(quizID + "-due", quizDue);//Save in local storage if there's any change
+            hasChanged = true;//Set as changed
+        }
+        if (DataAccess.getData(quizID + "-status") != quizStatus) {
+            DataAccess.setData(quizID + "-status", quizStatus);//Save in local storage if there's any change
+            hasChanged = true;//Set as changed
+        }
 
-        notified_urls = "" + DataAccess.getData("notified_urls");
+        if (hasChanged && DataAccess.getData("popup") == "true") {
+            DataAccess.setData(quizID + "-notified", "true");
+            showNotification(quizName, quizDue, quizStatus, quizUrl);
+        }
 
-        hidden_urls = DataAccess.getData("hidden_events") + "";
+        //showEvents("Quiz "+index, quizName, quizUrl, quizID, quizInfo, quizStatus);
+    });
+    if (quizIdList != DataAccess.getData("quiz_id_list")) {
+        DataAccess.setData("quiz_id_list", quizIdList);
+    }
+}
+
+function processForumPosts(forumPosts) {
+    if (numOfForumPosts != forumPosts.length) {
+        numOfForumPosts = forumPosts.length;
+    }
+
+    var forumIdList = "";
+    var nameElement;
+    var forumName;
+    var forumUrl;
+    var forumID;
+    var forumStatus;
+    var hasChanged;
+    forumPosts.each(function (index) {
+
+        nameElement = $(this).find(".name");
+        forumName = $(nameElement).text().replace("Forum: ", "");
+        forumUrl = $(nameElement).find("a").attr("href");
+        forumID = "forum-" + forumUrl.split("=")[1];
+        forumStatus = $(this).find(".info").text();
         hasChanged = false;
-        events = textString.match(/quiz overview/g).length;//Get number of available quiz event.
 
-        while (events-- > 0) {
-
-            /*
-             Remove unwanted string above the quiz
-             */
-            position = textString.indexOf("quiz overview");
-            textString = textString.slice(position);
-
-            /*
-             Get the url of quiz
-             */
-            position = textString.indexOf("http");
-            textString = textString.slice(position);//position = Starting index of the url to the quiz in the string
-            position = textString.indexOf("\">");
-            url = textString.slice(0, position);
-
-            /*
-             Get the name of quiz
-             */
-            textString = textString.slice(position + 2);//position+2 = Starting index of the name of quiz in the string
-            position = textString.indexOf("<");
-            name = textString.slice(0, position);
-
-            /*
-             Get the due date of quiz
-             */
-            position = textString.indexOf("info");
-            textString = textString.slice(position + 6);//position+6 = Due date of the quiz in the string
-            position = textString.indexOf("</div>");
-            due = textString.slice(0, position);
-
-            /*
-             Get the status of quiz
-             */
-            position = textString.indexOf("info");
-            textString = textString.slice(position + 6);//position+2 = Status about the quiz in the string
-            position = textString.indexOf("</div>");
-            status = textString.slice(0, position);
-
-            /*
-             Check for quizzes that are not attempted yet and and not hidden by the user.
-             Then store them in local storage.
-             */
-            if (status.search("No attempts have been made") != -1 && hidden_urls.indexOf(url) == -1) {
-                if (DataAccess.getData("url" + num_of_events) != url) {
-                    DataAccess.setData("url" + num_of_events, url);//Save in local storage if there's any change
-                    hasChanged = true;//Set as changed
-                }
-                if (DataAccess.getData("name" + num_of_events) != name) {
-                    DataAccess.setData("name" + num_of_events, name);//Save in local storage if there's any change
-                    hasChanged = true;//Set as changed
-                }
-                if (DataAccess.getData("due" + num_of_events) != due) {
-                    DataAccess.setData("due" + num_of_events, due);//Save in local storage if there's any change
-                    hasChanged = true;//Set as changed
-                }
-                if (DataAccess.getData("status" + num_of_events) != status) {
-                    DataAccess.setData("status" + num_of_events, status);//Save in local storage if there's any change
-                    hasChanged = true;//Set as changed
-                }
-                ++num_of_events;
-
-                /*
-                 Reload all desktop notifications.
-                 This is done by changing the boolean variable value to 'true'. As hasChanged == true, it shows the notification by executing code within 'if (hasChanged)' condition.
-                 */
-                if (has_reload_request) {
-                    hasChanged = true;
-                }
-
-                console.log(name);
-                console.log(url);
-                console.log(due);
-                console.log(status + "\n");
-            }
-
-            /*
-             If any change of the event is detected, notify to the user.
-             Notifications are called only if the event page has been changed.
-             */
-            if (hasChanged) {
-                hasChanged = false;
-                if (notified_urls.indexOf(url) == -1) {
-                    notified_urls = notified_urls + url + " ";
-                    DataAccess.setData("notified_urls", notified_urls);
-                    Background.showNotifications(name, due, status, url);
-                }
-            }
+        if (DataAccess.getData("hidden_events").search(forumID) != -1) {
+            --numOfForumPosts;
         }
-    },
 
+        if (forumIdList.search(forumID) == -1) {
+            forumIdList = forumIdList + forumID + ",";
+        }
+
+        if (DataAccess.getData(forumID + "-url") != forumUrl) {
+            DataAccess.setData(forumID + "-url", forumUrl);//Save in local storage if there's any change
+            hasChanged = true;//Set as changed
+        }
+        if (DataAccess.getData(forumID + "-name") != forumName) {
+            DataAccess.setData(forumID + "-name", forumName);//Save in local storage if there's any change
+            hasChanged = true;//Set as changed
+        }
+        if (DataAccess.getData(forumID + "-status") != forumStatus) {
+            DataAccess.setData(forumID + "-status", forumStatus);//Save in local storage if there's any change
+            hasChanged = true;//Set as changed
+        }
+        DataAccess.setData(forumID + "-due", "");
+        if (hasChanged && DataAccess.getData("popup") == "true") {
+            DataAccess.setData(forumID + "-notified", "true");
+            showNotification(forumName, "", forumStatus, forumUrl);
+        }
+
+        //showEvents("Forum "+index, forumName, forumUrl, forumID, "", forumInfo);
+    });
+    if (forumIdList != DataAccess.getData("forum_id_list")) {
+        DataAccess.setData("forum_id_list", forumIdList);
+    }
+}
+
+function showNotification(name, due, status, url) {
     /*
-     This function scratch the given string and separate the url of the forum posts and store them in local storage.
-
-     textString: A part of the html response text which includes info of forum post(s)
-     has_reload_request: Boolean variable to determine whether user has requested to reload notification(s)
+     Show desktop notification if enabled.
      */
-    processForumPosts: function (textString, has_reload_request) {
-        var url;//URL to the forum
-        var name;//Name of the forum
-        var status;//Status of the forum
-        var hasChanged;//Boolean variable for determining changes of the forum events
-        var hidden_urls;
-        var notified_urls;
-
-        notified_urls = "" + DataAccess.getData("notified_urls");
-
-        hidden_urls = DataAccess.getData("hidden_events") + "";
-        hasChanged = false;
-        events = textString.match(/overview forum/g).length;//Get number of available forum events
-
-        while (events-- > 0) {
-
-            /*
-             Remove unwanted string above the forum
-             */
-            position = textString.indexOf("overview forum");
-            textString = textString.slice(position);
-
-            /*
-             Get the url of forum
-             */
-            position = textString.indexOf("http");
-            textString = textString.slice(position);//position = Starting index of the url to the forum in the string
-            position = textString.indexOf("\">");
-            url = textString.slice(0, position);
-
-            /*
-             Get the name of forum
-             */
-            textString = textString.slice(position + 2);//position+2 = Starting index of the name of forum in the string
-            position = textString.indexOf("<");
-            name = textString.slice(0, position);
-            /*
-             Get the status of forum
-             */
-            position = textString.indexOf("postsincelogin");
-            textString = textString.slice(position + 16);//position+16 = Starting index of the status of forum in the string
-            position = textString.indexOf("<");
-            status = textString.slice(0, position);
-
-            /*
-             Check for forum posts that are not hidden by the user.
-             Then store them in local storage.
-             */
-            if (hidden_urls.indexOf(url) == -1) {
-                if (DataAccess.getData("url" + num_of_events) != url) {
-                    DataAccess.setData("url" + num_of_events, url);//Save in local storage if there's any change
-                    hasChanged = true;//Set as changed
-                }
-                if (DataAccess.getData("name" + num_of_events) != name) {
-                    DataAccess.setData("name" + num_of_events, name);//Save in local storage if there's any change
-                    hasChanged = true;//Set as changed
-                }
-
-                if (DataAccess.getData("status" + num_of_events) != status) {
-                    DataAccess.setData("status" + num_of_events, status);//Save in local storage if there's any change
-                    hasChanged = true;//Set as changed
-                    DataAccess.setData("due" + num_of_events, "");//Save in local storage if there's any change
-                    console.log(url);
-                    console.log(status + "\n");
-                }
-                ++num_of_events;
-
-                /*
-                 Reload all desktop notifications.
-                 This is done by changing the boolean variable value to 'true'. As hasChanged == true, it shows the notification by executing code within 'if (hasChanged)' condition.
-                 */
-                if (has_reload_request) {
-                    hasChanged = true;
-                }
-
-                console.log(name);
-                console.log(url);
-                console.log(status + "\n");
-            }
-
-            /*
-             If any change of the event is detected, notify to the user.
-             Notifications are called only if the event page has been changed.
-             */
-            if (hasChanged) {
-                hasChanged = false;
-                if (notified_urls.indexOf(url) == -1) {
-                    notified_urls = notified_urls + url + " ";
-                    DataAccess.setData("notified_urls", notified_urls);
-                    Background.showForumNotifications(name, status, url);
-                }
-            }
+    if (DataAccess.getData("popup") == "true") {
+        if (DataAccess.getData("popup_time") == "Indefinitely") {
+            notifyEvent(name, due + "\n" + status, url);
         }
-    },
-
+        else {
+            notify(name, due + "\n" + status, url, DataAccess.getData("popup_time"));
+        }
+    }
     /*
-     Snow desktop notifications and play audible notifications according to user preferences.
-     This function is used for events that have a deadline such as assignmnets and quizzes.
-
-     name: Name of the assignment/quiz
-     status: Status of the assignment/quiz
-     url: URL to the assignment/quiz
+     Play audible notifications if enabled.
      */
-    showNotifications: function (name, due, status, url) {
-        /*
-         Show desktop notification if enabled.
-         */
-        if (DataAccess.getData("popup") == "true") {
-            if (DataAccess.getData("popup_time") == "Indefinitely") {
-                notifyEvent(name, due + "\n" + status + "\n", url);
-            }
-            else {
-                notify(name, due + "\n" + status + "\n", url, DataAccess.getData("popup_time"));
-            }
-        }
-        /*
-         Play audible notifications if enabled.
-         */
-        if (DataAccess.getData("mute") == "false") {
-            playAlert(DataAccess.getData("alert_sound"));
-        }
-    },
+    if (DataAccess.getData("mute") == "false") {
+        playAlert(DataAccess.getData("alert_sound"));
+    }
+}
 
-    /*
-     Snow desktop notifications and play audible notifications according to user preferences.
-     This function is used for events that do not have a deadline such as forum posts.
+function showEvents(index, name, url, id, due, status) {
+    console.log(index + ":");
+    console.log(name);
+    console.log(url);
+    console.log(id);
+    console.log(due);
+    console.log(status);
+}
 
-     name: Name of the forum post
-     status: Status of the forum post
-     url: URL to the forum post
-     */
-    showForumNotifications: function (name, status, url) {
-        /*
-         Show desktop notification if enabled.
-         */
-        if (DataAccess.getData("popup") == "true") {
-            if (DataAccess.getData("popup_time") == "Indefinitely") {
-                notifyEvent(name, status + "\n", url);
-            }
-            else {
-                notify(name, status + "\n", url, DataAccess.getData("popup_time"));
-            }
-        }
-        /*
-         Play audible notifications if enabled.
-         */
-        if (DataAccess.getData("mute") == "false") {
-            playAlert(DataAccess.getData("alert_sound"));
-        }
-    },
-
-    /*
-     This function is used to sleep the entire javascript for a specific number of miliseconds.
-     This uses the system clock and check whether time difference is greater than given time.
-
-     milliseconds: Sleep time
-     */
-    sleep: function (milliseconds) {
-        var start = new Date().getTime();
-        /*
-         Do nothing until specified time period is expired
-         */
-        while ((new Date().getTime() - start) < milliseconds);
-    },
+function terminate() {
+    chrome.browserAction.setIcon({path: "img/icon_sleep.png"});
+    chrome.browserAction.setTitle({title: "No connection!"});
+    loggedIn = false;
 }

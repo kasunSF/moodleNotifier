@@ -628,3 +628,37 @@ article h2 a {
         width: 68%;
     }
 }
+
+/*Button style*/
+.button {
+    background: #ffbc5e;
+    background-image: -webkit-linear-gradient(top, #ffbc5e, #ff9500);
+    background-image: -moz-linear-gradient(top, #ffbc5e, #ff9500);
+    background-image: -ms-linear-gradient(top, #ffbc5e, #ff9500);
+    background-image: -o-linear-gradient(top, #ffbc5e, #ff9500);
+    background-image: linear-gradient(to bottom, #ffbc5e, #ff9500);
+    border-radius: 5px;
+    -webkit-box-shadow: 0px 1px 5px #666666;
+    -moz-box-shadow: 0px 1px 5px #666666;
+    box-shadow: 0px 1px 5px #666666;
+    font-family: Arial;
+    color: #ffffff;
+    font-size: 15px;
+    padding: 3px 10px 3px 10px;
+    text-decoration: none;
+}
+
+.button:hover {
+    background: #ff9500;
+    background-image: -webkit-linear-gradient(top, #ff9500, #ffbc5e);
+    background-image: -moz-linear-gradient(top, #ff9500, #ffbc5e);
+    background-image: -ms-linear-gradient(top, #ff9500, #ffbc5e);
+    background-image: -o-linear-gradient(top, #ff9500, #ffbc5e);
+    background-image: linear-gradient(to bottom, #ff9500, #ffbc5e);
+    text-decoration: none;
+}
+
+.button:active {
+    background: #ff9500;
+    text-decoration: none;
+}

@@ -1,5 +1,3 @@
-var notification;
-
 /*
  Show desktop notification for a specific period of time.
 
@@ -9,31 +7,20 @@ var notification;
  timeout: Notification period
  */
 function notify(title, body, url, timeout) {
-    if (window.webkitNotifications) {
-        notification = webkitNotifications.createNotification(title, body, "/img/icon_active.png");
-    } else {
-        notification = new Notification(title, {body: body, icon: "/img/icon_active.png"});
-    }
+    var notification = new Notification(title, {body: body, icon: "/img/icon_active.png"});
 
     /*
      Close the notification on click and redirect to url in a new tab.
      */
     notification.onclick = function () {
-        chrome.tabs.create({ url: url });
+        chrome.tabs.create({url: url});
         this.close();
-    }
-
+    };
     /*
      Close the notification after timeout.
      */
     setTimeout(function () {
-        if (notification) {
-            if (window.webkitNotifications) {
-                notification.cancel();
-            } else {
-                notification.close();
-            }
-        }
+        notification.close();
     }, timeout);
 }
 
@@ -45,17 +32,13 @@ function notify(title, body, url, timeout) {
  url: Redirect url on click
  */
 function notifyEvent(title, body, url) {
-    if (window.webkitNotifications) {
-        notification = webkitNotifications.createNotification(title, body, "/img/icon_active.png");
-    } else {
-        notification = new Notification(title, {body: body, icon: "/img/icon_active.png"});
-    }
+    var notification = new Notification(title, {body: body, icon: "/img/icon_active.png"});
 
     /*
      Close the notification on click and redirect to url in a new tab.
      */
     notification.onclick = function () {
-        chrome.tabs.create({ url: url });
+        chrome.tabs.create({url: url});
         this.close();
     }
 }

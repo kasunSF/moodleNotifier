@@ -1,0 +1,51 @@
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Moodle Notifier</title>
+    <link rel="stylesheet" media="all" href="css/style.css" type="text/css">
+    <script type="text/javascript" src="js/lib/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="js/popup.js"></script>
+    <script type="text/javascript" src="js/dataAccess.js"></script>
+</head>
+
+<body>
+
+<div class="wrap">
+
+    <header>
+        <div class="logo" id="visit_moodle" style="cursor: pointer" title="Visit Moodle"><img src="img/logo.png"></div>
+        <div class="options">
+            <ul>
+                <a href="#">
+                    <li id="edit_events" title="Edit events">Refresh</li>
+                    <li id="refresh" title="Refresh">Refresh</li>
+                </a>
+            </ul>
+        </div>
+        <div class="clear"></div>
+    </header>
+
+    <div class="content" id="event_container">
+        <h3 style="text-align: center;color: #a8a8a8">Assignments</h3>
+        <article class="underline" id="assign:4">
+		<button class="button" style="float: right;">Hide</button>
+			<h4>
+				<a href="http://localhost/moodle/mod/assign/view.php?id=4" target="new" id="event_url:assign:4">Practical 1</a>
+			</h4>
+
+            <p id="event_status:assign:4">My submission: Not submitted yet, Not graded</p>
+
+            <div class="date"><span id="event_due:assign:4">Due date: Sunday, 7 September 2014, 12:00 AM</span></div>
+        </article>
+    </div>   
+
+    <footer>
+        <p style="padding-left: 0px;">
+            MoodleNotifier™ &nbsp;
+        </p>
+    </footer>
+</div>
+
+
+</body>
+</html>
